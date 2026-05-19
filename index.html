@@ -852,10 +852,7 @@
       <span style="color:var(--ink-light)">Mots rencontrés :</span>
       <strong id="stat-words">0</strong>
     </div>
-    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-      <span style="color:var(--ink-light)">Réussis du premier coup :</span>
-      <strong id="stat-first-try" style="color:var(--correct)">0</strong>
-    </div>
+
     <div class="divider" style="margin: 16px 0;"></div>
     <div style="text-align:left;">
       <span style="color:var(--ink-light); font-size:0.9rem;">Mots à réviser en priorité :</span>
@@ -1628,7 +1625,7 @@ function spawnEx2Distractor(correctWord) {
       b.classList.remove('show');
       setTimeout(() => b.remove(), 300);
     }
-  }, 3000);
+  }, 4000);
 }
 
 // ══════════════════════════════════════════
@@ -1737,8 +1734,7 @@ function showSessionComplete() {
   
   document.getElementById('stat-time').textContent = `${m}m ${s}s`;
   document.getElementById('stat-words').textContent = words.length;
-  // 2 exercises tracked (EX1 and EX3)
-  document.getElementById('stat-first-try').textContent = `${firstTryCorrect} / ${words.length * 2}`; 
+
   
   const reviseList = document.getElementById('stat-revise-list');
   reviseList.innerHTML = '';
