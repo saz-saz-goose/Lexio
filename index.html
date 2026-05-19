@@ -1417,6 +1417,10 @@ function loadEx2GameWord() {
     }
   }, 1000);
   
+  for (let i = 0; i < 5; i++) {
+    spawnEx2Distractor(w.english);
+  }
+  
   spawnEx2Target(w.english);
   
   ex2GameLoopInterval = setInterval(() => {
@@ -1427,7 +1431,7 @@ function loadEx2GameWord() {
 function createBubble(text, isTarget, onClick) {
   const area = document.getElementById('ex2-game-area');
   const bubble = document.createElement('div');
-  bubble.className = isTarget ? 'game-bubble' : 'game-bubble distractor';
+  bubble.className = 'game-bubble distractor';
   bubble.textContent = text;
   
   const x = 15 + Math.random() * 70;
