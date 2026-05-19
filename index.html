@@ -530,6 +530,96 @@
   .instructions-list li {
     margin-bottom: 8px;
   }
+
+  /* ── TRANSITION SCREEN ── */
+  .transition-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    animation: bounce 1s infinite alternate;
+  }
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-15px); }
+  }
+  .transition-msg {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--ink);
+    text-align: center;
+  }
+
+  /* ── EX2 GAME ── */
+  .game-area {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  .game-target-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--ink-light);
+    opacity: 0.3;
+    pointer-events: none;
+    text-align: center;
+    z-index: 1;
+    width: 80%;
+  }
+  .game-bubble {
+    position: absolute;
+    padding: 10px 16px;
+    background: var(--accent);
+    color: white;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
+    z-index: 10;
+  }
+  .game-bubble.show {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .game-bubble.distractor {
+    background: white;
+    color: var(--ink);
+    border: 1.5px solid var(--border);
+  }
+  .game-timer {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .game-score-fly {
+    position: absolute;
+    color: var(--correct);
+    font-weight: bold;
+    font-size: 1.5rem;
+    pointer-events: none;
+    animation: flyUp 1s forwards;
+    z-index: 20;
+  }
+  @keyframes flyUp {
+    0% { transform: translate(-50%, 0); opacity: 1; }
+    100% { transform: translate(-50%, -40px); opacity: 0; }
+  }
+
 </style>
 </head>
 <body>
@@ -654,6 +744,54 @@
 </div>
 
 
+<!-- ══════════════════════════════════════════
+     SCREEN: TRANSITION
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-transition">
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+    <svg class="transition-icon" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 10a2 2 0 0 0-2-2c-1.1 0-2-.9-2-2 0-1.1.9-2 2-2 1.1 0 2 .9 2 2 0 1.1-.9 2-2 2Z" />
+      <path d="M12 10v11a1 1 0 0 0 2 0V10" />
+      <path d="M12 12c-2 0-8-1-8-3s2-3 8-1" />
+      <path d="M12 12c2 0 8-1 8-3s-2-3-8-1" />
+      <path d="M12 15c-1.5 0-6-.5-6-2s1.5-2 6-.5" />
+      <path d="M12 15c1.5 0 6-.5 6-2s-1.5-2-6-.5" />
+    </svg>
+    <div class="transition-msg" id="transition-msg-text">Great job so far!</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: EX2 INTRO
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-ex2-intro">
+  <div class="card" style="text-align:center;">
+    <div class="phase-tag">Exercice 2</div>
+    <div class="section-title mt-4">Tap the Translation</div>
+    <div class="section-sub mt-8">
+      Trouvez et tapez sur la bonne traduction en anglais le plus de fois possible en 15 secondes !<br><br>
+      Attention aux autres mots (distracteurs) qui apparaissent pour vous tromper.
+    </div>
+    <div class="divider" style="margin: 20px 0;"></div>
+    <button class="btn-primary" onclick="startEx2Game()">C'est parti !</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: EX2 GAME
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-ex2-game">
+  <div class="question-prompt">
+    <div class="q-label">Exercice 2 — Game</div>
+    <div class="game-timer" id="ex2-game-timer">15s</div>
+  </div>
+  
+  <div class="game-area" id="ex2-game-area">
+    <div class="game-target-center" id="ex2-game-french"></div>
+  </div>
+  
+  <div class="word-counter" id="ex2-game-counter" style="margin-top:16px;"></div>
+</div>
 
 <!-- ══════════════════════════════════════════
      SCREEN: EX3 — Partial word typing
@@ -683,9 +821,29 @@
 ══════════════════════════════════════════ -->
 <div class="screen" id="screen-complete">
   <div class="complete-icon">🎉</div>
-  <div class="complete-title">Première rencontre terminée !</div>
-  <div class="complete-sub">Vous avez rencontré les 10 mots pour la première fois.<br>Revenez demain pour la deuxième rencontre.</div>
-  <div class="divider"></div>
+  <div class="complete-title">Session terminée !</div>
+  
+  <div class="card" style="margin-top:10px; margin-bottom:10px; width:100%; text-align:center; padding:20px;">
+    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+      <span style="color:var(--ink-light)">Temps passé :</span>
+      <strong id="stat-time">0m 0s</strong>
+    </div>
+    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+      <span style="color:var(--ink-light)">Mots rencontrés :</span>
+      <strong id="stat-words">0</strong>
+    </div>
+    <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+      <span style="color:var(--ink-light)">Réussis du premier coup :</span>
+      <strong id="stat-first-try" style="color:var(--correct)">0</strong>
+    </div>
+    <div class="divider" style="margin: 16px 0;"></div>
+    <div style="text-align:left;">
+      <span style="color:var(--ink-light); font-size:0.9rem;">Mots à réviser en priorité :</span>
+      <ul id="stat-revise-list" style="margin-top:8px; padding-left:20px; font-weight:500; color:var(--wrong);">
+      </ul>
+    </div>
+  </div>
+  
   <button class="btn-primary" onclick="restartApp()">Recommencer la session</button>
   <button class="btn-primary" onclick="goToHome()" style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent); margin-top:8px;">Retour à l'accueil</button>
 </div>
@@ -713,7 +871,16 @@ let ex1Incorrect    = [];  // words to retest
 let ex1RetestQueue  = [];
 let ex1RetestIndex  = 0;
 
+let ex2GameQueue = [];
+let ex2GameIndex = 0;
+let ex2GameTimerInterval = null;
+let ex2GameLoopInterval = null;
+let ex2GameTimeLeft = 15;
+let ex2GameCorrectHits = 0;
 
+let sessionStartTime = 0;
+let firstTryCorrect = 0;
+let wordErrors = {};
 
 let ex3Queue        = [];
 let ex3Index        = 0;
@@ -737,6 +904,14 @@ function triggerGlow(type) {
   document.body.classList.remove('glow-correct', 'glow-wrong');
   document.body.classList.add(type === 'correct' ? 'glow-correct' : 'glow-wrong');
   setTimeout(() => document.body.classList.remove('glow-correct', 'glow-wrong'), 2000);
+}
+
+function showTransition(message, nextFunc) {
+  document.getElementById('transition-msg-text').textContent = message;
+  showScreen('screen-transition');
+  setTimeout(() => {
+    nextFunc();
+  }, 2500);
 }
 
 function shuffle(arr) {
@@ -1041,7 +1216,8 @@ function loadEncounterWord() {
 
 function loadEncounterWord() {
   if (encounterIndex >= words.length) {
-    startEx1();
+    const msgs = ["Great job so far!", "Keep going!", "You're doing so well!"];
+    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx1);
     return;
   }
   const w = words[encounterIndex];
@@ -1078,7 +1254,7 @@ function loadEx1() {
     if (ex1Incorrect.length > 0) {
       startEx1Retest();
     } else {
-      startEx3();
+      startEx2Intro();
     }
     return;
   }
@@ -1111,6 +1287,9 @@ function checkEx1(btn, chosen, correct, wordObj) {
     playAudio(false, correct);
     stepsCompleted++;
     updateProgress();
+    if (!ex1Incorrect.find(w => w.english === wordObj.english)) {
+      firstTryCorrect++;
+    }
     document.getElementById('ex1-next-btn').classList.remove('hidden');
   } else {
     btn.classList.add('wrong');
@@ -1118,6 +1297,11 @@ function checkEx1(btn, chosen, correct, wordObj) {
     triggerGlow('wrong');
     showFeedback('ex1-feedback', 'wrong', `✗ La bonne réponse est : "${correct}"`);
     if (!ex1Incorrect.find(w => w.english === wordObj.english)) ex1Incorrect.push(wordObj);
+    
+    // Track errors
+    if (!wordErrors[correct]) wordErrors[correct] = 0;
+    wordErrors[correct]++;
+    
     ex1Queue.splice(ex1Index + 1, 0, wordObj);
     document.getElementById('ex1-next-btn').classList.remove('hidden');
   }
@@ -1140,7 +1324,7 @@ function startEx1Retest() {
 
 function loadEx1Retest() {
   if (ex1RetestIndex >= ex1RetestQueue.length) {
-    startEx3();
+    startEx2Intro();
     return;
   }
   const w = ex1RetestQueue[ex1RetestIndex];
@@ -1187,163 +1371,146 @@ function ex1RetestNext() {
 }
 
 // ══════════════════════════════════════════
-// EX 2 — CLOZE
+// EX 2 — GAME (TAP THE TRANSLATION)
 // ══════════════════════════════════════════
-function startEx2() {
-  ex2Queue     = [...words];
-  ex2Index     = 0;
-  ex2Incorrect = [];
+function startEx2Intro() {
+  ex2GameQueue = shuffle([...words]);
+  ex2GameIndex = 0;
   document.getElementById('stepLabel').textContent = 'Exercice 2';
-  showScreen('screen-ex2');
-  loadEx2();
+  showScreen('screen-ex2-intro');
 }
 
-function loadEx2() {
-  if (ex2Index >= ex2Queue.length) {
-    if (ex2Incorrect.length > 0) {
-      startEx2Retest();
-    } else {
-      startEx3();
+function startEx2Game() {
+  showScreen('screen-ex2-game');
+  loadEx2GameWord();
+}
+
+function loadEx2GameWord() {
+  if (ex2GameIndex >= ex2GameQueue.length) {
+    const msgs = ["You're doing so well!", "Almost there!", "Fantastic!"];
+    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx3);
+    return;
+  }
+  
+  const w = ex2GameQueue[ex2GameIndex];
+  document.getElementById('ex2-game-french').textContent = w.french;
+  document.getElementById('ex2-game-counter').textContent = `Mot ${ex2GameIndex + 1} / ${ex2GameQueue.length}`;
+  
+  ex2GameTimeLeft = 15;
+  ex2GameCorrectHits = 0;
+  document.getElementById('ex2-game-timer').textContent = ex2GameTimeLeft + 's';
+  const area = document.getElementById('ex2-game-area');
+  Array.from(area.children).forEach(c => {
+    if (c.id !== 'ex2-game-french') area.removeChild(c);
+  });
+  
+  ex2GameTimerInterval = setInterval(() => {
+    ex2GameTimeLeft--;
+    document.getElementById('ex2-game-timer').textContent = ex2GameTimeLeft + 's';
+    if (ex2GameTimeLeft <= 0) {
+      clearInterval(ex2GameTimerInterval);
+      clearInterval(ex2GameLoopInterval);
+      stepsCompleted++;
+      updateProgress();
+      ex2GameIndex++;
+      loadEx2GameWord();
     }
-    return;
-  }
+  }, 1000);
+  
+  spawnEx2Target(w.english);
+  
+  ex2GameLoopInterval = setInterval(() => {
+    spawnEx2Distractor(w.english);
+  }, 800);
+}
 
-  const w = ex2Queue[ex2Index];
-  document.getElementById('ex2-word').textContent = w.french;
-  document.getElementById('ex2-counter').textContent = `${ex2Index + 1} / ${ex2Queue.length}`;
-  document.getElementById('ex2-feedback').className = 'feedback-banner';
-  document.getElementById('ex2-next-btn').classList.add('hidden');
+function createBubble(text, isTarget, onClick) {
+  const area = document.getElementById('ex2-game-area');
+  const bubble = document.createElement('div');
+  bubble.className = isTarget ? 'game-bubble' : 'game-bubble distractor';
+  bubble.textContent = text;
+  
+  const x = 15 + Math.random() * 70;
+  const y = 15 + Math.random() * 70;
+  bubble.style.left = x + '%';
+  bubble.style.top = y + '%';
+  
+  bubble.onclick = () => {
+    onClick(bubble);
+  };
+  
+  area.appendChild(bubble);
+  setTimeout(() => bubble.classList.add('show'), 50);
+  return bubble;
+}
 
-  const card = document.getElementById('ex2-sentences-card');
-  card.innerHTML = '';
-  w.sentences.forEach((s, i) => {
-    const frWithGap = s.fr.replace(/<b class='highlight'>.*?<\/b>/, `<span class='gap'>_____</span>`);
-    const escapedWord = w.english.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp('\\b' + escapedWord + '\\b', 'gi');
-    const enWithGap = s.en.replace(regex, `<span class='gap'>_____</span>`);
+function spawnEx2Target(correctWord) {
+  let alive = true;
+  const b = createBubble(correctWord, true, (bubble) => {
+    if (!alive) return;
+    alive = false;
+    ex2GameCorrectHits++;
+    bubble.classList.remove('show');
+    playAudio(false, correctWord);
     
-    const container = document.createElement('div');
-    container.style.marginBottom = i < 1 ? '16px' : '0';
-    container.style.display = 'flex';
-    container.style.flexDirection = 'column';
-    container.style.gap = '4px';
+    const fly = document.createElement('div');
+    fly.className = 'game-score-fly';
+    fly.textContent = '+1';
+    fly.style.left = bubble.style.left;
+    fly.style.top = bubble.style.top;
+    document.getElementById('ex2-game-area').appendChild(fly);
+    setTimeout(() => fly.remove(), 1000);
     
-    const pFr = document.createElement('p');
-    pFr.className = 'cloze-sentence';
-    pFr.innerHTML = `<span style="color:var(--ink-light);font-size:0.8rem;">${i+1}. Fr :</span> ${frWithGap}`;
-    
-    const pEn = document.createElement('p');
-    pEn.className = 'cloze-sentence';
-    pEn.style.color = 'var(--ink-light)';
-    pEn.style.fontSize = '0.95rem';
-    pEn.style.paddingLeft = '24px';
-    pEn.innerHTML = `<span style="font-size:0.8rem;">En :</span> (${enWithGap})`;
-    
-    container.appendChild(pFr);
-    container.appendChild(pEn);
-    card.appendChild(container);
+    setTimeout(() => bubble.remove(), 300);
+    setTimeout(() => { if (ex2GameTimeLeft > 0) spawnEx2Target(correctWord); }, 500);
   });
+  
+  setTimeout(() => {
+    if (alive) {
+      alive = false;
+      b.classList.remove('show');
+      setTimeout(() => b.remove(), 300);
+      setTimeout(() => { if (ex2GameTimeLeft > 0) spawnEx2Target(correctWord); }, 1000);
+    }
+  }, 5000);
+}
 
-  const otherWords = allEnglish.filter(e => e !== w.english);
-  const sessionDistractor = otherWords.length > 0 ? shuffle(otherWords)[0] : "word";
-  const randomDistractors = ['lion', 'tiger', 'monkey', 'rabbit', 'bear', 'giraffe', 'zebra', 'snake', 'turtle', 'fish'];
-  const randomDistractor = shuffle(randomDistractors.filter(x => x !== w.english))[0];
-  const options = shuffle([w.english, sessionDistractor, randomDistractor]);
-
-  const optContainer = document.getElementById('ex2-options');
-  optContainer.innerHTML = '';
-  options.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'cloze-option';
-    btn.textContent = opt;
-    btn.onclick = () => checkEx2(btn, opt, w.english, w);
-    optContainer.appendChild(btn);
+function spawnEx2Distractor(correctWord) {
+  let word = "word";
+  const r = Math.random();
+  if (r < 0.5 && allEnglish.length > 1) {
+    word = shuffle(allEnglish.filter(e => e !== correctWord))[0];
+  } else if (r < 0.6) {
+    if (correctWord.length > 3) {
+      let chars = correctWord.split('');
+      const idx = 1 + Math.floor(Math.random() * (chars.length - 2));
+      [chars[idx], chars[idx+1]] = [chars[idx+1], chars[idx]];
+      word = chars.join('');
+    } else {
+      word = correctWord + "s";
+    }
+  } else {
+    const randoms = ['lion', 'run', 'blue', 'fast', 'happy', 'house', 'tree', 'jump'];
+    word = shuffle(randoms.filter(x => x !== correctWord))[0];
+  }
+  
+  let alive = true;
+  const b = createBubble(word, false, (bubble) => {
+    if (!alive) return;
+    alive = false;
+    bubble.classList.remove('show');
+    bubble.style.background = 'var(--wrong)';
+    bubble.style.color = 'white';
+    setTimeout(() => bubble.remove(), 300);
   });
-}
-
-function checkEx2(btn, chosen, correct, wordObj) {
-  const allBtns = document.querySelectorAll('#ex2-options .cloze-option');
-  allBtns.forEach(b => b.disabled = true);
-
-  if (chosen === correct) {
-    btn.classList.add('correct');
-    triggerGlow('correct');
-    showFeedback('ex2-feedback', 'correct', '✓ Correct !');
-    playAudio(false, correct);
-    stepsCompleted++;
-    updateProgress();
-  } else {
-    btn.classList.add('wrong');
-    allBtns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
-    triggerGlow('wrong');
-    showFeedback('ex2-feedback', 'wrong', `✗ La bonne réponse est : "${correct}"`);
-    if (!ex2Incorrect.find(w => w.english === wordObj.english)) ex2Incorrect.push(wordObj);
-  }
-  document.getElementById('ex2-next-btn').classList.remove('hidden');
-}
-
-function ex2Next() {
-  ex2Index++;
-  showScreen('screen-ex2');
-  loadEx2();
-}
-
-// EX2 RETEST
-function startEx2Retest() {
-  ex2RetestQueue = [...ex2Incorrect];
-  ex2RetestIndex = 0;
-  document.getElementById('stepLabel').textContent = 'Exercice 2 — Révision';
-  showScreen('screen-ex2-retest');
-  loadEx2Retest();
-}
-
-function loadEx2Retest() {
-  if (ex2RetestIndex >= ex2RetestQueue.length) {
-    startEx3();
-    return;
-  }
-  const w = ex2RetestQueue[ex2RetestIndex];
-  document.getElementById('ex2rt-french').textContent = w.french;
-  document.getElementById('ex2rt-english-shown').textContent = w.english;
-  document.getElementById('ex2rt-counter').textContent = `${ex2RetestIndex + 1} / ${ex2RetestQueue.length}`;
-  document.getElementById('ex2rt-feedback').className = 'feedback-banner';
-  document.getElementById('ex2rt-next-btn').classList.add('hidden');
-  document.getElementById('ex2rt-reveal-area').classList.remove('hidden');
-  document.getElementById('ex2rt-type-area').classList.add('hidden');
-  document.getElementById('ex2rt-input').value = '';
-  document.getElementById('ex2rt-input').className = 'type-input';
-}
-
-function ex2RetestRevealHide() {
-  document.getElementById('ex2rt-reveal-area').classList.add('hidden');
-  document.getElementById('ex2rt-type-area').classList.remove('hidden');
-  document.getElementById('ex2rt-type-area').style.display = 'flex';
-  document.getElementById('ex2rt-input').focus();
-}
-
-function ex2RetestCheck() {
-  const w = ex2RetestQueue[ex2RetestIndex];
-  const val = document.getElementById('ex2rt-input').value.trim().toLowerCase();
-  const correct = w.english.toLowerCase();
-  if (val === correct) {
-    document.getElementById('ex2rt-input').classList.add('correct');
-    triggerGlow('correct');
-    showFeedback('ex2rt-feedback', 'correct', '✓ Correct !');
-    playAudio(false, correct);
-  } else {
-    document.getElementById('ex2rt-input').classList.add('wrong');
-    triggerGlow('wrong');
-    showFeedback('ex2rt-feedback', 'wrong', `✗ La bonne réponse est : "${w.english}"`);
-  }
-  stepsCompleted++;
-  updateProgress();
-  document.getElementById('ex2rt-next-btn').classList.remove('hidden');
-}
-
-function ex2RetestNext() {
-  ex2RetestIndex++;
-  showScreen('screen-ex2-retest');
-  loadEx2Retest();
+  
+  setTimeout(() => {
+    if (alive) {
+      alive = false;
+      b.classList.remove('show');
+      setTimeout(() => b.remove(), 300);
+    }
+  }, 3000);
 }
 
 // ══════════════════════════════════════════
@@ -1367,9 +1534,7 @@ function makePartialWord(word) {
 
 function loadEx3() {
   if (ex3Index >= ex3Queue.length) {
-    showScreen('screen-complete');
-    document.getElementById('stepLabel').textContent = 'Terminé !';
-    document.getElementById('progressBar').style.width = '100%';
+    showSessionComplete();
     return;
   }
 
@@ -1403,10 +1568,16 @@ function ex3Check() {
     triggerGlow('correct');
     showFeedback('ex3-feedback', 'correct', '✓ Correct !');
     playAudio(false, answer);
+    if (!wordErrors[answer]) {
+      firstTryCorrect++;
+    }
   } else {
     input.classList.add('wrong');
     triggerGlow('wrong');
     showFeedback('ex3-feedback', 'wrong', `✗ La bonne réponse était : "${input.dataset.answer}"`);
+    
+    if (!wordErrors[answer]) wordErrors[answer] = 0;
+    wordErrors[answer]++;
   }
   stepsCompleted++;
   updateProgress();
@@ -1428,9 +1599,45 @@ function showFeedback(id, type, msg) {
   el.innerHTML = (type === 'correct' ? '✓ ' : '✗ ') + msg.replace(/^[✓✗] /, '');
 }
 
+function showSessionComplete() {
+  document.getElementById('stepLabel').textContent = 'Terminé !';
+  document.getElementById('progressBar').style.width = '100%';
+  
+  const now = Date.now();
+  const diffSecs = Math.floor((now - sessionStartTime) / 1000);
+  const m = Math.floor(diffSecs / 60);
+  const s = diffSecs % 60;
+  
+  document.getElementById('stat-time').textContent = `${m}m ${s}s`;
+  document.getElementById('stat-words').textContent = words.length;
+  // 2 exercises tracked (EX1 and EX3)
+  document.getElementById('stat-first-try').textContent = `${firstTryCorrect} / ${words.length * 2}`; 
+  
+  const reviseList = document.getElementById('stat-revise-list');
+  reviseList.innerHTML = '';
+  
+  const sortedErrors = Object.keys(wordErrors).sort((a, b) => wordErrors[b] - wordErrors[a]);
+  const topErrors = sortedErrors.slice(0, 3);
+  
+  if (topErrors.length === 0) {
+    reviseList.innerHTML = '<li style="color:var(--correct); list-style:none;">Aucun, parfait ! 🎉</li>';
+  } else {
+    topErrors.forEach(w => {
+      const li = document.createElement('li');
+      li.textContent = w + ` (${wordErrors[w]} erreur${wordErrors[w] > 1 ? 's' : ''})`;
+      reviseList.appendChild(li);
+    });
+  }
+  
+  showScreen('screen-complete');
+}
+
 function restartApp() {
   stepsCompleted = 0;
-  totalSteps = words.length * 3;
+  totalSteps = words.length * 4;
+  sessionStartTime = Date.now();
+  firstTryCorrect = 0;
+  wordErrors = {};
   updateProgress();
   document.getElementById('header-home-btn').classList.remove('hidden');
   document.getElementById('header-progress-wrap').style.display = 'block';
@@ -1497,8 +1704,11 @@ async function loadWordList() {
     allEnglish = words.map(w => w.english);
     allFrench  = words.map(w => w.french);
     
-    totalSteps = words.length * 3;
+    totalSteps = words.length * 4;
     stepsCompleted = 0;
+    sessionStartTime = Date.now();
+    firstTryCorrect = 0;
+    wordErrors = {};
     updateProgress();
     
     document.getElementById('header-home-btn').classList.remove('hidden');
