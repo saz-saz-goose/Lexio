@@ -1571,7 +1571,7 @@ function spawnEx2Target(correctWord) {
     setTimeout(() => fly.remove(), 1000);
     
     setTimeout(() => bubble.remove(), 300);
-    setTimeout(() => { if (ex2GameTimeLeft > 0) spawnEx2Target(correctWord); }, 500);
+    setTimeout(() => { if (ex2GameTimeLeft > 0 && ex2GameQueue[ex2GameIndex] && ex2GameQueue[ex2GameIndex].english === correctWord) spawnEx2Target(correctWord); }, 500);
   });
   
   setTimeout(() => {
@@ -1579,7 +1579,7 @@ function spawnEx2Target(correctWord) {
       alive = false;
       b.classList.remove('show');
       setTimeout(() => b.remove(), 300);
-      setTimeout(() => { if (ex2GameTimeLeft > 0) spawnEx2Target(correctWord); }, 1000);
+      setTimeout(() => { if (ex2GameTimeLeft > 0 && ex2GameQueue[ex2GameIndex] && ex2GameQueue[ex2GameIndex].english === correctWord) spawnEx2Target(correctWord); }, 1000);
     }
   }, 5000);
 }
