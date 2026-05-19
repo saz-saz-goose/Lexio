@@ -1280,7 +1280,7 @@ function loadEncounterWord() {
 function loadEncounterWord() {
   if (encounterIndex >= words.length) {
     const msgs = ["Great job so far!", "Keep going!", "You're doing so well!"];
-    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx1);
+    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx2Part1);
     return;
   }
   const w = words[encounterIndex];
@@ -1317,7 +1317,8 @@ function loadEx1() {
     if (ex1Incorrect.length > 0) {
       startEx1Retest();
     } else {
-      startEx2Intro();
+      const msgs = ["Almost there!", "Keep it up!", "Great work!"];
+      showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx2Part2);
     }
     return;
   }
@@ -1388,7 +1389,8 @@ function startEx1Retest() {
 
 function loadEx1Retest() {
   if (ex1RetestIndex >= ex1RetestQueue.length) {
-    startEx2Intro();
+    const msgs = ["Almost there!", "Keep it up!", "Great work!"];
+    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx2Part2);
     return;
   }
   const w = ex1RetestQueue[ex1RetestIndex];
@@ -1438,13 +1440,36 @@ function ex1RetestNext() {
 // ══════════════════════════════════════════
 // EX 2 — GAME (TAP THE TRANSLATION)
 // ══════════════════════════════════════════
-function startEx2Intro() {
-  ex2GameQueue = shuffle([...words]);
+let ex2FullQueue = [];
+
+function startEx2Part1() {
+  ex2FullQueue = shuffle([...words]);
+  ex2GameQueue = ex2FullQueue.slice(0, 5);
   ex2GameIndex = 0;
-  document.getElementById('stepLabel').textContent = 'Exercice 2';
+  document.getElementById('stepLabel').textContent = 'Exercice 2 (1/2)';
   showScreen('screen-ex2-intro');
+  document.querySelector('#screen-ex2-intro .btn-primary').setAttribute('onclick', 'startEx2Part1Game()');
 }
 
+function startEx2Part1Game() {
+  showScreen('screen-ex2-game');
+  loadEx2GameWord();
+}
+
+function startEx2Part2() {
+  ex2GameQueue = ex2FullQueue.slice(5);
+  ex2GameIndex = 0;
+  document.getElementById('stepLabel').textContent = 'Exercice 2 (2/2)';
+  showScreen('screen-ex2-intro');
+  document.querySelector('#screen-ex2-intro .btn-primary').setAttribute('onclick', 'startEx2Part2Game()');
+}
+
+function startEx2Part2Game() {
+  showScreen('screen-ex2-game');
+  loadEx2GameWord();
+}
+
+// Called from intro screen - handles which part we're in
 function startEx2Game() {
   showScreen('screen-ex2-game');
   loadEx2GameWord();
@@ -1452,8 +1477,19 @@ function startEx2Game() {
 
 function loadEx2GameWord() {
   if (ex2GameIndex >= ex2GameQueue.length) {
-    const msgs = ["You're doing so well!", "Almost there!", "Fantastic!"];
-    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx3);
+    stepsCompleted++;
+    updateProgress();
+    // Determine which part just finished based on stepLabel
+    const label = document.getElementById('stepLabel').textContent;
+    if (label.includes('1/2')) {
+      // Part 1 done: go to EX1
+      const msgs = ["Now let's test your memory!", "Exercise time!", "Keep going!"];
+      showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx1);
+    } else {
+      // Part 2 done: go to EX3
+      const msgs = ["You're doing so well!", "Almost there!", "Fantastic!"];
+      showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx3);
+    }
     return;
   }
   
