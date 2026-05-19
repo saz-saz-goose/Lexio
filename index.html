@@ -623,6 +623,22 @@
     100% { transform: translate(-50%, -40px); opacity: 0; }
   }
 
+  /* ── LIVES ── */
+  .lives-container {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .heart {
+    font-size: 1.2rem;
+    color: var(--wrong);
+    transition: opacity 0.3s, filter 0.3s;
+  }
+  .heart.lost {
+    opacity: 0.3;
+    filter: grayscale(100%);
+  }
+
 </style>
 </head>
 <body>
@@ -634,9 +650,10 @@
     </button>
     <div class="logo" id="header-logo">Lexio</div>
   </div>
-  <div class="progress-bar-wrap" id="header-progress-wrap" style="display:none;">
+  <div class="progress-bar-wrap" id="header-progress-wrap" style="display:none; flex: 1; margin: 0 15px;">
     <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
   </div>
+  <div class="lives-container" id="lives-container" style="display:none;"></div>
   <div class="step-label" id="stepLabel" style="display:none;">Première rencontre</div>
 </div>
 
@@ -851,6 +868,18 @@
   <button class="btn-primary" onclick="goToHome()" style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent); margin-top:8px;">Retour à l'accueil</button>
 </div>
 
+<!-- ══════════════════════════════════════════
+     SCREEN: GAME OVER
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-game-over">
+  <div class="complete-icon">💔</div>
+  <div class="complete-title">Try Again!</div>
+  <div class="complete-sub">Vous avez fait 6 erreurs. Ne vous découragez pas, la pratique fait la perfection !</div>
+  <div class="divider" style="margin: 24px 0;"></div>
+  <button class="btn-primary" onclick="restartApp()">Recommencer la session</button>
+  <button class="btn-primary" onclick="goToHome()" style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent); margin-top:8px;">Retour à l'accueil</button>
+</div>
+
 <script>
 // ══════════════════════════════════════════
 // WORD DATA & ARCHITECTURE
@@ -885,6 +914,9 @@ let sessionStartTime = 0;
 let firstTryCorrect = 0;
 let wordErrors = {};
 
+let playerLives = 6;
+const MAX_LIVES = 6;
+
 let ex3Queue        = [];
 let ex3Index        = 0;
 
@@ -907,6 +939,34 @@ function triggerGlow(type) {
   document.body.classList.remove('glow-correct', 'glow-wrong');
   document.body.classList.add(type === 'correct' ? 'glow-correct' : 'glow-wrong');
   setTimeout(() => document.body.classList.remove('glow-correct', 'glow-wrong'), 2000);
+}
+
+function initLives() {
+  playerLives = MAX_LIVES;
+  const container = document.getElementById('lives-container');
+  container.innerHTML = '';
+  for (let i = 0; i < MAX_LIVES; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.textContent = '❤️';
+    container.appendChild(heart);
+  }
+  container.style.display = 'flex';
+}
+
+function loseLife() {
+  if (playerLives <= 0) return;
+  playerLives--;
+  const container = document.getElementById('lives-container');
+  const hearts = container.querySelectorAll('.heart');
+  if (hearts[playerLives]) {
+    hearts[playerLives].classList.add('lost');
+  }
+  if (playerLives <= 0) {
+    showScreen('screen-game-over');
+    if (typeof ex2GameTimerInterval !== 'undefined') clearInterval(ex2GameTimerInterval);
+    if (typeof ex2GameLoopInterval !== 'undefined') clearInterval(ex2GameLoopInterval);
+  }
 }
 
 function showTransition(message, nextFunc) {
@@ -1304,6 +1364,7 @@ function checkEx1(btn, chosen, correct, wordObj) {
     // Track errors
     if (!wordErrors[correct]) wordErrors[correct] = 0;
     wordErrors[correct]++;
+    loseLife();
     
     ex1Queue.splice(ex1Index + 1, 0, wordObj);
     document.getElementById('ex1-next-btn').classList.remove('hidden');
@@ -1361,6 +1422,7 @@ function checkEx1Retest(btn, chosen, correct) {
     allBtns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
     triggerGlow('wrong');
     showFeedback('ex1rt-feedback', 'wrong', `✗ La bonne réponse est : "${correct}"`);
+    loseLife();
   }
   stepsCompleted++;
   updateProgress();
@@ -1512,6 +1574,7 @@ function spawnEx2Distractor(correctWord) {
     bubble.classList.remove('show');
     bubble.style.background = 'var(--wrong)';
     bubble.style.color = 'white';
+    loseLife();
     setTimeout(() => bubble.remove(), 300);
   });
   
@@ -1589,6 +1652,7 @@ function ex3Check() {
     
     if (!wordErrors[answer]) wordErrors[answer] = 0;
     wordErrors[answer]++;
+    loseLife();
   }
   stepsCompleted++;
   updateProgress();
@@ -1649,6 +1713,7 @@ function restartApp() {
   sessionStartTime = Date.now();
   firstTryCorrect = 0;
   wordErrors = {};
+  initLives();
   updateProgress();
   document.getElementById('header-home-btn').classList.remove('hidden');
   document.getElementById('header-progress-wrap').style.display = 'block';
@@ -1720,6 +1785,7 @@ async function loadWordList() {
     sessionStartTime = Date.now();
     firstTryCorrect = 0;
     wordErrors = {};
+    initLives();
     updateProgress();
     
     document.getElementById('header-home-btn').classList.remove('hidden');
