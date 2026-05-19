@@ -1,0 +1,106 @@
+{
+  "meta": {
+    "id": "cambridge-yle-starters-animals",
+    "title": "Les Animaux (Starters)",
+    "source": "Cambridge YLE Starters",
+    "level": "A1",
+    "category": "curriculum",
+    "subcategory": "Cambridge YLE Starters",
+    "theme": "animals",
+    "native_language": "fr",
+    "target_language": "en",
+    "word_count": 10
+  },
+  "words": [
+    {
+      "id": "dog",
+      "french": "chien",
+      "english": "dog",
+      "sentences": [
+        { "fr": "Le <b class='highlight'>dog</b> court après le ballon dans le jardin.", "en": "The dog runs after the ball in the garden." },
+        { "fr": "J'ai un petit <b class='highlight'>dog</b> marron très affectueux.", "en": "I have a small, very affectionate brown dog." }
+      ]
+    },
+    {
+      "id": "cat",
+      "french": "chat",
+      "english": "cat",
+      "sentences": [
+        { "fr": "Notre <b class='highlight'>cat</b> adore dormir sur le canapé chaud.", "en": "Our cat loves sleeping on the warm sofa." },
+        { "fr": "Regarde ce petit <b class='highlight'>cat</b> noir sur le toit.", "en": "Look at that little black cat on the roof." }
+      ]
+    },
+    {
+      "id": "bird",
+      "french": "oiseau",
+      "english": "bird",
+      "sentences": [
+        { "fr": "Un joli <b class='highlight'>bird</b> bleu chante sur la branche.", "en": "A pretty blue bird sings on the branch." },
+        { "fr": "Le chat regarde le <b class='highlight'>bird</b> par la fenêtre.", "en": "The cat watches the bird through the window." }
+      ]
+    },
+    {
+      "id": "horse",
+      "french": "cheval",
+      "english": "horse",
+      "sentences": [
+        { "fr": "Elle monte à <b class='highlight'>horse</b> tous les samedis matins.", "en": "She rides a horse every Saturday morning." },
+        { "fr": "Le grand <b class='highlight'>horse</b> blanc galope dans le champ.", "en": "The big white horse gallops in the field." }
+      ]
+    },
+    {
+      "id": "mouse",
+      "french": "souris",
+      "english": "mouse",
+      "sentences": [
+        { "fr": "La petite <b class='highlight'>mouse</b> grise court très vite sous la table.", "en": "The little grey mouse runs very fast under the table." },
+        { "fr": "Notre chat a chassé une <b class='highlight'>mouse</b> dans le jardin.", "en": "Our cat chased a mouse in the garden." }
+      ]
+    },
+    {
+      "id": "duck",
+      "french": "canard",
+      "english": "duck",
+      "sentences": [
+        { "fr": "Le <b class='highlight'>duck</b> nage tranquillement sur le lac du parc.", "en": "The duck swims quietly on the park lake." },
+        { "fr": "Les enfants jettent du pain aux <b class='highlight'>duck</b> sauvages.", "en": "The children throw bread to the wild ducks." }
+      ]
+    },
+    {
+      "id": "frog",
+      "french": "grenouille",
+      "english": "frog",
+      "sentences": [
+        { "fr": "La <b class='highlight'>frog</b> verte saute dans l'eau de la mare.", "en": "The green frog jumps into the pond water." },
+        { "fr": "On entend le chant de la <b class='highlight'>frog</b> pendant les nuits d'été.", "en": "We hear the song of the frog during summer nights." }
+      ]
+    },
+    {
+      "id": "sheep",
+      "french": "mouton",
+      "english": "sheep",
+      "sentences": [
+        { "fr": "Le fermier rassemble ses <b class='highlight'>sheep</b> dans la colline.", "en": "The farmer gathers his sheep on the hill." },
+        { "fr": "La laine de ce <b class='highlight'>sheep</b> est très douce et blanche.", "en": "The wool of this sheep is very soft and white." }
+      ]
+    },
+    {
+      "id": "elephant",
+      "french": "éléphant",
+      "english": "elephant",
+      "sentences": [
+        { "fr": "L' <b class='highlight'>elephant</b> est le plus grand animal terrestre.", "en": "The elephant is the largest land animal." },
+        { "fr": "Nous avons vu un <b class='highlight'>elephant</b> d'Afrique lors de notre safari.", "en": "We saw an African elephant during our safari." }
+      ]
+    },
+    {
+      "id": "spider",
+      "french": "araignée",
+      "english": "spider",
+      "sentences": [
+        { "fr": "Il y a une petite <b class='highlight'>spider</b> au plafond de la chambre.", "en": "There is a small spider on the bedroom ceiling." },
+        { "fr": "La <b class='highlight'>spider</b> tissait sa toile entre deux branches.", "en": "The spider was spinning its web between two branches." }
+      ]
+    }
+  ]
+}

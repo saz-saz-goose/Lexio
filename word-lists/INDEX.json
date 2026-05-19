@@ -1,0 +1,180 @@
+{
+  "meta": {
+    "title": "Word Lists – Master Index",
+    "description": "Complete index of all JSON word list files for the language learning app. Three categories: Curriculum Learning, Word Group Learning, and Theme Learning.",
+    "total_files": 12,
+    "last_updated": "2026-05"
+  },
+  "structure": {
+    "1_curriculum_learning": {
+      "label": "Curriculum Learning",
+      "description": "Official and curriculum-aligned vocabulary lists based on Cambridge YLE exams and the French Éducation Nationale programme for English.",
+      "sub_categories": {
+        "cambridge_yle": {
+          "label": "Cambridge English for Young Learners (YLE)",
+          "description": "Three levels of the Cambridge YLE suite, for learners aged 6–12. Based on the official Cambridge wordlists for exams from 2018.",
+          "files": [
+            {
+              "filename": "starters_pre_a1.json",
+              "path": "curriculum/cambridge_yle/starters_pre_a1.json",
+              "title": "Cambridge YLE – Pre-A1 Starters",
+              "level": "Pre-A1",
+              "topics_count": 13,
+              "approximate_word_count": 200,
+              "notes": "Core vocabulary for the youngest learners. Organised by topic (animals, body, clothes, colours, family, food, home, numbers, school, sports, time, toys, transport)."
+            },
+            {
+              "filename": "movers_a1.json",
+              "path": "curriculum/cambridge_yle/movers_a1.json",
+              "title": "Cambridge YLE – A1 Movers",
+              "level": "A1",
+              "topics_count": 13,
+              "approximate_word_count": 220,
+              "notes": "Words ADDITIONAL to the Starters list. Use alongside starters_pre_a1.json for the full Movers vocabulary set."
+            },
+            {
+              "filename": "flyers_a2.json",
+              "path": "curriculum/cambridge_yle/flyers_a2.json",
+              "title": "Cambridge YLE – A2 Flyers",
+              "level": "A2",
+              "topics_count": 9,
+              "approximate_word_count": 200,
+              "notes": "Words ADDITIONAL to the Starters and Movers lists. Roughly equivalent to Cambridge A2 Key for Schools but with child-appropriate topics."
+            }
+          ]
+        },
+        "brevet_bac": {
+          "label": "French Curriculum – Brevet and Bac Aligned",
+          "description": "English vocabulary aligned with the French Éducation Nationale programme for English as a foreign language (LV1/LV2), covering collège (Brevet) and lycée (Bac) levels.",
+          "files": [
+            {
+              "filename": "brevet_themes_b1.json",
+              "path": "curriculum/brevet_bac/brevet_themes_b1.json",
+              "title": "Brevet-Aligned English Vocabulary",
+              "level": "B1 (end of collège / 3ème)",
+              "themes_count": 8,
+              "approximate_word_count": 160,
+              "notes": "Eight thematic areas from the French collège English curriculum: identity, school, the English-speaking world, technology, environment, myths and heroes, sport/health, arts/media."
+            },
+            {
+              "filename": "bac_axes_thematiques_b2.json",
+              "path": "curriculum/brevet_bac/bac_axes_thematiques_b2.json",
+              "title": "Bac-Aligned English Vocabulary",
+              "level": "B2 (end of lycée / Terminale)",
+              "axes_count": 5,
+              "approximate_word_count": 125,
+              "notes": "The five thematic axes of the French lycée English Bac programme (2021 reform): L'art de vivre ensemble, Territoire et mémoire, Expressions et représentations, Innovations scientifiques, Rencontres avec l'autre."
+            }
+          ]
+        }
+      }
+    },
+    "2_word_group_learning": {
+      "label": "Word Group Learning",
+      "description": "AI-generated vocabulary by word class, organised by CEFR level. Each file covers nouns, verbs, adjectives, adverbs, prepositions of time and place, connectives, and idioms.",
+      "files": [
+        {
+          "filename": "word_groups_a1_a2.json",
+          "path": "word_groups/A1_A2/word_groups_a1_a2.json",
+          "title": "Word Group Learning – A1/A2 (Beginner)",
+          "level": "A1-A2",
+          "groups": ["nouns", "verbs", "adjectives", "adverbs", "prepositions of place", "prepositions of time", "connectives", "common expressions"],
+          "approximate_word_count": 230
+        },
+        {
+          "filename": "word_groups_b1_b2.json",
+          "path": "word_groups/B1_B2/word_groups_b1_b2.json",
+          "title": "Word Group Learning – B1/B2 (Intermediate)",
+          "level": "B1-B2",
+          "groups": ["nouns", "verbs", "adjectives", "adverbs", "prepositions of place", "prepositions of time", "phrasal verbs", "connectives", "idioms"],
+          "approximate_word_count": 330
+        },
+        {
+          "filename": "word_groups_c1_c2.json",
+          "path": "word_groups/C1_C2/word_groups_c1_c2.json",
+          "title": "Word Group Learning – C1/C2 (Advanced)",
+          "level": "C1-C2",
+          "groups": ["nouns", "verbs", "adjectives", "adverbs", "advanced prepositions", "discourse markers / connectives", "advanced idioms"],
+          "approximate_word_count": 330
+        }
+      ]
+    },
+    "3_theme_learning": {
+      "label": "Theme Learning",
+      "description": "AI-generated thematic vocabulary lists, organised by CEFR level and topic. Seven core themes plus three specialist topics.",
+      "themes": ["everyday_objects", "the_house_and_local_area", "family_and_relationships", "travel_and_holidays", "environment_and_world", "food_and_lifestyle", "hobbies_and_interests"],
+      "levelled_files": [
+        {
+          "filename": "themes_a1_a2.json",
+          "path": "themes/A1_A2/themes_a1_a2.json",
+          "title": "Theme Learning – A1/A2 (Beginner)",
+          "level": "A1-A2",
+          "themes_count": 7,
+          "approximate_word_count": 200
+        },
+        {
+          "filename": "themes_b1_b2.json",
+          "path": "themes/B1_B2/themes_b1_b2.json",
+          "title": "Theme Learning – B1/B2 (Intermediate)",
+          "level": "B1-B2",
+          "themes_count": 7,
+          "approximate_word_count": 210
+        },
+        {
+          "filename": "themes_c1_c2.json",
+          "path": "themes/C1_C2/themes_c1_c2.json",
+          "title": "Theme Learning – C1/C2 (Advanced)",
+          "level": "C1-C2",
+          "themes_count": 7,
+          "approximate_word_count": 210
+        }
+      ],
+      "specialist_files": {
+        "label": "Specialist Topics (no fixed level)",
+        "description": "These lists are not tied to a specific CEFR level. They cover professional/specialist registers needed regardless of age or exam.",
+        "files": [
+          {
+            "filename": "business_and_finance.json",
+            "path": "themes/specialist/business_and_finance.json",
+            "title": "Business and Finance Terms",
+            "level": "B2-C2 (mixed)",
+            "categories": ["core business", "finance and economics", "meetings and negotiations", "marketing and branding"],
+            "approximate_word_count": 140,
+            "notes": "Includes professional phrases and business idioms."
+          },
+          {
+            "filename": "medical_and_psychological.json",
+            "path": "themes/specialist/medical_and_psychological.json",
+            "title": "Medical and Psychological Terms",
+            "level": "B2-C2 (mixed)",
+            "categories": ["general medical language", "anatomy", "common conditions and procedures", "mental health and psychology", "healthcare settings"],
+            "approximate_word_count": 165,
+            "notes": "Language learning resource only — not medical advice."
+          },
+          {
+            "filename": "practical_english.json",
+            "path": "themes/specialist/practical_english.json",
+            "title": "Practical English – Real-World Phrases",
+            "level": "A2-B1 (accessible)",
+            "categories": ["greetings and basics", "at a shop", "at a restaurant", "at a hotel", "at a pharmacy/doctor", "at a bank/post office", "transport", "making complaints", "emergencies"],
+            "approximate_word_count": 140,
+            "notes": "Full phrases rather than isolated words. Ideal for travel and real-world use. British English primary, with US variants noted."
+          }
+        ]
+      }
+    }
+  },
+  "design_notes": {
+    "json_structure": "Each file uses a consistent meta block (title, level, source, description) followed by categorised word objects with 'word' and 'type' fields as minimum, plus optional 'example', 'notes', 'translation_hint', and 'meaning' fields.",
+    "word_object_fields": {
+      "word": "The word or phrase (required)",
+      "type": "Grammatical type: noun, verb, adjective, adverb, expression, phrasal verb, etc. (recommended)",
+      "example": "A sample sentence (optional)",
+      "notes": "Clarifications, e.g. plural forms, UK/US variants (optional)",
+      "meaning": "Used for idioms to explain the figurative meaning (optional)",
+      "translation_hint": "A simple gloss, not a full translation (optional, used at A1/A2)"
+    },
+    "cambridge_yle_usage": "The three YLE files are cumulative. Starters is the base level. Movers words should be used alongside Starters. Flyers words should be used alongside both Starters and Movers.",
+    "practical_english_note": "The practical_english.json file uses a 'phrases' array (not 'words') with 'phrase' and 'use' fields, given its communicative rather than lexical focus."
+  }
+}

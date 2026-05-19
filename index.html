@@ -48,6 +48,13 @@
     align-items: center;
     justify-content: space-between;
     padding: 28px 24px 0;
+    min-height: 60px;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 
   .logo {
@@ -56,6 +63,26 @@
     font-weight: 600;
     color: var(--accent);
     letter-spacing: -0.5px;
+  }
+
+  .back-home-btn {
+    background: transparent;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--accent);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    transition: background 0.2s, color 0.2s;
+  }
+  .back-home-btn:hover {
+    background: var(--accent-light);
   }
 
   .progress-bar-wrap {
@@ -98,6 +125,115 @@
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── HOME SCREEN ── */
+  .home-hero {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .home-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .home-subtitle {
+    font-size: 0.95rem;
+    color: var(--ink-light);
+    line-height: 1.5;
+  }
+  .category-section {
+    width: 100%;
+    margin-top: 24px;
+  }
+  .category-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 12px;
+    border-left: 3px solid var(--accent);
+    padding-left: 8px;
+  }
+  .courses-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    width: 100%;
+  }
+  @media(min-width: 480px) {
+    .courses-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .course-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  .course-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+    border-color: var(--accent);
+  }
+  .course-card-top {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .level-badge {
+    align-self: flex-start;
+    font-size: 0.62rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+  }
+  /* level tag colors */
+  .level-pre-a1 { background: #E2ECF5; color: #1E4E79; }
+  .level-a1 { background: #D5ECE4; color: #1B5E45; }
+  .level-a2 { background: #EAE6F8; color: #493393; }
+  .level-b1 { background: #FDE8D4; color: #9A5013; }
+  .level-b2 { background: #FDE1E3; color: #9E1F28; }
+  .level-c1-c2 { background: #E1E2E4; color: #333639; }
+
+  .course-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .course-desc {
+    font-size: 0.78rem;
+    color: var(--ink-light);
+    line-height: 1.4;
+  }
+  .course-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.72rem;
+    color: var(--ink-light);
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+    margin-top: 2px;
+  }
+  .course-count {
+    font-weight: 500;
+    color: var(--accent);
   }
 
   /* ── CARDS ── */
@@ -203,20 +339,6 @@
   }
   .btn-primary:hover  { background: #2e4a6e; }
   .btn-primary:active { transform: scale(0.98); }
-
-  .btn-secondary {
-    background: transparent;
-    color: var(--accent);
-    border: 1.5px solid var(--accent);
-    border-radius: 12px;
-    padding: 14px 24px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .btn-secondary:hover { background: var(--accent-light); }
 
   /* ── MCQ OPTIONS ── */
   .options-grid {
@@ -357,18 +479,6 @@
     line-height: 1.6;
   }
 
-  /* ── WORD CHIP (retest list) ── */
-  .retest-chip {
-    display: inline-block;
-    background: var(--wrong-bg);
-    color: var(--wrong);
-    border-radius: 8px;
-    padding: 4px 12px;
-    font-size: 0.85rem;
-    margin: 4px;
-    font-weight: 500;
-  }
-
   /* ── COMPLETE SCREEN ── */
   .complete-icon { font-size: 3rem; text-align: center; }
   .complete-title {
@@ -391,36 +501,95 @@
   .mt-4 { margin-top: 4px; }
   .mt-8 { margin-top: 8px; }
   .center { text-align: center; }
+
+  /* ── LOADING SPINNER ── */
+  .spinner {
+    border: 4px solid var(--accent-light);
+    border-top: 4px solid var(--accent);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .instructions-list {
+    text-align: left;
+    padding-left: 20px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--ink-light);
+  }
+
+  .instructions-list li {
+    margin-bottom: 8px;
+  }
 </style>
 </head>
 <body>
 
 <div class="app-header">
-  <div class="logo">Lexio</div>
-  <div class="progress-bar-wrap">
+  <div class="logo-area">
+    <button class="back-home-btn hidden" id="header-home-btn" onclick="goToHome()">
+      ← Accueil
+    </button>
+    <div class="logo" id="header-logo">Lexio</div>
+  </div>
+  <div class="progress-bar-wrap" id="header-progress-wrap" style="display:none;">
     <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
   </div>
-  <div class="step-label" id="stepLabel">Première rencontre</div>
+  <div class="step-label" id="stepLabel" style="display:none;">Première rencontre</div>
 </div>
 
 <!-- ══════════════════════════════════════════
-     SCREEN: HOME
+     SCREEN: LOADING SCREEN
 ══════════════════════════════════════════ -->
-<div class="screen active" id="screen-home">
-  <div class="complete-icon">📚</div>
-  <div class="complete-title">Bienvenue sur Lexio</div>
-  <div class="complete-sub">Choisissez un cours pour commencer à apprendre.</div>
-  
-  <div class="card" style="width:100%; margin-top:20px;">
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-      <label for="autoplay-toggle" style="font-weight:500;">Lecture audio automatique</label>
-      <input type="checkbox" id="autoplay-toggle" checked style="transform:scale(1.3);">
-    </div>
-    
-    <div class="section-title mt-4" style="font-size:1.2rem; text-align:left; margin-bottom:12px;">Vos cours</div>
-    <button class="btn-secondary" style="width:100%; text-align:left; margin-bottom:12px;" onclick="loadCourse('word-lists/cambridge-yle-starters-animals.json')">
-      🦊 Cambridge YLE Starters - Animaux
-    </button>
+<div class="screen active" id="screen-loading">
+  <div class="card" style="text-align: center; padding: 40px 20px;">
+    <div class="logo" style="font-size: 2.5rem; margin-bottom: 20px;">Lexio</div>
+    <div class="spinner"></div>
+    <div class="section-sub" id="loading-status">Chargement en cours...</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: ERROR SCREEN (CORS / HTTP)
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-error">
+  <div class="card" style="border-color: var(--wrong); background: var(--card); padding: 32px 24px;">
+    <div class="phase-tag" style="background: var(--wrong-bg); color: var(--wrong); margin-bottom: 20px;">Erreur de chargement</div>
+    <div class="word-display" style="font-size: 2rem; color: var(--wrong); margin-bottom: 12px; font-family: 'Playfair Display', serif;">Impossible de charger les données</div>
+    <p class="section-sub" style="text-align: left; margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">
+      Pour des raisons de sécurité, les navigateurs bloquent la lecture de fichiers externes (politique CORS) lorsque l'application est ouverte directement comme un fichier local (adresse commençant par <code>file://</code>).
+    </p>
+    <div class="divider" style="margin-bottom: 16px;"></div>
+    <p class="section-sub" style="text-align: left; font-weight: 500; color: var(--ink); margin-bottom: 8px;">Comment lancer un serveur local :</p>
+    <ul class="instructions-list">
+      <li><strong>Avec VS Code :</strong> Ouvrez le dossier du projet dans VS Code, installez l'extension <strong>Live Server</strong>, puis cliquez sur <strong>Go Live</strong> en bas à droite.</li>
+      <li><strong>Avec Python :</strong> Ouvrez votre console dans ce dossier et tapez <code>python -m http.server</code>. Ouvrez ensuite <code>http://localhost:8000</code> dans votre navigateur.</li>
+      <li><strong>Consultez le fichier :</strong> <code>GUIDE-SERVEUR-LOCAL.md</code> dans le dossier du projet pour plus de détails.</li>
+    </ul>
+    <button class="btn-primary" onclick="handleRetry()">Réessayer</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: HOME SCREEN (Course Dashboard)
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-home">
+  <div class="home-hero">
+    <div class="home-title">Lexio</div>
+    <div class="home-subtitle">Choisissez votre liste de vocabulaire pour commencer à apprendre</div>
+  </div>
+
+  <div id="home-categories-container" style="width: 100%;">
+    <!-- Dynamically populated categories and course cards -->
   </div>
 </div>
 
@@ -432,19 +601,22 @@
     <div class="phase-tag">Première rencontre</div>
     <div class="word-display" id="enc-word"></div>
     <div class="translation-display" id="enc-translation"></div>
-    <div style="display:flex; gap:8px;">
-      <button class="audio-btn" id="enc-audio-btn" onclick="playAudio(false)">
-        🔊 <span>Écouter</span>
+    <div style="display: flex; gap: 10px; width: 100%; margin-bottom: 8px;">
+      <button class="audio-btn" id="enc-audio-btn" onclick="playAudio(false)" style="flex: 1; justify-content: center;">
+        🔊 <span>Listen</span>
       </button>
-      <button class="audio-btn" id="enc-audio-btn-slow" onclick="playAudio(true)">
-        🐢 <span>Lent</span>
+      <button class="audio-btn" id="enc-slow-audio-btn" onclick="playAudio(true)" style="flex: 1; justify-content: center; background: #FFF; border: 1.5px solid var(--border); color: var(--ink-light);">
+        🐌 <span>Slow version</span>
       </button>
     </div>
   </div>
 
   <div class="sentence-area">
     <div class="sentence-counter" id="enc-sent-counter">Phrase 1 sur 2</div>
-    <div class="sentence-text" id="enc-sent-text"></div>
+    <div id="enc-sentences-container" style="display: flex; flex-direction: column; gap: 12px;">
+      <div class="sentence-text" id="enc-sent-text-fr"></div>
+      <div class="sentence-text" id="enc-sent-text-en" style="color: var(--ink-light); font-size: 0.95rem; border-top: 1px dashed var(--border); padding-top: 8px;"></div>
+    </div>
   </div>
 
   <button class="btn-primary" id="enc-next-btn" onclick="encounterNext()">✓ J'ai lu cette phrase</button>
@@ -521,7 +693,7 @@
   <div id="ex2rt-reveal-area">
     <div class="section-sub center" style="font-size:0.85rem;">Mot anglais :</div>
     <div class="partial-word-display" id="ex2rt-english-shown"></div>
-    <button class="btn-primary" onclick="ex2RetestRevealHide()" id="ex2rt-reveal-btn">Cliquez pour masquer le mot et taper</button>
+    <button class="btn-primary" onclick="ex2RetestRevealHide()" id="ex2rt-reveal-btn">Cliquez pour masquer le mot et tapez</button>
   </div>
 
   <div id="ex2rt-type-area" class="hidden" style="width:100%;display:flex;flex-direction:column;gap:12px;align-items:center;">
@@ -563,19 +735,22 @@
 <div class="screen" id="screen-complete">
   <div class="complete-icon">🎉</div>
   <div class="complete-title">Première rencontre terminée !</div>
-  <div class="complete-sub">Vous avez rencontré les 5 mots pour la première fois.<br>Revenez demain pour la deuxième rencontre.</div>
+  <div class="complete-sub">Vous avez rencontré les 10 mots pour la première fois.<br>Revenez demain pour la deuxième rencontre.</div>
   <div class="divider"></div>
   <button class="btn-primary" onclick="restartApp()">Recommencer la session</button>
+  <button class="btn-primary" onclick="goToHome()" style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent); margin-top:8px;">Retour à l'accueil</button>
 </div>
 
 <script>
 // ══════════════════════════════════════════
-// WORD DATA
+// WORD DATA & ARCHITECTURE
 // ══════════════════════════════════════════
+const INDEX_FILE = 'word-lists/INDEX.json';
+let WORD_LIST_FILE = '';
 let words = [];
 let allEnglish = [];
 let allFrench = [];
-let autoPlayAudio = true;
+let indexDataCached = null;
 
 // ══════════════════════════════════════════
 // STATE
@@ -645,15 +820,469 @@ function updateProgress() {
   document.getElementById('progressBar').style.width = pct + '%';
 }
 
-function playAudio(slow = false) {
-  // Placeholder — real implementation would use TTS API or pre-generated audio files
-  const word = words[encounterIndex].english;
+function playAudio(slow = false, specificWord = null) {
+  if (words.length === 0) return;
+  const word = specificWord || (encounterIndex < words.length ? words[encounterIndex].english : "");
+  if (!word) return;
   if ('speechSynthesis' in window) {
+    speechSynthesis.cancel(); // Cancel any playing speech
     const utt = new SpeechSynthesisUtterance(word);
     utt.lang = 'en-GB';
     utt.rate = slow ? 0.5 : 1.0;
     speechSynthesis.speak(utt);
   }
+}
+
+// ══════════════════════════════════════════
+// GOOGLE TRANSLATE API DYNAMIC FETCH
+// ══════════════════════════════════════════
+async function translateText(text, sl = 'en', tl = 'fr') {
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Translation failed");
+  const data = await response.json();
+  try {
+    return data[0].map(item => item[0]).join('');
+  } catch (e) {
+    return text;
+  }
+}
+
+function normalizeString(str) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
+function replaceFrenchWordWithEnglish(frSentence, frWord, enWord) {
+  const wordsReal = frSentence.split(/\s+/).filter(Boolean);
+  const normFrWord = normalizeString(frWord);
+  
+  let matchIdx = -1;
+  let matchLen = 1;
+  
+  // 1. Try exact word match (normalized, ignoring punctuation)
+  for (let i = 0; i < wordsReal.length; i++) {
+    const wNorm = normalizeString(wordsReal[i].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?']/g, ""));
+    if (wNorm === normFrWord || wNorm === normFrWord + 's' || normFrWord === wNorm + 's') {
+      matchIdx = i;
+      break;
+    }
+  }
+  
+  // 2. Try prefix/substring match if not found exactly (e.g. "entraînait" for "entraîner")
+  if (matchIdx === -1) {
+    for (let i = 0; i < wordsReal.length; i++) {
+      const wNorm = normalizeString(wordsReal[i].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?']/g, ""));
+      if (wNorm.includes(normFrWord) || normFrWord.includes(wNorm)) {
+        if (wNorm.length > 2 && normFrWord.length > 2) {
+          matchIdx = i;
+          break;
+        }
+      }
+    }
+  }
+  
+  // 3. Try matching multi-word translations (e.g. "chemin de fer" for "railway")
+  if (matchIdx === -1 && frWord.includes(' ')) {
+    const frParts = frWord.split(/\s+/).map(normalizeString);
+    for (let i = 0; i <= wordsReal.length - frParts.length; i++) {
+      let sequenceMatch = true;
+      for (let j = 0; j < frParts.length; j++) {
+        const wNorm = normalizeString(wordsReal[i + j].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?']/g, ""));
+        if (!wNorm.includes(frParts[j]) && !frParts[j].includes(wNorm)) {
+          sequenceMatch = false;
+          break;
+        }
+      }
+      if (sequenceMatch) {
+        matchIdx = i;
+        matchLen = frParts.length;
+        break;
+      }
+    }
+  }
+  
+  if (matchIdx !== -1) {
+    const firstWord = wordsReal[matchIdx];
+    const lastWord = wordsReal[matchIdx + matchLen - 1];
+    
+    // Extract prefix and suffix punctuation from the original words
+    const prefixPunct = firstWord.match(/^[.,\/#!$%\^&\*;:{}=\-_`~()?']+/)?.[0] || "";
+    const suffixPunct = lastWord.match(/[.,\/#!$%\^&\*;:{}=\-_`~()?']+$/)?.[0] || "";
+    
+    const replacement = `${prefixPunct}<b class='highlight'>${enWord}</b>${suffixPunct}`;
+    const resultWords = [...wordsReal];
+    resultWords.splice(matchIdx, matchLen, replacement);
+    return resultWords.join(' ');
+  }
+  
+  // 4. Fallback if no match is found: replace the last word of the sentence
+  if (wordsReal.length > 0) {
+    const lastWordIdx = wordsReal.length - 1;
+    const lastWord = wordsReal[lastWordIdx];
+    
+    // Extract prefix and suffix punctuation from the last word
+    const prefixPunct = lastWord.match(/^[.,\/#!$%\^&\*;:{}=\-_`~()?']+/)?.[0] || "";
+    const suffixPunct = lastWord.match(/[.,\/#!$%\^&\*;:{}=\-_`~()?']+$/)?.[0] || "";
+    
+    const replacement = `${prefixPunct}<b class='highlight'>${enWord}</b>${suffixPunct}`;
+    const resultWords = [...wordsReal];
+    resultWords[lastWordIdx] = replacement;
+    return resultWords.join(' ');
+  }
+  
+  return `<b class='highlight'>${enWord}</b>`;
+}
+
+function getTemplatesForWord(word, type) {
+  const t = (type || '').toLowerCase();
+  
+  const nounTemplates = [
+    `I can see the ${word}.`,
+    `This is a beautiful ${word}.`,
+    `We need a new ${word}.`,
+    `He put the ${word} on the table.`,
+    `She has a big ${word}.`,
+    `Please show me the ${word}.`
+  ];
+  
+  const verbTemplates = [
+    `I want to ${word} today.`,
+    `Can you ${word} this for me?`,
+    `He likes to ${word} every morning.`,
+    `We should ${word} together.`,
+    `She knows how to ${word} well.`,
+    `Please ${word} when you are ready.`
+  ];
+  
+  const adjTemplates = [
+    `This is a very ${word} place.`,
+    `She looks ${word} today.`,
+    `I want to find a ${word} option.`,
+    `The book is very ${word}.`,
+    `He is a ${word} boy.`,
+    `It was a ${word} decision.`
+  ];
+  
+  const advTemplates = [
+    `Please write ${word}.`,
+    `He walked ${word} along the street.`,
+    `She explained the rules ${word}.`,
+    `They worked ${word} all day.`,
+    `You must drive ${word} at night.`,
+    `The car moved ${word} down the hill.`
+  ];
+  
+  const generalTemplates = [
+    `I like this ${word}.`,
+    `We are talking about the ${word}.`,
+    `This is a good ${word}.`,
+    `Can you see the ${word}?`,
+    `They have a nice ${word}.`,
+    `He knows the ${word}.`
+  ];
+  
+  if (t.includes('noun')) return nounTemplates;
+  if (t.includes('verb')) return verbTemplates;
+  if (t.includes('adj')) return adjTemplates;
+  if (t.includes('adv')) return advTemplates;
+  return generalTemplates;
+}
+
+function checkSentenceContainsWord(frSentence, frWord) {
+  const normSent = normalizeString(frSentence);
+  const normWord = normalizeString(frWord);
+  
+  // Clean punctuation to avoid issues
+  const cleanSent = normSent.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?']/g, " ");
+  const wordsList = cleanSent.split(/\s+/).filter(Boolean);
+  
+  for (let w of wordsList) {
+    if (w === normWord) return true;
+    if (w.length > 2 && normWord.length > 2) {
+      if (w === normWord + 's' || normWord === w + 's' || w.includes(normWord) || normWord.includes(w)) {
+        return true;
+      }
+    }
+  }
+  if (normSent.includes(normWord) && normWord.length > 2) {
+    return true;
+  }
+  return false;
+}
+
+async function translateAndGenerateSentencesForSession(selectedWords) {
+  const promises = selectedWords.map(async (w) => {
+    let english = w.english;
+    let type = w.type || "";
+    
+    // First, translate the word itself to French (to get its most common translation)
+    let french = w.french;
+    const hasFrench = w.french && !w.french.includes('[Traduire') && w.french.trim() !== "";
+    if (!hasFrench) {
+      try {
+        french = await translateText(english, 'en', 'fr');
+      } catch (e) {
+        french = french || `[Traduire : ${english}]`;
+      }
+    }
+    
+    // Generate exactly 2 context sentences
+    const templates = getTemplatesForWord(english, type);
+    const sentences = [];
+    
+    // We search the templates for ones that translate cleanly containing the French word
+    for (let enSent of templates) {
+      if (sentences.length >= 2) break;
+      try {
+        const frSentTranslated = await translateText(enSent, 'en', 'fr');
+        if (checkSentenceContainsWord(frSentTranslated, french)) {
+          const frSentAligned = replaceFrenchWordWithEnglish(frSentTranslated, french, english);
+          sentences.push({
+            en: enSent,
+            fr: frSentAligned
+          });
+        }
+      } catch (e) {
+        console.error("Translation error during template generation:", e);
+      }
+    }
+    
+    // Fallback logic to make sure we always have 2 sentences
+    let fallbackIdx = 0;
+    const usedEn = new Set(sentences.map(s => s.en));
+    while (sentences.length < 2) {
+      // Find a template we haven't successfully used yet (if possible)
+      let fallbackTemplate = null;
+      for (let i = 0; i < templates.length; i++) {
+        const idx = (fallbackIdx + i) % templates.length;
+        const candidate = templates[idx];
+        if (!usedEn.has(candidate)) {
+          fallbackTemplate = candidate;
+          fallbackIdx = idx + 1;
+          break;
+        }
+      }
+      if (!fallbackTemplate) {
+        fallbackTemplate = `I see the ${english}.`;
+      }
+      
+      let frSent = "";
+      try {
+        frSent = await translateText(fallbackTemplate, 'en', 'fr');
+      } catch (e) {
+        frSent = fallbackTemplate;
+      }
+      const frSentAligned = replaceFrenchWordWithEnglish(frSent, french, english);
+      sentences.push({
+        en: fallbackTemplate,
+        fr: frSentAligned
+      });
+      usedEn.add(fallbackTemplate);
+    }
+    
+    return {
+      id: w.id,
+      english: english,
+      french: french,
+      sentences: sentences
+    };
+  });
+  
+  return Promise.all(promises);
+}
+
+// ══════════════════════════════════════════
+// HOME DASHBOARD & NAVIGATION
+// ══════════════════════════════════════════
+function goToHome() {
+  document.getElementById('header-home-btn').classList.add('hidden');
+  document.getElementById('header-logo').style.display = 'block';
+  document.getElementById('header-progress-wrap').style.display = 'none';
+  document.getElementById('stepLabel').style.display = 'none';
+  showScreen('screen-home');
+}
+
+function renderHomeDashboard(indexData) {
+  const container = document.getElementById('home-categories-container');
+  container.innerHTML = '';
+
+  const structure = indexData.structure;
+
+  const categories = [
+    {
+      title: "Curriculum Officiel",
+      description: "Listes de vocabulaire alignées sur les examens de Cambridge et le programme national.",
+      files: [
+        { filename: "CAMBRIDGE STARTERS ANIMALS.json", title: "Les Animaux (Starters)", level: "A1" },
+        { filename: "CAMBRIDGE STARTERS.json", title: "Cambridge YLE Starters", level: "Pre-A1" },
+        { filename: "CAMBRIDGE MOVERS.json", title: "Cambridge YLE Movers", level: "A1" },
+        { filename: "CAMBRIDGE FLYERS.json", title: "Cambridge YLE Flyers", level: "A2" },
+        { filename: "BREVET.json", title: "Brevet - Vocabulaire", level: "B1" },
+        { filename: "BAC - axes thematiques.json", title: "Bac - Axes Thématiques", level: "B2" }
+      ]
+    },
+    {
+      title: "Par Groupes de Mots",
+      description: "Vocabulaire classé par nature grammaticale et par niveau CEFR.",
+      files: [
+        { filename: "WORD GROUPS A1-A2.json", title: "Groupes de Mots A1-A2", level: "A1-A2" },
+        { filename: "WORD GROUPS B1-B2.json", title: "Groupes de Mots B1-B2", level: "B1-B2" },
+        { filename: "WORD GROUPS C1-C2.json", title: "Groupes de Mots C1-C2", level: "C1-C2" }
+      ]
+    },
+    {
+      title: "Par Thèmes",
+      description: "Listes thématiques couvrant la vie quotidienne et les sujets d'intérêt.",
+      files: [
+        { filename: "THEMES A1-A2.json", title: "Thèmes A1-A2", level: "A1-A2" },
+        { filename: "THEMES B1-B2.json", title: "Thèmes B1-B2", level: "B1-B2" },
+        { filename: "THEMES C1-C2.json", title: "Thèmes C1-C2", level: "C1-C2" },
+        { filename: "BUSINESS AND FINANCE.json", title: "Business and Finance", level: "C1-C2" },
+        { filename: "MEDICAL AND PSYCHOLOGICAL.json", title: "Medical and Psychological", level: "C1-C2" },
+        { filename: "PRACTICAL ENGLISH.json", title: "Practical English", level: "B1-B2" }
+      ]
+    }
+  ];
+
+  categories.forEach(cat => {
+    const sec = document.createElement('div');
+    sec.className = 'category-section';
+    
+    const h3 = document.createElement('h3');
+    h3.className = 'category-title';
+    h3.textContent = cat.title;
+    sec.appendChild(h3);
+    
+    const grid = document.createElement('div');
+    grid.className = 'courses-grid';
+    
+    cat.files.forEach(file => {
+      const card = document.createElement('div');
+      card.className = 'course-card';
+      card.onclick = () => selectCourse(file.filename);
+      
+      const top = document.createElement('div');
+      top.className = 'course-card-top';
+      
+      let lvlClass = 'level-c1-c2';
+      const lvl = (file.level || 'A1').toLowerCase();
+      if (lvl.includes('pre-a1')) lvlClass = 'level-pre-a1';
+      else if (lvl.includes('a1')) lvlClass = 'level-a1';
+      else if (lvl.includes('a2')) lvlClass = 'level-a2';
+      else if (lvl.includes('b1')) lvlClass = 'level-b1';
+      else if (lvl.includes('b2')) lvlClass = 'level-b2';
+      
+      const badge = document.createElement('span');
+      badge.className = `level-badge ${lvlClass}`;
+      badge.textContent = file.level || 'A1';
+      top.appendChild(badge);
+      
+      const name = document.createElement('div');
+      name.className = 'course-name';
+      name.textContent = file.title;
+      top.appendChild(name);
+      
+      const desc = document.createElement('div');
+      desc.className = 'course-desc';
+      desc.textContent = file.notes || file.description || 'Vocabulaire thématique pour l\'apprentissage.';
+      top.appendChild(desc);
+      
+      card.appendChild(top);
+      
+      const footer = document.createElement('div');
+      footer.className = 'course-footer';
+      
+      const count = document.createElement('span');
+      count.className = 'course-count';
+      count.textContent = file.approximate_word_count ? `~${file.approximate_word_count} mots` : '10 mots';
+      footer.appendChild(count);
+      
+      const act = document.createElement('span');
+      act.textContent = 'Étudier →';
+      footer.appendChild(act);
+      
+      card.appendChild(footer);
+      grid.appendChild(card);
+    });
+    
+    sec.appendChild(grid);
+    container.appendChild(sec);
+  });
+}
+
+function selectCourse(filename) {
+  WORD_LIST_FILE = 'word-lists/' + filename;
+  loadWordList();
+}
+
+// ══════════════════════════════════════════
+// SCHEMA PARSER
+// ══════════════════════════════════════════
+function parseWordList(data) {
+  let parsedWords = [];
+  
+  if (data.words && Array.isArray(data.words)) {
+    parsedWords = data.words;
+  }
+  else if (data.topics && typeof data.topics === 'object') {
+    Object.keys(data.topics).forEach(topicKey => {
+      const topic = data.topics[topicKey];
+      if (topic.words && Array.isArray(topic.words)) {
+        parsedWords.push(...topic.words);
+      }
+    });
+  }
+  else if (data.word_groups && typeof data.word_groups === 'object') {
+    Object.keys(data.word_groups).forEach(groupKey => {
+      const group = data.word_groups[groupKey];
+      if (group.words && Array.isArray(group.words)) {
+        parsedWords.push(...group.words);
+      }
+    });
+  }
+  else if (data.themes && typeof data.themes === 'object') {
+    Object.keys(data.themes).forEach(themeKey => {
+      const theme = data.themes[themeKey];
+      if (theme.words && Array.isArray(theme.words)) {
+        parsedWords.push(...theme.words);
+      }
+    });
+  }
+  else if (data.categories && typeof data.categories === 'object') {
+    Object.keys(data.categories).forEach(catKey => {
+      const cat = data.categories[catKey];
+      if (cat.words && Array.isArray(cat.words)) {
+        parsedWords.push(...cat.words);
+      }
+    });
+  }
+  else if (data.situations && typeof data.situations === 'object') {
+    Object.keys(data.situations).forEach(sitKey => {
+      const sit = data.situations[sitKey];
+      if (sit.phrases && Array.isArray(sit.phrases)) {
+        sit.phrases.forEach(p => {
+          parsedWords.push({
+            word: p.phrase,
+            type: "expression",
+            notes: p.use
+          });
+        });
+      }
+    });
+  }
+
+  return parsedWords.map(w => {
+    const english = w.word || w.english || "Unknown";
+    let french = w.french || w.translation_hint || w.meaning || w.notes || "";
+    
+    return {
+      id: w.id || english.toLowerCase().replace(/[^a-z0-9]/g, "-"),
+      french: french,
+      english: english,
+      sentences: w.sentences || [],
+      type: w.type || ""
+    };
+  });
 }
 
 // ══════════════════════════════════════════
@@ -676,18 +1305,19 @@ function loadEncounterWord() {
   document.getElementById('enc-translation').textContent = w.french;
   document.getElementById('stepLabel').textContent = `Mot ${encounterIndex + 1} / ${words.length}`;
   loadEncounterSentence();
+  
+  setTimeout(() => {
+    playAudio(false);
+  }, 300);
 }
 
 function loadEncounterSentence() {
   const w = words[encounterIndex];
   document.getElementById('enc-sent-counter').textContent = `Phrase ${encounterSentenceIndex + 1} sur 2`;
-  document.getElementById('enc-sent-text').innerHTML = w.sentences[encounterSentenceIndex].fr;
+  document.getElementById('enc-sent-text-fr').innerHTML = w.sentences[encounterSentenceIndex].fr;
+  document.getElementById('enc-sent-text-en').innerHTML = `(${w.sentences[encounterSentenceIndex].en})`;
   const isLast = encounterSentenceIndex === 1;
   document.getElementById('enc-next-btn').textContent = isLast ? (encounterIndex < words.length - 1 ? '→ Mot suivant' : '→ Commencer les exercices') : '✓ J\'ai lu cette phrase';
-  
-  if (encounterSentenceIndex === 0 && autoPlayAudio) {
-    playAudio(false);
-  }
 }
 
 function encounterNext() {
@@ -749,6 +1379,7 @@ function checkEx1(btn, chosen, correct, wordObj) {
     btn.classList.add('correct');
     triggerGlow('correct');
     showFeedback('ex1-feedback', 'correct', '✓ Correct !');
+    playAudio(false, correct);
     stepsCompleted++;
     updateProgress();
     document.getElementById('ex1-next-btn').classList.remove('hidden');
@@ -758,7 +1389,6 @@ function checkEx1(btn, chosen, correct, wordObj) {
     triggerGlow('wrong');
     showFeedback('ex1-feedback', 'wrong', `✗ La bonne réponse est : "${correct}"`);
     if (!ex1Incorrect.find(w => w.english === wordObj.english)) ex1Incorrect.push(wordObj);
-    // Re-queue this word immediately
     ex1Queue.splice(ex1Index + 1, 0, wordObj);
     document.getElementById('ex1-next-btn').classList.remove('hidden');
   }
@@ -809,6 +1439,7 @@ function checkEx1Retest(btn, chosen, correct) {
     btn.classList.add('correct');
     triggerGlow('correct');
     showFeedback('ex1rt-feedback', 'correct', '✓ Correct !');
+    playAudio(false, correct);
   } else {
     btn.classList.add('wrong');
     allBtns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
@@ -854,24 +1485,40 @@ function loadEx2() {
   document.getElementById('ex2-feedback').className = 'feedback-banner';
   document.getElementById('ex2-next-btn').classList.add('hidden');
 
-  // Build sentences with gap
   const card = document.getElementById('ex2-sentences-card');
   card.innerHTML = '';
   w.sentences.forEach((s, i) => {
-    // Replace the highlighted word with a gap span
-    const sentWithGap = s.fr.replace(/<b class='highlight'>.*?<\/b>/, `<span class='gap'>_____</span>`);
-    const p = document.createElement('p');
-    p.className = 'cloze-sentence';
-    p.style.marginBottom = i < 2 ? '10px' : '0';
-    p.innerHTML = `<span style="color:var(--ink-light);font-size:0.8rem;">${i+1}.</span> ${sentWithGap}`;
-    card.appendChild(p);
+    const frWithGap = s.fr.replace(/<b class='highlight'>.*?<\/b>/, `<span class='gap'>_____</span>`);
+    const escapedWord = w.english.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp('\\b' + escapedWord + '\\b', 'gi');
+    const enWithGap = s.en.replace(regex, `<span class='gap'>_____</span>`);
+    
+    const container = document.createElement('div');
+    container.style.marginBottom = i < 1 ? '16px' : '0';
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.gap = '4px';
+    
+    const pFr = document.createElement('p');
+    pFr.className = 'cloze-sentence';
+    pFr.innerHTML = `<span style="color:var(--ink-light);font-size:0.8rem;">${i+1}. Fr :</span> ${frWithGap}`;
+    
+    const pEn = document.createElement('p');
+    pEn.className = 'cloze-sentence';
+    pEn.style.color = 'var(--ink-light)';
+    pEn.style.fontSize = '0.95rem';
+    pEn.style.paddingLeft = '24px';
+    pEn.innerHTML = `<span style="font-size:0.8rem;">En :</span> (${enWithGap})`;
+    
+    container.appendChild(pFr);
+    container.appendChild(pEn);
+    card.appendChild(container);
   });
 
-  // Build options: correct + 1 from session words + 1 random English adjective
   const otherWords = allEnglish.filter(e => e !== w.english);
-  const sessionDistractor = shuffle(otherWords)[0];
-  const randomDistractors = ['bright', 'heavy', 'cold', 'small', 'loud', 'rough', 'fast', 'old', 'tall', 'thin'];
-  const randomDistractor = shuffle(randomDistractors)[0];
+  const sessionDistractor = otherWords.length > 0 ? shuffle(otherWords)[0] : "word";
+  const randomDistractors = ['lion', 'tiger', 'monkey', 'rabbit', 'bear', 'giraffe', 'zebra', 'snake', 'turtle', 'fish'];
+  const randomDistractor = shuffle(randomDistractors.filter(x => x !== w.english))[0];
   const options = shuffle([w.english, sessionDistractor, randomDistractor]);
 
   const optContainer = document.getElementById('ex2-options');
@@ -893,6 +1540,7 @@ function checkEx2(btn, chosen, correct, wordObj) {
     btn.classList.add('correct');
     triggerGlow('correct');
     showFeedback('ex2-feedback', 'correct', '✓ Correct !');
+    playAudio(false, correct);
     stepsCompleted++;
     updateProgress();
   } else {
@@ -952,6 +1600,7 @@ function ex2RetestCheck() {
     document.getElementById('ex2rt-input').classList.add('correct');
     triggerGlow('correct');
     showFeedback('ex2rt-feedback', 'correct', '✓ Correct !');
+    playAudio(false, correct);
   } else {
     document.getElementById('ex2rt-input').classList.add('wrong');
     triggerGlow('wrong');
@@ -980,16 +1629,11 @@ function startEx3() {
 }
 
 function makePartialWord(word) {
-  // Remove ~50% of letters, keeping first letter always visible
   const letters = word.split('');
+  if (letters.length <= 1) return '_';
   const toHide = Math.ceil(letters.length * 0.5);
-  // Positions to hide (never position 0)
   const positions = shuffle([...Array(letters.length).keys()].slice(1)).slice(0, toHide);
   return letters.map((l, i) => positions.includes(i) ? '_' : l).join('');
-}
-
-function getHiddenPositions(word, partial) {
-  return [...partial].map((c, i) => c === '_' ? i : -1).filter(i => i !== -1);
 }
 
 function loadEx3() {
@@ -1004,7 +1648,6 @@ function loadEx3() {
   const partial = makePartialWord(w.english);
   document.getElementById('ex3-french').textContent = w.french;
 
-  // Display partial word nicely
   const display = [...partial].map(c =>
     c === '_' ? `<span class='blank'>_</span>` : c
   ).join('');
@@ -1017,7 +1660,6 @@ function loadEx3() {
   document.getElementById('ex3-input').className = 'type-input';
   document.getElementById('ex3-input').placeholder = 'Tapez le mot anglais complet...';
 
-  // Store partial for checking
   document.getElementById('ex3-input').dataset.answer = w.english;
   document.getElementById('ex3-input').dataset.partial = partial;
 }
@@ -1031,6 +1673,7 @@ function ex3Check() {
     input.classList.add('correct');
     triggerGlow('correct');
     showFeedback('ex3-feedback', 'correct', '✓ Correct !');
+    playAudio(false, answer);
   } else {
     input.classList.add('wrong');
     triggerGlow('wrong');
@@ -1058,36 +1701,98 @@ function showFeedback(id, type, msg) {
 
 function restartApp() {
   stepsCompleted = 0;
-  totalSteps = words.length * 4; // rough estimate
+  totalSteps = words.length * 5;
   updateProgress();
+  document.getElementById('header-home-btn').classList.remove('hidden');
+  document.getElementById('header-progress-wrap').style.display = 'block';
+  document.getElementById('stepLabel').style.display = 'block';
   showScreen('screen-encounter');
   startEncounter();
 }
 
-async function loadCourse(jsonPath) {
+// ══════════════════════════════════════════
+// INIT & FETCH
+// ══════════════════════════════════════════
+async function initializeDashboard() {
+  showScreen('screen-loading');
+  document.getElementById('loading-status').textContent = 'Chargement en cours...';
+  document.getElementById('header-home-btn').classList.add('hidden');
+  document.getElementById('header-logo').style.display = 'block';
+  document.getElementById('header-progress-wrap').style.display = 'none';
+  document.getElementById('stepLabel').style.display = 'none';
+  
   try {
-    const res = await fetch(jsonPath);
-    const data = await res.json();
-    words = data.words;
-    allEnglish = words.map(w => w.english);
-    allFrench = words.map(w => w.french);
-    autoPlayAudio = document.getElementById('autoplay-toggle').checked;
-    
-    totalSteps = words.length * 5;
-    document.getElementById('stepLabel').textContent = 'Première rencontre';
-    showScreen('screen-encounter');
-    startEncounter();
+    const response = await fetch(INDEX_FILE);
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+    const data = await response.json();
+    indexDataCached = data;
+    renderHomeDashboard(data);
+    showScreen('screen-home');
   } catch (err) {
-    console.error(err);
-    alert("Impossible de charger le cours. Assurez-vous d'utiliser un serveur local.");
+    console.error("Failed to load index:", err);
+    WORD_LIST_FILE = '';
+    showScreen('screen-error');
   }
 }
 
-// ══════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════
-showScreen('screen-home');
-document.getElementById('stepLabel').textContent = 'Accueil';
+async function loadWordList() {
+  showScreen('screen-loading');
+  document.getElementById('loading-status').textContent = 'Chargement de la liste...';
+  document.getElementById('header-home-btn').classList.add('hidden');
+  document.getElementById('header-logo').style.display = 'none';
+  document.getElementById('header-progress-wrap').style.display = 'none';
+  document.getElementById('stepLabel').style.display = 'none';
+  
+  try {
+    const response = await fetch(WORD_LIST_FILE);
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+    const data = await response.json();
+    
+    let parsedWords = parseWordList(data);
+    
+    if (!parsedWords || parsedWords.length === 0) {
+      throw new Error("No words found in JSON.");
+    }
+    
+    if (parsedWords.length > 10) {
+      parsedWords = shuffle(parsedWords).slice(0, 10);
+    }
+    
+    document.getElementById('loading-status').textContent = 'Traduction et génération des phrases...';
+    
+    words = await translateAndGenerateSentencesForSession(parsedWords);
+    allEnglish = words.map(w => w.english);
+    allFrench  = words.map(w => w.french);
+    
+    totalSteps = words.length * 5;
+    stepsCompleted = 0;
+    updateProgress();
+    
+    document.getElementById('header-home-btn').classList.remove('hidden');
+    document.getElementById('header-progress-wrap').style.display = 'block';
+    document.getElementById('stepLabel').style.display = 'block';
+    
+    showScreen('screen-encounter');
+    startEncounter();
+  } catch (err) {
+    console.error("Failed to load words:", err);
+    showScreen('screen-error');
+  }
+}
+
+function handleRetry() {
+  if (WORD_LIST_FILE) {
+    loadWordList();
+  } else {
+    initializeDashboard();
+  }
+}
+
+window.onload = initializeDashboard;
 </script>
 </body>
 </html>

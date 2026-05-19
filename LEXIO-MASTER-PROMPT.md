@@ -93,7 +93,7 @@ const WORD_LIST_FILE = 'word-lists/FILENAME.json';
 ```
 
 **Important sentence rules:**
-- Each word has exactly **2 example sentences**
+- Each word has exactly **3 example sentences**
 - The target English word is embedded in the French sentence wrapped in `<b class='highlight'>word</b>` — this is how the app knows what to remove for cloze exercises
 - Sentences should be natural, level-appropriate, and contextually clear
 - The two distractor options in EX2 must not be grammatically or contextually correct in the sentence
@@ -134,20 +134,20 @@ Each session introduces **10 new words**. Sessions are structured into **Encount
 
 **First Encounter — Introduction**
 - Show the English word, its French translation, and an audio pronunciation button
-- Show 2 example sentences that use the primary meaning of the word one at a time; user clicks a tick/confirm button to advance through each sentence
+- Show 3 example sentences one at a time; user clicks a tick/confirm button to advance through each sentence
 - Sentences should show the target English word highlighted within the French sentence
 
-**EX 1 — Multiple Choice (Recognition: English→ French )**
-- Show the English word
-- User chooses the correct French translation from 4 options
+**EX 1 — Multiple Choice (Recognition: French → English)**
+- Show the French word
+- User chooses the correct English translation from 4 options
 - ✅ Correct: green glow, move to next word
 - ❌ Incorrect: red glow, show correction, re-test the same word immediately in the same format until correct
 - Repeat for all 10 words
-- **Re-test at end:** any word initially answered incorrectly is re-tested — showing the English word, user chooses the correct French translation from 2 options.
+- **Re-test at end:** any word initially answered incorrectly is re-tested — this time showing the English word, user chooses the correct French translation from 4 options (reversed direction)
 
 **EX 2 — Cloze / Fill the Gap**
 - Show the French word at the top (NOT the English — showing English gives the answer away)
-- Show the 2 example sentences from the First Encounter with the English target word removed (replaced by a gap)
+- Show all 3 example sentences from the First Encounter with the English target word removed (replaced by a gap)
 - User chooses the correct English word from 3 options:
   - 1 correct answer
   - At least 1 distractor from other words in the current session
@@ -248,7 +248,7 @@ Currently using browser Web Speech API (`SpeechSynthesisUtterance`, lang `en-GB`
 
 The following has been built and is working:
 
-- ✅ First Encounter (word intro, audio button, 2 sentences one at a time)
+- ✅ First Encounter (word intro, audio button, 3 sentences one at a time)
 - ✅ EX 1 with immediate re-test and end-of-exercise retest (reversed direction)
 - ✅ EX 2 with cloze sentences, 3 options, end-of-exercise retest with reveal-then-type
 - ✅ EX 3 with partial word display and typing

@@ -1,0 +1,206 @@
+{
+  "meta": {
+    "title": "Cambridge YLE – A2 Flyers",
+    "level": "A2",
+    "source": "Cambridge English Young Learners (YLE) official wordlist – for exams from 2018",
+    "description": "Vocabulary introduced at A2 Flyers level. Candidates are expected to know these words IN ADDITION TO the Starters and Movers lists.",
+    "notes": "These are words new at Flyers level only. Roughly equivalent in difficulty to Cambridge A2 Key for Schools."
+  },
+  "topics": {
+    "animals": {
+      "label": "Animals (new at Flyers)",
+      "words": [
+        { "word": "beetle", "type": "noun" },
+        { "word": "butterfly", "type": "noun" },
+        { "word": "camel", "type": "noun" },
+        { "word": "creature", "type": "noun" },
+        { "word": "dinosaur", "type": "noun" },
+        { "word": "eagle", "type": "noun" },
+        { "word": "extinct", "type": "adjective" },
+        { "word": "fur", "type": "noun" },
+        { "word": "insect", "type": "noun" },
+        { "word": "nest", "type": "noun" },
+        { "word": "octopus", "type": "noun" },
+        { "word": "swan", "type": "noun" },
+        { "word": "tortoise", "type": "noun" },
+        { "word": "wild", "type": "adjective" },
+        { "word": "wing", "type": "noun" }
+      ]
+    },
+    "arts_and_media": {
+      "label": "Arts and Media",
+      "words": [
+        { "word": "band", "type": "noun" },
+        { "word": "cartoon", "type": "noun" },
+        { "word": "concert", "type": "noun" },
+        { "word": "documentary", "type": "noun" },
+        { "word": "exhibition", "type": "noun" },
+        { "word": "festival", "type": "noun" },
+        { "word": "magazine", "type": "noun" },
+        { "word": "newspaper", "type": "noun" },
+        { "word": "novel", "type": "noun" },
+        { "word": "orchestra", "type": "noun" },
+        { "word": "perform", "type": "verb" },
+        { "word": "poem", "type": "noun" },
+        { "word": "programme", "type": "noun" },
+        { "word": "rock music", "type": "noun" },
+        { "word": "screen", "type": "noun" },
+        { "word": "singer", "type": "noun" },
+        { "word": "stage", "type": "noun" },
+        { "word": "theatre", "type": "noun", "notes": "US: theater" },
+        { "word": "tune", "type": "noun" },
+        { "word": "violin", "type": "noun" }
+      ]
+    },
+    "environment": {
+      "label": "The Environment",
+      "words": [
+        { "word": "area", "type": "noun" },
+        { "word": "country", "type": "noun" },
+        { "word": "countryside", "type": "noun" },
+        { "word": "desert", "type": "noun" },
+        { "word": "earth", "type": "noun" },
+        { "word": "environment", "type": "noun" },
+        { "word": "field", "type": "noun" },
+        { "word": "forest", "type": "noun" },
+        { "word": "hill", "type": "noun" },
+        { "word": "jungle", "type": "noun" },
+        { "word": "ocean", "type": "noun" },
+        { "word": "path", "type": "noun" },
+        { "word": "plant", "type": "noun" },
+        { "word": "pollution", "type": "noun" },
+        { "word": "recycle", "type": "verb" },
+        { "word": "rock", "type": "noun" },
+        { "word": "sea", "type": "noun" },
+        { "word": "shore", "type": "noun" },
+        { "word": "space", "type": "noun" },
+        { "word": "stone", "type": "noun" },
+        { "word": "storm", "type": "noun" },
+        { "word": "stream", "type": "noun" },
+        { "word": "valley", "type": "noun" },
+        { "word": "waterfall", "type": "noun" },
+        { "word": "wood", "type": "noun" },
+        { "word": "world", "type": "noun" }
+      ]
+    },
+    "food_and_drink": {
+      "label": "Food and Drink (new at Flyers)",
+      "words": [
+        { "word": "chopsticks", "type": "noun" },
+        { "word": "fork", "type": "noun" },
+        { "word": "knife", "type": "noun" },
+        { "word": "shampoo", "type": "noun" },
+        { "word": "soap", "type": "noun" },
+        { "word": "spoon", "type": "noun" },
+        { "word": "strawberry", "type": "noun" },
+        { "word": "sugar", "type": "noun" }
+      ]
+    },
+    "health_and_body": {
+      "label": "Health and Body (new at Flyers)",
+      "words": [
+        { "word": "asleep", "type": "adjective" },
+        { "word": "awake", "type": "adjective" },
+        { "word": "earache", "type": "noun" },
+        { "word": "fever", "type": "noun" },
+        { "word": "fit", "type": "adjective" },
+        { "word": "healthy", "type": "adjective" },
+        { "word": "stress", "type": "noun" },
+        { "word": "tired", "type": "adjective" },
+        { "word": "x-ray", "type": "noun" }
+      ]
+    },
+    "home_and_places": {
+      "label": "Home and Places (new at Flyers)",
+      "words": [
+        { "word": "balcony", "type": "noun" },
+        { "word": "bin", "type": "noun" },
+        { "word": "electricity", "type": "noun" },
+        { "word": "fence", "type": "noun" },
+        { "word": "hall", "type": "noun" },
+        { "word": "rucksack", "type": "noun", "notes": "US: backpack" },
+        { "word": "silver", "type": "adjective/noun" },
+        { "word": "skyscraper", "type": "noun" },
+        { "word": "suitcase", "type": "noun" },
+        { "word": "tent", "type": "noun" },
+        { "word": "torch", "type": "noun", "notes": "US: flashlight" },
+        { "word": "tyre", "type": "noun", "notes": "US: tire" },
+        { "word": "view", "type": "noun" },
+        { "word": "wheel", "type": "noun" },
+        { "word": "wifi", "type": "noun" }
+      ]
+    },
+    "science_and_technology": {
+      "label": "Science and Technology",
+      "words": [
+        { "word": "astronaut", "type": "noun" },
+        { "word": "battery", "type": "noun" },
+        { "word": "biology", "type": "noun" },
+        { "word": "chemistry", "type": "noun" },
+        { "word": "experiment", "type": "noun" },
+        { "word": "internet", "type": "noun" },
+        { "word": "invention", "type": "noun" },
+        { "word": "laboratory", "type": "noun" },
+        { "word": "machine", "type": "noun" },
+        { "word": "planet", "type": "noun" },
+        { "word": "rocket", "type": "noun" },
+        { "word": "science", "type": "noun" },
+        { "word": "scientist", "type": "noun" },
+        { "word": "search", "type": "verb" },
+        { "word": "spaceship", "type": "noun" },
+        { "word": "technology", "type": "noun" },
+        { "word": "website", "type": "noun" }
+      ]
+    },
+    "sports_and_adventure": {
+      "label": "Sports and Adventure (new at Flyers)",
+      "words": [
+        { "word": "adventure", "type": "noun" },
+        { "word": "award", "type": "noun" },
+        { "word": "champion", "type": "noun" },
+        { "word": "competition", "type": "noun" },
+        { "word": "goal", "type": "noun" },
+        { "word": "gold", "type": "adjective/noun" },
+        { "word": "medal", "type": "noun" },
+        { "word": "score", "type": "noun/verb" },
+        { "word": "ski", "type": "verb" },
+        { "word": "sledge", "type": "noun" },
+        { "word": "snowboard", "type": "noun" },
+        { "word": "snowboarding", "type": "noun" },
+        { "word": "stadium", "type": "noun" },
+        { "word": "stamp", "type": "noun" },
+        { "word": "swing", "type": "noun/verb" },
+        { "word": "team", "type": "noun" },
+        { "word": "timetable", "type": "noun" },
+        { "word": "tour", "type": "noun" },
+        { "word": "tournament", "type": "noun" },
+        { "word": "traffic", "type": "noun" },
+        { "word": "win", "type": "verb" },
+        { "word": "winner", "type": "noun" }
+      ]
+    },
+    "travel_and_holidays": {
+      "label": "Travel and Holidays",
+      "words": [
+        { "word": "abroad", "type": "adverb" },
+        { "word": "beach", "type": "noun" },
+        { "word": "book", "type": "verb" },
+        { "word": "camp", "type": "verb/noun" },
+        { "word": "coach", "type": "noun" },
+        { "word": "destination", "type": "noun" },
+        { "word": "luggage", "type": "noun" },
+        { "word": "passport", "type": "noun" },
+        { "word": "receipt", "type": "noun" },
+        { "word": "restaurant", "type": "noun" },
+        { "word": "souvenir", "type": "noun" },
+        { "word": "taxi", "type": "noun" },
+        { "word": "ticket", "type": "noun" },
+        { "word": "tourist", "type": "noun" },
+        { "word": "travel", "type": "verb/noun" },
+        { "word": "trip", "type": "noun" },
+        { "word": "university", "type": "noun" },
+        { "word": "waiter", "type": "noun" }
+      ]
+    }
+  }
+}

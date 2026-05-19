@@ -1,0 +1,184 @@
+{
+  "meta": {
+    "title": "Practical English – Real-World Phrases for Getting Things Done Abroad",
+    "level": "A2-B1 (accessible to intermediate learners)",
+    "source": "AI-generated",
+    "description": "Essential phrases and vocabulary for navigating real-life situations in an English-speaking country or when using English abroad. Covers shops, restaurants, hotels, transport, hospitals, and problem-solving. Includes full phrases, not just isolated words.",
+    "notes": "Phrases are given in natural, polite British English. Where American English differs significantly, alternatives are noted. Context labels help learners find the right phrase for the right moment."
+  },
+  "situations": {
+    "greetings_and_basics": {
+      "label": "Greetings and Basics",
+      "phrases": [
+        { "phrase": "Good morning / Good afternoon / Good evening.", "use": "Formal greeting at different times of day" },
+        { "phrase": "How can I help you?", "use": "What staff typically say to you" },
+        { "phrase": "Could you repeat that, please?", "use": "When you don't hear or understand" },
+        { "phrase": "Could you speak more slowly, please?", "use": "When speech is too fast" },
+        { "phrase": "I'm sorry, I don't understand.", "use": "When you're lost in a conversation" },
+        { "phrase": "Do you speak French / Spanish / [language]?", "use": "Asking for language support" },
+        { "phrase": "Is there someone here who speaks [language]?", "use": "Asking for a translator" },
+        { "phrase": "Where is the nearest …?", "use": "Asking for directions" },
+        { "phrase": "Can you write that down, please?", "use": "Asking for written confirmation" },
+        { "phrase": "Thank you very much. / Many thanks.", "use": "Expressing gratitude" },
+        { "phrase": "Sorry to bother you, but…", "use": "Polite way to interrupt or ask for help" }
+      ]
+    },
+    "at_a_shop": {
+      "label": "At a Shop",
+      "phrases": [
+        { "phrase": "Do you have this in a different size / colour?", "use": "Asking about stock" },
+        { "phrase": "How much does this cost?", "use": "Asking the price" },
+        { "phrase": "Is there a discount?", "use": "Asking about offers" },
+        { "phrase": "Do you accept credit cards / cash?", "use": "Asking about payment" },
+        { "phrase": "I'd like to pay by card, please.", "use": "Paying by card" },
+        { "phrase": "Can I have a receipt, please?", "use": "Requesting proof of purchase" },
+        { "phrase": "I'd like to return / exchange this.", "use": "Returning an item" },
+        { "phrase": "I bought this yesterday and it's faulty.", "use": "Reporting a defective item" },
+        { "phrase": "Do you have a changing room / fitting room?", "use": "Asking where to try on clothes" },
+        { "phrase": "I'm just looking, thank you.", "use": "When you don't need help yet" },
+        { "phrase": "Could you gift wrap this, please?", "use": "Asking for gift packaging" },
+        { "phrase": "I'd like to make a complaint about…", "use": "Raising a formal complaint" },
+        { "phrase": "Is this on sale?", "use": "Asking if an item is discounted" },
+        { "phrase": "Can I have a bag, please?", "use": "Asking for a shopping bag" }
+      ]
+    },
+    "at_a_restaurant_or_café": {
+      "label": "At a Restaurant or Café",
+      "phrases": [
+        { "phrase": "A table for [two], please.", "use": "Asking for a table" },
+        { "phrase": "Do you have a reservation?", "use": "What staff may ask you" },
+        { "phrase": "I have a reservation under [name].", "use": "Confirming your booking" },
+        { "phrase": "Could we have the menu, please?", "use": "Asking for the menu" },
+        { "phrase": "What do you recommend?", "use": "Asking for the waiter's suggestion" },
+        { "phrase": "I'd like to order…", "use": "Placing your order" },
+        { "phrase": "I'll have the [dish], please.", "use": "Ordering food" },
+        { "phrase": "Does this contain [nuts / gluten / dairy]?", "use": "Asking about allergens" },
+        { "phrase": "I'm allergic to…", "use": "Stating an allergy" },
+        { "phrase": "I'm vegetarian / vegan. Is this dish suitable?", "use": "Dietary requirements" },
+        { "phrase": "Could I have it without [onions / sauce]?", "use": "Customising your order" },
+        { "phrase": "Excuse me, I ordered the [dish] but I received the [other dish].", "use": "Reporting an incorrect order" },
+        { "phrase": "This isn't what I ordered.", "use": "Flagging an error" },
+        { "phrase": "The food is cold / not cooked properly.", "use": "Raising a quality issue" },
+        { "phrase": "Could we have the bill / check, please?", "use": "Asking for the bill" },
+        { "phrase": "Can we pay separately?", "use": "Asking to split the bill" },
+        { "phrase": "Is service included?", "use": "Asking about the tip" },
+        { "phrase": "Keep the change.", "use": "Telling the waiter to keep the tip" },
+        { "phrase": "Could I have a takeaway / to go, please?", "use": "Ordering food to take out" }
+      ]
+    },
+    "at_a_hotel": {
+      "label": "At a Hotel",
+      "phrases": [
+        { "phrase": "I have a reservation under [name].", "use": "Checking in" },
+        { "phrase": "I'd like to check in / check out, please.", "use": "Standard check-in / check-out" },
+        { "phrase": "What time is check-out?", "use": "Asking about check-out time" },
+        { "phrase": "Could I have a room with a [sea view / double bed / bath]?", "use": "Requesting room preferences" },
+        { "phrase": "Is breakfast included?", "use": "Asking about meals" },
+        { "phrase": "Could I have an extra pillow / towel / blanket?", "use": "Requesting items for the room" },
+        { "phrase": "The heating / air conditioning isn't working.", "use": "Reporting a problem" },
+        { "phrase": "There's a problem with my room.", "use": "General problem report" },
+        { "phrase": "The shower isn't working properly.", "use": "Reporting a specific issue" },
+        { "phrase": "Could I change rooms, please?", "use": "Requesting a room change" },
+        { "phrase": "There's a noise complaint — the room next door is very loud.", "use": "Reporting disturbance" },
+        { "phrase": "Could I leave my luggage here until check-out?", "use": "Asking for luggage storage" },
+        { "phrase": "What's the Wi-Fi password?", "use": "Asking for internet access" },
+        { "phrase": "I've lost my key card.", "use": "Reporting a lost key" },
+        { "phrase": "Can I extend my stay by one night?", "use": "Requesting an extra night" },
+        { "phrase": "I'd like to pay by [card / cash].", "use": "Choosing payment method" },
+        { "phrase": "Could I have a copy of the invoice?", "use": "Asking for a receipt" }
+      ]
+    },
+    "at_a_pharmacy_or_with_a_doctor": {
+      "label": "At a Pharmacy or with a Doctor",
+      "phrases": [
+        { "phrase": "I need something for a headache / cold / stomach ache.", "use": "At a pharmacy" },
+        { "phrase": "Do you have anything for…?", "use": "Asking for a remedy" },
+        { "phrase": "I need to see a doctor.", "use": "Requesting medical help" },
+        { "phrase": "I'd like to make an appointment.", "use": "Booking a doctor's appointment" },
+        { "phrase": "It's urgent.", "use": "Flagging urgency" },
+        { "phrase": "I have a pain here [pointing].", "use": "Describing pain location" },
+        { "phrase": "I've had this for [two days].", "use": "Describing duration of symptoms" },
+        { "phrase": "I feel dizzy / faint / short of breath.", "use": "Describing symptoms" },
+        { "phrase": "I'm allergic to [penicillin].", "use": "Stating an allergy" },
+        { "phrase": "I take [medication name] regularly.", "use": "Mentioning existing medication" },
+        { "phrase": "I think I need stitches.", "use": "Describing an injury" },
+        { "phrase": "Can you prescribe me something?", "use": "Requesting a prescription" },
+        { "phrase": "How many times a day should I take this?", "use": "Asking about dosage" },
+        { "phrase": "Are there any side effects?", "use": "Asking about drug side effects" },
+        { "phrase": "Where is the nearest A&E / emergency room?", "use": "Finding emergency care" },
+        { "phrase": "Please call an ambulance.", "use": "Emergency phrase" },
+        { "phrase": "I have travel insurance.", "use": "Stating you are covered" },
+        { "phrase": "I need a medical certificate for my insurance.", "use": "Requesting documentation" }
+      ]
+    },
+    "at_a_bank_or_post_office": {
+      "label": "At a Bank or Post Office",
+      "phrases": [
+        { "phrase": "I'd like to withdraw some cash.", "use": "Withdrawing money" },
+        { "phrase": "I'd like to change some [euros] into [pounds].", "use": "Currency exchange" },
+        { "phrase": "What's the exchange rate today?", "use": "Asking about exchange rates" },
+        { "phrase": "I'd like to send this parcel to [country].", "use": "Sending post abroad" },
+        { "phrase": "How long will it take to arrive?", "use": "Asking about delivery time" },
+        { "phrase": "I'd like to send it by recorded delivery / registered post.", "use": "Choosing tracked post" },
+        { "phrase": "My card has been blocked / stolen.", "use": "Reporting a card issue" },
+        { "phrase": "I need to report a lost card.", "use": "Reporting a missing card" },
+        { "phrase": "Is there a charge for this?", "use": "Asking about fees" }
+      ]
+    },
+    "transport_and_getting_around": {
+      "label": "Transport and Getting Around",
+      "phrases": [
+        { "phrase": "A single / return to [destination], please.", "use": "Buying a train or bus ticket" },
+        { "phrase": "Which platform does the train to [X] leave from?", "use": "Train travel" },
+        { "phrase": "Is this the right train / bus for [destination]?", "use": "Confirming the route" },
+        { "phrase": "How long does the journey take?", "use": "Asking travel time" },
+        { "phrase": "Does this bus stop at [name of stop]?", "use": "Checking bus route" },
+        { "phrase": "Can you tell me when we reach [stop]?", "use": "Asking the driver to alert you" },
+        { "phrase": "I've missed my connection.", "use": "Reporting a missed connection" },
+        { "phrase": "My flight has been delayed / cancelled.", "use": "Reporting a flight issue" },
+        { "phrase": "I need to rebook my ticket.", "use": "Changing a ticket" },
+        { "phrase": "Where can I get a taxi / Uber?", "use": "Finding transport" },
+        { "phrase": "Could you take me to [address], please?", "use": "Directing a taxi" },
+        { "phrase": "I think you've taken the wrong route.", "use": "Challenging a taxi route" },
+        { "phrase": "How much will it cost to get to [place]?", "use": "Asking for an estimate" },
+        { "phrase": "I'd like to hire a car, please.", "use": "Car hire" },
+        { "phrase": "I have an international driving licence.", "use": "Showing credentials for car hire" }
+      ]
+    },
+    "dealing_with_problems": {
+      "label": "Dealing with Problems and Making Complaints",
+      "phrases": [
+        { "phrase": "Excuse me, I'd like to make a complaint.", "use": "Opening a formal complaint" },
+        { "phrase": "I'm not happy with the service I received.", "use": "Expressing dissatisfaction" },
+        { "phrase": "This is not what I was expecting.", "use": "Expressing disappointment" },
+        { "phrase": "I was told that…", "use": "Referring to a previous agreement" },
+        { "phrase": "This is a mistake on your part.", "use": "Attributing fault" },
+        { "phrase": "I'd like a refund.", "use": "Requesting money back" },
+        { "phrase": "I'd like to speak to the manager, please.", "use": "Escalating an issue" },
+        { "phrase": "Can I have your name and a reference number?", "use": "Requesting documentation of complaint" },
+        { "phrase": "I've been waiting for [thirty minutes].", "use": "Expressing frustration at waiting" },
+        { "phrase": "This is urgent.", "use": "Flagging urgency" },
+        { "phrase": "I need this resolved today.", "use": "Requesting immediate action" },
+        { "phrase": "I would appreciate a written response.", "use": "Requesting formal follow-up" },
+        { "phrase": "I'll be contacting your head office if this isn't resolved.", "use": "Escalation warning" }
+      ]
+    },
+    "emergency_phrases": {
+      "label": "Emergency Phrases",
+      "phrases": [
+        { "phrase": "Help!", "use": "Calling for help" },
+        { "phrase": "Call the police!", "use": "Emergency — police needed" },
+        { "phrase": "Call an ambulance!", "use": "Medical emergency" },
+        { "phrase": "There's been an accident.", "use": "Reporting an accident" },
+        { "phrase": "I've been robbed / mugged.", "use": "Reporting a crime" },
+        { "phrase": "My bag / wallet / passport has been stolen.", "use": "Reporting theft" },
+        { "phrase": "I need to report a crime.", "use": "Going to the police" },
+        { "phrase": "I need to go to the nearest police station.", "use": "Finding police help" },
+        { "phrase": "I need to contact my embassy.", "use": "Seeking consular help" },
+        { "phrase": "I'm lost.", "use": "Asking for help finding your way" },
+        { "phrase": "Is there anyone who speaks French / [language]?", "use": "Finding language support" },
+        { "phrase": "It's a medical emergency.", "use": "Flagging urgency to emergency services" }
+      ]
+    }
+  }
+}

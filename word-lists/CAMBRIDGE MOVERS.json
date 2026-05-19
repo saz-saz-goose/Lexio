@@ -1,0 +1,313 @@
+{
+  "meta": {
+    "title": "Cambridge YLE – A1 Movers",
+    "level": "A1",
+    "source": "Cambridge English Young Learners (YLE) official wordlist – for exams from 2018",
+    "description": "Vocabulary introduced at A1 Movers level. Candidates are expected to know these words IN ADDITION TO the Pre-A1 Starters list.",
+    "notes": "Words here are new at Movers level only. Use alongside starters_pre_a1.json for the full picture."
+  },
+  "topics": {
+    "animals": {
+      "label": "Animals (new at Movers)",
+      "words": [
+        { "word": "bat", "type": "noun" },
+        { "word": "cage", "type": "noun" },
+        { "word": "dolphin", "type": "noun" },
+        { "word": "fly", "type": "noun/verb" },
+        { "word": "kangaroo", "type": "noun" },
+        { "word": "kitten", "type": "noun" },
+        { "word": "lion", "type": "noun" },
+        { "word": "panda", "type": "noun" },
+        { "word": "parrot", "type": "noun" },
+        { "word": "penguin", "type": "noun" },
+        { "word": "puppy", "type": "noun" },
+        { "word": "rabbit", "type": "noun" },
+        { "word": "shark", "type": "noun" },
+        { "word": "snail", "type": "noun" },
+        { "word": "whale", "type": "noun" }
+      ]
+    },
+    "the_body_and_face": {
+      "label": "The Body and the Face (new at Movers)",
+      "words": [
+        { "word": "back", "type": "noun" },
+        { "word": "beard", "type": "noun" },
+        { "word": "blonde", "type": "adjective" },
+        { "word": "curly", "type": "adjective" },
+        { "word": "elbow", "type": "noun" },
+        { "word": "fair", "type": "adjective" },
+        { "word": "fat", "type": "adjective" },
+        { "word": "finger", "type": "noun" },
+        { "word": "knee", "type": "noun" },
+        { "word": "moustache", "type": "noun" },
+        { "word": "neck", "type": "noun" },
+        { "word": "shoulder", "type": "noun" },
+        { "word": "stomach", "type": "noun" },
+        { "word": "thin", "type": "adjective" },
+        { "word": "toe", "type": "noun" },
+        { "word": "tooth", "type": "noun", "notes": "plural: teeth" }
+      ]
+    },
+    "clothes": {
+      "label": "Clothes (new at Movers)",
+      "words": [
+        { "word": "belt", "type": "noun" },
+        { "word": "bracelet", "type": "noun" },
+        { "word": "coat", "type": "noun" },
+        { "word": "costume", "type": "noun" },
+        { "word": "crown", "type": "noun" },
+        { "word": "glove", "type": "noun" },
+        { "word": "helmet", "type": "noun" },
+        { "word": "necklace", "type": "noun" },
+        { "word": "pyjamas", "type": "noun", "notes": "US: pajamas" },
+        { "word": "pocket", "type": "noun" },
+        { "word": "ring", "type": "noun" },
+        { "word": "scarf", "type": "noun" },
+        { "word": "spotted", "type": "adjective" },
+        { "word": "stripe", "type": "noun" },
+        { "word": "striped", "type": "adjective" },
+        { "word": "sunglasses", "type": "noun" },
+        { "word": "sweater", "type": "noun" },
+        { "word": "swimsuit", "type": "noun" },
+        { "word": "trainers", "type": "noun" },
+        { "word": "umbrella", "type": "noun" },
+        { "word": "uniform", "type": "noun" }
+      ]
+    },
+    "family_and_friends": {
+      "label": "Family and Friends (new at Movers)",
+      "words": [
+        { "word": "aunt", "type": "noun" },
+        { "word": "daughter", "type": "noun" },
+        { "word": "granddaughter", "type": "noun" },
+        { "word": "grandparent", "type": "noun" },
+        { "word": "grandson", "type": "noun" },
+        { "word": "grown-up", "type": "noun" },
+        { "word": "husband", "type": "noun" },
+        { "word": "married", "type": "adjective" },
+        { "word": "parent", "type": "noun" },
+        { "word": "son", "type": "noun" },
+        { "word": "surname", "type": "noun" },
+        { "word": "uncle", "type": "noun" },
+        { "word": "wife", "type": "noun" }
+      ]
+    },
+    "food_and_drink": {
+      "label": "Food and Drink (new at Movers)",
+      "words": [
+        { "word": "biscuit", "type": "noun" },
+        { "word": "butter", "type": "noun" },
+        { "word": "cheese", "type": "noun" },
+        { "word": "coffee", "type": "noun" },
+        { "word": "cream", "type": "noun" },
+        { "word": "cucumber", "type": "noun" },
+        { "word": "eat", "type": "verb" },
+        { "word": "flour", "type": "noun" },
+        { "word": "fridge", "type": "noun" },
+        { "word": "hungry", "type": "adjective" },
+        { "word": "jam", "type": "noun" },
+        { "word": "lunch", "type": "noun" },
+        { "word": "meal", "type": "noun" },
+        { "word": "menu", "type": "noun" },
+        { "word": "pasta", "type": "noun" },
+        { "word": "pepper", "type": "noun" },
+        { "word": "pizza", "type": "noun" },
+        { "word": "salt", "type": "noun" },
+        { "word": "snack", "type": "noun" },
+        { "word": "thirsty", "type": "adjective" },
+        { "word": "yoghurt", "type": "noun" }
+      ]
+    },
+    "health": {
+      "label": "Health",
+      "words": [
+        { "word": "better", "type": "adjective" },
+        { "word": "cold", "type": "noun/adjective" },
+        { "word": "doctor", "type": "noun" },
+        { "word": "headache", "type": "noun" },
+        { "word": "hospital", "type": "noun" },
+        { "word": "hurt", "type": "verb" },
+        { "word": "medicine", "type": "noun" },
+        { "word": "toothache", "type": "noun" },
+        { "word": "well", "type": "adjective" }
+      ]
+    },
+    "hobbies_and_leisure": {
+      "label": "Hobbies and Leisure",
+      "words": [
+        { "word": "board game", "type": "noun" },
+        { "word": "bowling", "type": "noun" },
+        { "word": "cinema", "type": "noun" },
+        { "word": "circus", "type": "noun" },
+        { "word": "collect", "type": "verb" },
+        { "word": "comic", "type": "noun" },
+        { "word": "cook", "type": "verb" },
+        { "word": "dance", "type": "noun/verb" },
+        { "word": "draw", "type": "verb" },
+        { "word": "enjoy", "type": "verb" },
+        { "word": "film", "type": "noun" },
+        { "word": "fish", "type": "verb" },
+        { "word": "hobby", "type": "noun" },
+        { "word": "holiday", "type": "noun" },
+        { "word": "laugh", "type": "verb" },
+        { "word": "music", "type": "noun" },
+        { "word": "party", "type": "noun" },
+        { "word": "photo", "type": "noun" },
+        { "word": "picnic", "type": "noun" },
+        { "word": "read", "type": "verb" },
+        { "word": "shopping", "type": "noun" },
+        { "word": "sing", "type": "verb" },
+        { "word": "story", "type": "noun" },
+        { "word": "swim", "type": "verb" },
+        { "word": "visit", "type": "verb" }
+      ]
+    },
+    "home": {
+      "label": "The Home (new at Movers)",
+      "words": [
+        { "word": "apartment", "type": "noun" },
+        { "word": "attic", "type": "noun" },
+        { "word": "basement", "type": "noun" },
+        { "word": "blanket", "type": "noun" },
+        { "word": "bowl", "type": "noun" },
+        { "word": "brush", "type": "noun/verb" },
+        { "word": "clean", "type": "adjective/verb" },
+        { "word": "dirty", "type": "adjective" },
+        { "word": "flat", "type": "noun" },
+        { "word": "garage", "type": "noun" },
+        { "word": "garden", "type": "noun" },
+        { "word": "gate", "type": "noun" },
+        { "word": "glass", "type": "noun" },
+        { "word": "lamp", "type": "noun" },
+        { "word": "mirror", "type": "noun" },
+        { "word": "plate", "type": "noun" },
+        { "word": "roof", "type": "noun" },
+        { "word": "shelf", "type": "noun" },
+        { "word": "shower", "type": "noun" },
+        { "word": "stairs", "type": "noun" },
+        { "word": "tidy", "type": "adjective/verb" },
+        { "word": "upstairs", "type": "adverb" }
+      ]
+    },
+    "places_and_directions": {
+      "label": "Places and Directions",
+      "words": [
+        { "word": "airport", "type": "noun" },
+        { "word": "behind", "type": "preposition" },
+        { "word": "between", "type": "preposition" },
+        { "word": "bookshop", "type": "noun" },
+        { "word": "city", "type": "noun" },
+        { "word": "corner", "type": "noun" },
+        { "word": "farm", "type": "noun" },
+        { "word": "hotel", "type": "noun" },
+        { "word": "island", "type": "noun" },
+        { "word": "left", "type": "adjective/adverb" },
+        { "word": "library", "type": "noun" },
+        { "word": "market", "type": "noun" },
+        { "word": "museum", "type": "noun" },
+        { "word": "next to", "type": "preposition" },
+        { "word": "opposite", "type": "preposition" },
+        { "word": "place", "type": "noun" },
+        { "word": "playground", "type": "noun" },
+        { "word": "post office", "type": "noun" },
+        { "word": "right", "type": "adjective/adverb" },
+        { "word": "road", "type": "noun" },
+        { "word": "shop", "type": "noun" },
+        { "word": "sports centre", "type": "noun" },
+        { "word": "station", "type": "noun" },
+        { "word": "street", "type": "noun" },
+        { "word": "supermarket", "type": "noun" },
+        { "word": "swimming pool", "type": "noun" },
+        { "word": "town", "type": "noun" },
+        { "word": "village", "type": "noun" }
+      ]
+    },
+    "school": {
+      "label": "School (new at Movers)",
+      "words": [
+        { "word": "art", "type": "noun" },
+        { "word": "exam", "type": "noun" },
+        { "word": "geography", "type": "noun" },
+        { "word": "history", "type": "noun" },
+        { "word": "homework", "type": "noun" },
+        { "word": "maths", "type": "noun" },
+        { "word": "PE (physical education)", "type": "noun" },
+        { "word": "science", "type": "noun" },
+        { "word": "student", "type": "noun" },
+        { "word": "subject", "type": "noun" },
+        { "word": "test", "type": "noun" }
+      ]
+    },
+    "sports": {
+      "label": "Sports (new at Movers)",
+      "words": [
+        { "word": "badminton", "type": "noun" },
+        { "word": "baseball", "type": "noun" },
+        { "word": "climb", "type": "verb" },
+        { "word": "cycling", "type": "noun" },
+        { "word": "golf", "type": "noun" },
+        { "word": "gymnastics", "type": "noun" },
+        { "word": "hockey", "type": "noun" },
+        { "word": "ride", "type": "verb" },
+        { "word": "sailing", "type": "noun" },
+        { "word": "skating", "type": "noun" },
+        { "word": "skiing", "type": "noun" },
+        { "word": "volleyball", "type": "noun" }
+      ]
+    },
+    "time": {
+      "label": "Time (new at Movers)",
+      "words": [
+        { "word": "January", "type": "noun" },
+        { "word": "February", "type": "noun" },
+        { "word": "March", "type": "noun" },
+        { "word": "April", "type": "noun" },
+        { "word": "May", "type": "noun" },
+        { "word": "June", "type": "noun" },
+        { "word": "July", "type": "noun" },
+        { "word": "August", "type": "noun" },
+        { "word": "September", "type": "noun" },
+        { "word": "October", "type": "noun" },
+        { "word": "November", "type": "noun" },
+        { "word": "December", "type": "noun" },
+        { "word": "month", "type": "noun" },
+        { "word": "week", "type": "noun" },
+        { "word": "weekend", "type": "noun" },
+        { "word": "yesterday", "type": "adverb" },
+        { "word": "tomorrow", "type": "adverb" }
+      ]
+    },
+    "transport": {
+      "label": "Transport (new at Movers)",
+      "words": [
+        { "word": "boat", "type": "noun" },
+        { "word": "helicopter", "type": "noun" },
+        { "word": "ship", "type": "noun" },
+        { "word": "tractor", "type": "noun" },
+        { "word": "truck", "type": "noun", "notes": "UK: lorry" }
+      ]
+    },
+    "weather": {
+      "label": "Weather",
+      "words": [
+        { "word": "cloud", "type": "noun" },
+        { "word": "cloudy", "type": "adjective" },
+        { "word": "cold", "type": "adjective" },
+        { "word": "fog", "type": "noun" },
+        { "word": "foggy", "type": "adjective" },
+        { "word": "hot", "type": "adjective" },
+        { "word": "rain", "type": "noun/verb" },
+        { "word": "rainy", "type": "adjective" },
+        { "word": "snow", "type": "noun/verb" },
+        { "word": "snowy", "type": "adjective" },
+        { "word": "sun", "type": "noun" },
+        { "word": "sunny", "type": "adjective" },
+        { "word": "temperature", "type": "noun" },
+        { "word": "warm", "type": "adjective" },
+        { "word": "weather", "type": "noun" },
+        { "word": "wind", "type": "noun" },
+        { "word": "windy", "type": "adjective" }
+      ]
+    }
+  }
+}
