@@ -567,14 +567,17 @@
     left: 50%;
     transform: translate(-50%, -50%);
     font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--ink-light);
-    opacity: 0.3;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     pointer-events: none;
     text-align: center;
-    z-index: 1;
-    width: 80%;
+    z-index: 5;
+    white-space: nowrap;
   }
   .game-bubble {
     position: absolute;
@@ -1434,8 +1437,12 @@ function createBubble(text, isTarget, onClick) {
   bubble.className = 'game-bubble distractor';
   bubble.textContent = text;
   
-  const x = 15 + Math.random() * 70;
-  const y = 15 + Math.random() * 70;
+  let x, y;
+  do {
+    x = 10 + Math.random() * 80;
+    y = 10 + Math.random() * 80;
+  } while (x > 25 && x < 75 && y > 35 && y < 65);
+  
   bubble.style.left = x + '%';
   bubble.style.top = y + '%';
   
