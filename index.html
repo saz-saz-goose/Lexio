@@ -1678,21 +1678,24 @@ function loadEx3() {
 
   document.getElementById('ex3-input').dataset.answer = w.english;
   document.getElementById('ex3-input').dataset.partial = anagram;
+  document.getElementById('ex3-input').dataset.ex3Tried = "false";
 }
 
 function ex3Check() {
   const input = document.getElementById('ex3-input');
   const answer = input.dataset.answer.toLowerCase();
   const val = input.value.trim().toLowerCase();
+  const tried = input.dataset.ex3Tried === "true";
 
   if (val === answer) {
     input.classList.add('correct');
     triggerGlow('correct');
     showFeedback('ex3-feedback', 'correct', '✓ Correct !');
     playAudio(false, answer);
-    if (!wordErrors[answer]) {
+    if (!tried) {
       firstTryCorrect++;
     }
+    input.dataset.ex3Tried = "true";
   } else {
     input.classList.add('wrong');
     triggerGlow('wrong');
@@ -1701,6 +1704,7 @@ function ex3Check() {
     if (!wordErrors[answer]) wordErrors[answer] = 0;
     wordErrors[answer]++;
     loseLife();
+    input.dataset.ex3Tried = "true";
   }
   stepsCompleted++;
   updateProgress();
