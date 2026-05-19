@@ -818,17 +818,17 @@
 ══════════════════════════════════════════ -->
 <div class="screen" id="screen-ex3">
   <div class="question-prompt">
-    <div class="q-label">Exercice 3 — Complétez le mot</div>
+    <div class="q-label">Exercice 3 — Anagramme</div>
     <div class="q-word" id="ex3-french"></div>
-    <div class="q-sub">Tapez les lettres manquantes pour compléter le mot anglais</div>
+    <div class="q-sub">Remettez les lettres dans le bon ordre pour trouver le mot anglais</div>
   </div>
 
   <div class="card" style="text-align:center;">
-    <div class="section-sub" style="margin-bottom:12px;">Mot anglais (lettres manquantes) :</div>
+    <div class="section-sub" style="margin-bottom:12px;">Lettres en désordre :</div>
     <div class="partial-word-display" id="ex3-partial"></div>
   </div>
 
-  <input class="type-input" id="ex3-input" type="text" placeholder="Tapez les lettres manquantes..." autocomplete="off" autocorrect="off" spellcheck="false" />
+  <input class="type-input" id="ex3-input" type="text" placeholder="Tapez le mot anglais..." autocomplete="off" autocorrect="off" spellcheck="false" />
   <button class="btn-primary" onclick="ex3Check()">Vérifier</button>
 
   <div class="feedback-banner" id="ex3-feedback"></div>
@@ -1642,12 +1642,16 @@ function startEx3() {
   loadEx3();
 }
 
-function makePartialWord(word) {
+function makeAnagramWord(word) {
   const letters = word.split('');
-  if (letters.length <= 1) return '_';
-  const toHide = Math.ceil(letters.length * 0.5);
-  const positions = shuffle([...Array(letters.length).keys()].slice(1)).slice(0, toHide);
-  return letters.map((l, i) => positions.includes(i) ? '_' : l).join('');
+  if (letters.length <= 1) return word;
+  let anagram = shuffle(letters).join('');
+  let attempts = 0;
+  while (anagram === word && attempts < 5) {
+    anagram = shuffle(letters).join('');
+    attempts++;
+  }
+  return anagram;
 }
 
 function loadEx3() {
@@ -1657,11 +1661,11 @@ function loadEx3() {
   }
 
   const w = ex3Queue[ex3Index];
-  const partial = makePartialWord(w.english);
+  const anagram = makeAnagramWord(w.english);
   document.getElementById('ex3-french').textContent = w.french;
 
-  const display = [...partial].map(c =>
-    c === '_' ? `<span class='blank'>_</span>` : c
+  const display = [...anagram].map(c =>
+    c === ' ' ? `&nbsp;&nbsp;` : `<span style="margin: 0 2px;">${c}</span>`
   ).join('');
   document.getElementById('ex3-partial').innerHTML = display;
 
@@ -1673,7 +1677,7 @@ function loadEx3() {
   document.getElementById('ex3-input').placeholder = 'Tapez le mot anglais complet...';
 
   document.getElementById('ex3-input').dataset.answer = w.english;
-  document.getElementById('ex3-input').dataset.partial = partial;
+  document.getElementById('ex3-input').dataset.partial = anagram;
 }
 
 function ex3Check() {
