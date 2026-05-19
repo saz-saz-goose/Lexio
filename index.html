@@ -611,15 +611,9 @@
     </div>
   </div>
 
-  <div class="sentence-area">
-    <div class="sentence-counter" id="enc-sent-counter">Phrase 1 sur 2</div>
-    <div id="enc-sentences-container" style="display: flex; flex-direction: column; gap: 12px;">
-      <div class="sentence-text" id="enc-sent-text-fr"></div>
-      <div class="sentence-text" id="enc-sent-text-en" style="color: var(--ink-light); font-size: 0.95rem; border-top: 1px dashed var(--border); padding-top: 8px;"></div>
-    </div>
-  </div>
 
-  <button class="btn-primary" id="enc-next-btn" onclick="encounterNext()">✓ J'ai lu cette phrase</button>
+
+  <button class="btn-primary" id="enc-next-btn" onclick="encounterNext()">Continuer →</button>
 </div>
 
 <!-- ══════════════════════════════════════════
@@ -659,52 +653,7 @@
   <div class="word-counter" id="ex1rt-counter"></div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     SCREEN: EX2 — CLOZE
-══════════════════════════════════════════ -->
-<div class="screen" id="screen-ex2">
-  <div class="question-prompt">
-    <div class="q-label">Exercice 2 — Complétez la phrase</div>
-    <div class="q-word" id="ex2-word"></div>
-    <div class="q-sub">Quel mot anglais complète ces phrases ?</div>
-  </div>
 
-  <div class="card" id="ex2-sentences-card"></div>
-
-  <div class="cloze-options" id="ex2-options"></div>
-  <div class="feedback-banner" id="ex2-feedback"></div>
-  <button class="btn-primary hidden" id="ex2-next-btn" onclick="ex2Next()">Continuer →</button>
-  <div class="word-counter" id="ex2-counter"></div>
-</div>
-
-<!-- EX2 RETEST — type the TL word -->
-<div class="screen" id="screen-ex2-retest">
-  <div class="card">
-    <div class="phase-tag" style="background:#FFE5E5;color:#9B2226;">Révision</div>
-    <div class="section-title mt-4">Révision — Tapez le mot</div>
-    <div class="section-sub mt-8">Vous voyez le mot français. Tapez sa traduction en anglais.</div>
-  </div>
-
-  <div class="question-prompt">
-    <div class="q-label">Mot français</div>
-    <div class="q-word" id="ex2rt-french"></div>
-  </div>
-
-  <div id="ex2rt-reveal-area">
-    <div class="section-sub center" style="font-size:0.85rem;">Mot anglais :</div>
-    <div class="partial-word-display" id="ex2rt-english-shown"></div>
-    <button class="btn-primary" onclick="ex2RetestRevealHide()" id="ex2rt-reveal-btn">Cliquez pour masquer le mot et tapez</button>
-  </div>
-
-  <div id="ex2rt-type-area" class="hidden" style="width:100%;display:flex;flex-direction:column;gap:12px;align-items:center;">
-    <input class="type-input" id="ex2rt-input" type="text" placeholder="Tapez le mot anglais..." autocomplete="off" autocorrect="off" spellcheck="false" />
-    <button class="btn-primary" onclick="ex2RetestCheck()">Vérifier</button>
-  </div>
-
-  <div class="feedback-banner" id="ex2rt-feedback"></div>
-  <button class="btn-primary hidden" id="ex2rt-next-btn" onclick="ex2RetestNext()">Continuer →</button>
-  <div class="word-counter" id="ex2rt-counter"></div>
-</div>
 
 <!-- ══════════════════════════════════════════
      SCREEN: EX3 — Partial word typing
@@ -764,11 +713,7 @@ let ex1Incorrect    = [];  // words to retest
 let ex1RetestQueue  = [];
 let ex1RetestIndex  = 0;
 
-let ex2Queue        = [];
-let ex2Index        = 0;
-let ex2Incorrect    = [];
-let ex2RetestQueue  = [];
-let ex2RetestIndex  = 0;
+
 
 let ex3Queue        = [];
 let ex3Index        = 0;
@@ -852,170 +797,9 @@ function normalizeString(str) {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 }
 
-function replaceFrenchWordWithEnglish(frSentence, frWord, enWord) {
-  const wordsReal = frSentence.split(/\s+/).filter(Boolean);
-  const normFrWord = normalizeString(frWord);
-  
-  let matchIdx = -1;
-  let matchLen = 1;
-  
-  // 1. Try exact word match (normalized, ignoring punctuation)
-  for (let i = 0; i < wordsReal.length; i++) {
-    const wNorm = normalizeString(wordsReal[i].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?']/g, ""));
-    if (wNorm === normFrWord || wNorm === normFrWord + 's' || normFrWord === wNorm + 's') {
-      matchIdx = i;
-      break;
-    }
-  }
-  
-  // 2. Try prefix/substring match if not found exactly (e.g. "entraînait" for "entraîner")
-  if (matchIdx === -1) {
-    for (let i = 0; i < wordsReal.length; i++) {
-      const wNorm = normalizeString(wordsReal[i].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?']/g, ""));
-      if (wNorm.includes(normFrWord) || normFrWord.includes(wNorm)) {
-        if (wNorm.length > 2 && normFrWord.length > 2) {
-          matchIdx = i;
-          break;
-        }
-      }
-    }
-  }
-  
-  // 3. Try matching multi-word translations (e.g. "chemin de fer" for "railway")
-  if (matchIdx === -1 && frWord.includes(' ')) {
-    const frParts = frWord.split(/\s+/).map(normalizeString);
-    for (let i = 0; i <= wordsReal.length - frParts.length; i++) {
-      let sequenceMatch = true;
-      for (let j = 0; j < frParts.length; j++) {
-        const wNorm = normalizeString(wordsReal[i + j].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?']/g, ""));
-        if (!wNorm.includes(frParts[j]) && !frParts[j].includes(wNorm)) {
-          sequenceMatch = false;
-          break;
-        }
-      }
-      if (sequenceMatch) {
-        matchIdx = i;
-        matchLen = frParts.length;
-        break;
-      }
-    }
-  }
-  
-  if (matchIdx !== -1) {
-    const firstWord = wordsReal[matchIdx];
-    const lastWord = wordsReal[matchIdx + matchLen - 1];
-    
-    // Extract prefix and suffix punctuation from the original words
-    const prefixPunct = firstWord.match(/^[.,\/#!$%\^&\*;:{}=\-_`~()?']+/)?.[0] || "";
-    const suffixPunct = lastWord.match(/[.,\/#!$%\^&\*;:{}=\-_`~()?']+$/)?.[0] || "";
-    
-    const replacement = `${prefixPunct}<b class='highlight'>${enWord}</b>${suffixPunct}`;
-    const resultWords = [...wordsReal];
-    resultWords.splice(matchIdx, matchLen, replacement);
-    return resultWords.join(' ');
-  }
-  
-  // 4. Fallback if no match is found: replace the last word of the sentence
-  if (wordsReal.length > 0) {
-    const lastWordIdx = wordsReal.length - 1;
-    const lastWord = wordsReal[lastWordIdx];
-    
-    // Extract prefix and suffix punctuation from the last word
-    const prefixPunct = lastWord.match(/^[.,\/#!$%\^&\*;:{}=\-_`~()?']+/)?.[0] || "";
-    const suffixPunct = lastWord.match(/[.,\/#!$%\^&\*;:{}=\-_`~()?']+$/)?.[0] || "";
-    
-    const replacement = `${prefixPunct}<b class='highlight'>${enWord}</b>${suffixPunct}`;
-    const resultWords = [...wordsReal];
-    resultWords[lastWordIdx] = replacement;
-    return resultWords.join(' ');
-  }
-  
-  return `<b class='highlight'>${enWord}</b>`;
-}
-
-function getTemplatesForWord(word, type) {
-  const t = (type || '').toLowerCase();
-  
-  const nounTemplates = [
-    `I can see the ${word}.`,
-    `This is a beautiful ${word}.`,
-    `We need a new ${word}.`,
-    `He put the ${word} on the table.`,
-    `She has a big ${word}.`,
-    `Please show me the ${word}.`
-  ];
-  
-  const verbTemplates = [
-    `I want to ${word} today.`,
-    `Can you ${word} this for me?`,
-    `He likes to ${word} every morning.`,
-    `We should ${word} together.`,
-    `She knows how to ${word} well.`,
-    `Please ${word} when you are ready.`
-  ];
-  
-  const adjTemplates = [
-    `This is a very ${word} place.`,
-    `She looks ${word} today.`,
-    `I want to find a ${word} option.`,
-    `The book is very ${word}.`,
-    `He is a ${word} boy.`,
-    `It was a ${word} decision.`
-  ];
-  
-  const advTemplates = [
-    `Please write ${word}.`,
-    `He walked ${word} along the street.`,
-    `She explained the rules ${word}.`,
-    `They worked ${word} all day.`,
-    `You must drive ${word} at night.`,
-    `The car moved ${word} down the hill.`
-  ];
-  
-  const generalTemplates = [
-    `I like this ${word}.`,
-    `We are talking about the ${word}.`,
-    `This is a good ${word}.`,
-    `Can you see the ${word}?`,
-    `They have a nice ${word}.`,
-    `He knows the ${word}.`
-  ];
-  
-  if (t.includes('noun')) return nounTemplates;
-  if (t.includes('verb')) return verbTemplates;
-  if (t.includes('adj')) return adjTemplates;
-  if (t.includes('adv')) return advTemplates;
-  return generalTemplates;
-}
-
-function checkSentenceContainsWord(frSentence, frWord) {
-  const normSent = normalizeString(frSentence);
-  const normWord = normalizeString(frWord);
-  
-  // Clean punctuation to avoid issues
-  const cleanSent = normSent.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?']/g, " ");
-  const wordsList = cleanSent.split(/\s+/).filter(Boolean);
-  
-  for (let w of wordsList) {
-    if (w === normWord) return true;
-    if (w.length > 2 && normWord.length > 2) {
-      if (w === normWord + 's' || normWord === w + 's' || w.includes(normWord) || normWord.includes(w)) {
-        return true;
-      }
-    }
-  }
-  if (normSent.includes(normWord) && normWord.length > 2) {
-    return true;
-  }
-  return false;
-}
-
 async function translateAndGenerateSentencesForSession(selectedWords) {
   const promises = selectedWords.map(async (w) => {
     let english = w.english;
-    let type = w.type || "";
-    
-    // First, translate the word itself to French (to get its most common translation)
     let french = w.french;
     const hasFrench = w.french && !w.french.includes('[Traduire') && w.french.trim() !== "";
     if (!hasFrench) {
@@ -1025,69 +809,13 @@ async function translateAndGenerateSentencesForSession(selectedWords) {
         french = french || `[Traduire : ${english}]`;
       }
     }
-    
-    // Generate exactly 2 context sentences
-    const templates = getTemplatesForWord(english, type);
-    const sentences = [];
-    
-    // We search the templates for ones that translate cleanly containing the French word
-    for (let enSent of templates) {
-      if (sentences.length >= 2) break;
-      try {
-        const frSentTranslated = await translateText(enSent, 'en', 'fr');
-        if (checkSentenceContainsWord(frSentTranslated, french)) {
-          const frSentAligned = replaceFrenchWordWithEnglish(frSentTranslated, french, english);
-          sentences.push({
-            en: enSent,
-            fr: frSentAligned
-          });
-        }
-      } catch (e) {
-        console.error("Translation error during template generation:", e);
-      }
-    }
-    
-    // Fallback logic to make sure we always have 2 sentences
-    let fallbackIdx = 0;
-    const usedEn = new Set(sentences.map(s => s.en));
-    while (sentences.length < 2) {
-      // Find a template we haven't successfully used yet (if possible)
-      let fallbackTemplate = null;
-      for (let i = 0; i < templates.length; i++) {
-        const idx = (fallbackIdx + i) % templates.length;
-        const candidate = templates[idx];
-        if (!usedEn.has(candidate)) {
-          fallbackTemplate = candidate;
-          fallbackIdx = idx + 1;
-          break;
-        }
-      }
-      if (!fallbackTemplate) {
-        fallbackTemplate = `I see the ${english}.`;
-      }
-      
-      let frSent = "";
-      try {
-        frSent = await translateText(fallbackTemplate, 'en', 'fr');
-      } catch (e) {
-        frSent = fallbackTemplate;
-      }
-      const frSentAligned = replaceFrenchWordWithEnglish(frSent, french, english);
-      sentences.push({
-        en: fallbackTemplate,
-        fr: frSentAligned
-      });
-      usedEn.add(fallbackTemplate);
-    }
-    
     return {
       id: w.id,
       english: english,
       french: french,
-      sentences: sentences
+      sentences: []
     };
   });
-  
   return Promise.all(promises);
 }
 
@@ -1311,25 +1039,26 @@ function loadEncounterWord() {
   }, 300);
 }
 
-function loadEncounterSentence() {
+function loadEncounterWord() {
+  if (encounterIndex >= words.length) {
+    startEx1();
+    return;
+  }
   const w = words[encounterIndex];
-  document.getElementById('enc-sent-counter').textContent = `Phrase ${encounterSentenceIndex + 1} sur 2`;
-  document.getElementById('enc-sent-text-fr').innerHTML = w.sentences[encounterSentenceIndex].fr;
-  document.getElementById('enc-sent-text-en').innerHTML = `(${w.sentences[encounterSentenceIndex].en})`;
-  const isLast = encounterSentenceIndex === 1;
-  document.getElementById('enc-next-btn').textContent = isLast ? (encounterIndex < words.length - 1 ? '→ Mot suivant' : '→ Commencer les exercices') : '✓ J\'ai lu cette phrase';
+  document.getElementById('enc-word').textContent = w.english;
+  document.getElementById('enc-translation').textContent = w.french;
+  document.getElementById('stepLabel').textContent = `Mot ${encounterIndex + 1} / ${words.length}`;
+  
+  setTimeout(() => {
+    playAudio(false);
+  }, 300);
 }
 
 function encounterNext() {
-  if (encounterSentenceIndex < 1) {
-    encounterSentenceIndex++;
-    loadEncounterSentence();
-  } else {
-    stepsCompleted++;
-    updateProgress();
-    encounterIndex++;
-    loadEncounterWord();
-  }
+  stepsCompleted++;
+  updateProgress();
+  encounterIndex++;
+  loadEncounterWord();
 }
 
 // ══════════════════════════════════════════
@@ -1349,7 +1078,7 @@ function loadEx1() {
     if (ex1Incorrect.length > 0) {
       startEx1Retest();
     } else {
-      startEx2();
+      startEx3();
     }
     return;
   }
@@ -1411,7 +1140,7 @@ function startEx1Retest() {
 
 function loadEx1Retest() {
   if (ex1RetestIndex >= ex1RetestQueue.length) {
-    startEx2();
+    startEx3();
     return;
   }
   const w = ex1RetestQueue[ex1RetestIndex];
@@ -1701,7 +1430,7 @@ function showFeedback(id, type, msg) {
 
 function restartApp() {
   stepsCompleted = 0;
-  totalSteps = words.length * 5;
+  totalSteps = words.length * 3;
   updateProgress();
   document.getElementById('header-home-btn').classList.remove('hidden');
   document.getElementById('header-progress-wrap').style.display = 'block';
@@ -1768,7 +1497,7 @@ async function loadWordList() {
     allEnglish = words.map(w => w.english);
     allFrench  = words.map(w => w.french);
     
-    totalSteps = words.length * 5;
+    totalSteps = words.length * 3;
     stepsCompleted = 0;
     updateProgress();
     
