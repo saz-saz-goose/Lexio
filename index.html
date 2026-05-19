@@ -1610,6 +1610,15 @@ function spawnEx2Distractor(correctWord) {
     bubble.classList.remove('show');
     bubble.style.background = 'var(--wrong)';
     bubble.style.color = 'white';
+    
+    const wrongDisplay = document.createElement('div');
+    wrongDisplay.className = 'game-target-center';
+    wrongDisplay.style.color = 'var(--wrong)';
+    wrongDisplay.style.zIndex = '20';
+    wrongDisplay.textContent = correctWord;
+    document.getElementById('ex2-game-area').appendChild(wrongDisplay);
+    setTimeout(() => wrongDisplay.remove(), 1000);
+    
     setTimeout(() => bubble.remove(), 300);
   });
   
