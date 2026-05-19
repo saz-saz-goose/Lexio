@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lexio — Apprends l'anglais</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F4EF;
+    --card: #FFFFFF;
+    --ink: #1A1A2E;
+    --ink-light: #6B6B80;
+    --accent: #3D5A80;
+    --accent-light: #E0E8F0;
+    --correct: #2D6A4F;
+    --correct-bg: #D8F3DC;
+    --wrong: #9B2226;
+    --wrong-bg: #FFE5E5;
+    --border: #E2DDD6;
+    --glow-correct: rgba(45, 106, 79, 0.15);
+    --glow-wrong: rgba(155, 34, 38, 0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    transition: background 0.4s ease;
+  }
+
+  body.glow-correct { background: linear-gradient(135deg, #D8F3DC 0%, #F7F4EF 40%); }
+  body.glow-wrong   { background: linear-gradient(135deg, #FFE5E5 0%, #F7F4EF 40%); }
+
+  /* ── HEADER ── */
+  .app-header {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 24px 0;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  .progress-bar-wrap {
+    flex: 1;
+    margin: 0 20px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  .step-label {
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* ── MAIN SCREEN ── */
+  .screen {
+    display: none;
+    width: 100%;
+    max-width: 640px;
+    padding: 32px 24px 40px;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .screen.active { display: flex; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── CARDS ── */
+  .card {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+
+  .phase-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+
+  .word-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .translation-display {
+    font-size: 1.1rem;
+    color: var(--ink-light);
+    margin-bottom: 20px;
+  }
+
+  .audio-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-light);
+    color: var(--accent);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 8px;
+  }
+  .audio-btn:hover { background: #c8d8ea; }
+
+  /* ── SENTENCE CARD ── */
+  .sentence-area {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+
+  .sentence-counter {
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .sentence-text {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+
+  .sentence-text .highlight {
+    color: var(--accent);
+    font-weight: 500;
+    border-bottom: 2px solid var(--accent-light);
+  }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    width: 100%;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    letter-spacing: 0.2px;
+  }
+  .btn-primary:hover  { background: #2e4a6e; }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+    border-radius: 12px;
+    padding: 14px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-secondary:hover { background: var(--accent-light); }
+
+  /* ── MCQ OPTIONS ── */
+  .options-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .option-btn {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.1s;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .option-btn:hover  { border-color: var(--accent); background: var(--accent-light); }
+  .option-btn:active { transform: scale(0.97); }
+  .option-btn.correct { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+  .option-btn.wrong   { border-color: var(--wrong);   background: var(--wrong-bg);   color: var(--wrong); }
+  .option-btn:disabled { cursor: default; }
+
+  /* ── FEEDBACK BANNER ── */
+  .feedback-banner {
+    width: 100%;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: none;
+    align-items: center;
+    gap: 10px;
+  }
+  .feedback-banner.show { display: flex; }
+  .feedback-banner.correct { background: var(--correct-bg); color: var(--correct); }
+  .feedback-banner.wrong   { background: var(--wrong-bg);   color: var(--wrong); }
+
+  /* ── QUESTION PROMPT ── */
+  .question-prompt {
+    width: 100%;
+    text-align: center;
+  }
+  .question-prompt .q-label {
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 8px;
+  }
+  .question-prompt .q-word {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .question-prompt .q-sub {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    margin-top: 6px;
+  }
+
+  /* ── CLOZE ── */
+  .cloze-sentence {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .gap { display: inline-block; min-width: 80px; border-bottom: 2px solid var(--accent); color: var(--accent); font-weight: 500; text-align: center; padding: 0 4px; }
+
+  .cloze-options { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 4px; }
+  .cloze-option {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    text-align: left;
+  }
+  .cloze-option:hover { border-color: var(--accent); background: var(--accent-light); }
+  .cloze-option.correct { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+  .cloze-option.wrong   { border-color: var(--wrong);   background: var(--wrong-bg);   color: var(--wrong); }
+  .cloze-option:disabled { cursor: default; }
+
+  /* ── TYPE INPUT ── */
+  .type-input {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.1rem;
+    color: var(--ink);
+    background: var(--card);
+    outline: none;
+    transition: border-color 0.2s;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  .type-input:focus { border-color: var(--accent); }
+  .type-input.correct { border-color: var(--correct); background: var(--correct-bg); }
+  .type-input.wrong   { border-color: var(--wrong);   background: var(--wrong-bg); }
+
+  /* ── EX3 PARTIAL WORD ── */
+  .partial-word-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    letter-spacing: 6px;
+    color: var(--ink);
+    text-align: center;
+    margin: 8px 0 4px;
+  }
+  .partial-word-display .blank { color: var(--accent); border-bottom: 2px solid var(--accent); min-width: 18px; display: inline-block; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ink);
+    text-align: center;
+  }
+  .section-sub {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  /* ── WORD CHIP (retest list) ── */
+  .retest-chip {
+    display: inline-block;
+    background: var(--wrong-bg);
+    color: var(--wrong);
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    margin: 4px;
+    font-weight: 500;
+  }
+
+  /* ── COMPLETE SCREEN ── */
+  .complete-icon { font-size: 3rem; text-align: center; }
+  .complete-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--ink);
+  }
+  .complete-sub { font-size: 1rem; color: var(--ink-light); text-align: center; line-height: 1.6; }
+
+  /* ── DIVIDER ── */
+  .divider { width: 100%; height: 1px; background: var(--border); }
+
+  /* ── WORD COUNTER ── */
+  .word-counter { font-size: 0.8rem; color: var(--ink-light); text-align: center; }
+
+  /* Screen-specific helpers */
+  .hidden { display: none !important; }
+  .mt-4 { margin-top: 4px; }
+  .mt-8 { margin-top: 8px; }
+  .center { text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="logo">Lexio</div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+  </div>
+  <div class="step-label" id="stepLabel">Première rencontre</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: HOME
+══════════════════════════════════════════ -->
+<div class="screen active" id="screen-home">
+  <div class="complete-icon">📚</div>
+  <div class="complete-title">Bienvenue sur Lexio</div>
+  <div class="complete-sub">Choisissez un cours pour commencer à apprendre.</div>
+  
+  <div class="card" style="width:100%; margin-top:20px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+      <label for="autoplay-toggle" style="font-weight:500;">Lecture audio automatique</label>
+      <input type="checkbox" id="autoplay-toggle" checked style="transform:scale(1.3);">
+    </div>
+    
+    <div class="section-title mt-4" style="font-size:1.2rem; text-align:left; margin-bottom:12px;">Vos cours</div>
+    <button class="btn-secondary" style="width:100%; text-align:left; margin-bottom:12px;" onclick="loadCourse('word-lists/cambridge-yle-starters-animals.json')">
+      🦊 Cambridge YLE Starters - Animaux
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: FIRST ENCOUNTER — word intro
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-encounter">
+  <div class="card">
+    <div class="phase-tag">Première rencontre</div>
+    <div class="word-display" id="enc-word"></div>
+    <div class="translation-display" id="enc-translation"></div>
+    <div style="display:flex; gap:8px;">
+      <button class="audio-btn" id="enc-audio-btn" onclick="playAudio(false)">
+        🔊 <span>Écouter</span>
+      </button>
+      <button class="audio-btn" id="enc-audio-btn-slow" onclick="playAudio(true)">
+        🐢 <span>Lent</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="sentence-area">
+    <div class="sentence-counter" id="enc-sent-counter">Phrase 1 sur 2</div>
+    <div class="sentence-text" id="enc-sent-text"></div>
+  </div>
+
+  <button class="btn-primary" id="enc-next-btn" onclick="encounterNext()">✓ J'ai lu cette phrase</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: EX1 — MCQ (FR word → EN options)
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-ex1">
+  <div class="question-prompt">
+    <div class="q-label">Exercice 1 — Choisissez la bonne traduction</div>
+    <div class="q-word" id="ex1-word"></div>
+    <div class="q-sub">Quel est le sens de ce mot en anglais ?</div>
+  </div>
+
+  <div class="options-grid" id="ex1-options"></div>
+
+  <div class="feedback-banner" id="ex1-feedback"></div>
+
+  <button class="btn-primary hidden" id="ex1-next-btn" onclick="ex1Next()">Continuer →</button>
+  <div class="word-counter" id="ex1-counter"></div>
+</div>
+
+<!-- EX1 RETEST (native → TL) -->
+<div class="screen" id="screen-ex1-retest">
+  <div class="card">
+    <div class="phase-tag" style="background:#FFE5E5;color:#9B2226;">Révision</div>
+    <div class="section-title mt-4">Révision des mots manqués</div>
+    <div class="section-sub mt-8">Cette fois, vous voyez le mot en anglais et choisissez la bonne traduction française.</div>
+  </div>
+
+  <div class="question-prompt">
+    <div class="q-label">Traduisez en français</div>
+    <div class="q-word" id="ex1rt-word"></div>
+  </div>
+
+  <div class="options-grid" id="ex1rt-options"></div>
+  <div class="feedback-banner" id="ex1rt-feedback"></div>
+  <button class="btn-primary hidden" id="ex1rt-next-btn" onclick="ex1RetestNext()">Continuer →</button>
+  <div class="word-counter" id="ex1rt-counter"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: EX2 — CLOZE
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-ex2">
+  <div class="question-prompt">
+    <div class="q-label">Exercice 2 — Complétez la phrase</div>
+    <div class="q-word" id="ex2-word"></div>
+    <div class="q-sub">Quel mot anglais complète ces phrases ?</div>
+  </div>
+
+  <div class="card" id="ex2-sentences-card"></div>
+
+  <div class="cloze-options" id="ex2-options"></div>
+  <div class="feedback-banner" id="ex2-feedback"></div>
+  <button class="btn-primary hidden" id="ex2-next-btn" onclick="ex2Next()">Continuer →</button>
+  <div class="word-counter" id="ex2-counter"></div>
+</div>
+
+<!-- EX2 RETEST — type the TL word -->
+<div class="screen" id="screen-ex2-retest">
+  <div class="card">
+    <div class="phase-tag" style="background:#FFE5E5;color:#9B2226;">Révision</div>
+    <div class="section-title mt-4">Révision — Tapez le mot</div>
+    <div class="section-sub mt-8">Vous voyez le mot français. Tapez sa traduction en anglais.</div>
+  </div>
+
+  <div class="question-prompt">
+    <div class="q-label">Mot français</div>
+    <div class="q-word" id="ex2rt-french"></div>
+  </div>
+
+  <div id="ex2rt-reveal-area">
+    <div class="section-sub center" style="font-size:0.85rem;">Mot anglais :</div>
+    <div class="partial-word-display" id="ex2rt-english-shown"></div>
+    <button class="btn-primary" onclick="ex2RetestRevealHide()" id="ex2rt-reveal-btn">Cliquez pour masquer le mot et taper</button>
+  </div>
+
+  <div id="ex2rt-type-area" class="hidden" style="width:100%;display:flex;flex-direction:column;gap:12px;align-items:center;">
+    <input class="type-input" id="ex2rt-input" type="text" placeholder="Tapez le mot anglais..." autocomplete="off" autocorrect="off" spellcheck="false" />
+    <button class="btn-primary" onclick="ex2RetestCheck()">Vérifier</button>
+  </div>
+
+  <div class="feedback-banner" id="ex2rt-feedback"></div>
+  <button class="btn-primary hidden" id="ex2rt-next-btn" onclick="ex2RetestNext()">Continuer →</button>
+  <div class="word-counter" id="ex2rt-counter"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: EX3 — Partial word typing
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-ex3">
+  <div class="question-prompt">
+    <div class="q-label">Exercice 3 — Complétez le mot</div>
+    <div class="q-word" id="ex3-french"></div>
+    <div class="q-sub">Tapez les lettres manquantes pour compléter le mot anglais</div>
+  </div>
+
+  <div class="card" style="text-align:center;">
+    <div class="section-sub" style="margin-bottom:12px;">Mot anglais (lettres manquantes) :</div>
+    <div class="partial-word-display" id="ex3-partial"></div>
+  </div>
+
+  <input class="type-input" id="ex3-input" type="text" placeholder="Tapez les lettres manquantes..." autocomplete="off" autocorrect="off" spellcheck="false" />
+  <button class="btn-primary" onclick="ex3Check()">Vérifier</button>
+
+  <div class="feedback-banner" id="ex3-feedback"></div>
+  <button class="btn-primary hidden" id="ex3-next-btn" onclick="ex3Next()">Continuer →</button>
+  <div class="word-counter" id="ex3-counter"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: SESSION COMPLETE
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-complete">
+  <div class="complete-icon">🎉</div>
+  <div class="complete-title">Première rencontre terminée !</div>
+  <div class="complete-sub">Vous avez rencontré les 5 mots pour la première fois.<br>Revenez demain pour la deuxième rencontre.</div>
+  <div class="divider"></div>
+  <button class="btn-primary" onclick="restartApp()">Recommencer la session</button>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// WORD DATA
+// ══════════════════════════════════════════
+let words = [];
+let allEnglish = [];
+let allFrench = [];
+let autoPlayAudio = true;
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let encounterIndex  = 0;
+let encounterSentenceIndex = 0;
+
+let ex1Queue        = [];  // words to test
+let ex1Index        = 0;
+let ex1Incorrect    = [];  // words to retest
+let ex1RetestQueue  = [];
+let ex1RetestIndex  = 0;
+
+let ex2Queue        = [];
+let ex2Index        = 0;
+let ex2Incorrect    = [];
+let ex2RetestQueue  = [];
+let ex2RetestIndex  = 0;
+
+let ex3Queue        = [];
+let ex3Index        = 0;
+
+let totalSteps      = 0;
+let stepsCompleted  = 0;
+
+// ══════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  el.style.animation = 'none';
+  el.offsetHeight; // reflow
+  el.style.animation = '';
+}
+
+function triggerGlow(type) {
+  document.body.classList.remove('glow-correct', 'glow-wrong');
+  document.body.classList.add(type === 'correct' ? 'glow-correct' : 'glow-wrong');
+  setTimeout(() => document.body.classList.remove('glow-correct', 'glow-wrong'), 2000);
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function getMCQOptions(correctEnglish, count = 4) {
+  const distractors = allEnglish.filter(e => e !== correctEnglish);
+  const chosen = shuffle(distractors).slice(0, count - 1);
+  return shuffle([correctEnglish, ...chosen]);
+}
+
+function getFrenchMCQOptions(correctFrench, count = 4) {
+  const distractors = allFrench.filter(f => f !== correctFrench);
+  const chosen = shuffle(distractors).slice(0, count - 1);
+  return shuffle([correctFrench, ...chosen]);
+}
+
+function updateProgress() {
+  const pct = totalSteps > 0 ? Math.round((stepsCompleted / totalSteps) * 100) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function playAudio(slow = false) {
+  // Placeholder — real implementation would use TTS API or pre-generated audio files
+  const word = words[encounterIndex].english;
+  if ('speechSynthesis' in window) {
+    const utt = new SpeechSynthesisUtterance(word);
+    utt.lang = 'en-GB';
+    utt.rate = slow ? 0.5 : 1.0;
+    speechSynthesis.speak(utt);
+  }
+}
+
+// ══════════════════════════════════════════
+// FIRST ENCOUNTER
+// ══════════════════════════════════════════
+function startEncounter() {
+  encounterIndex = 0;
+  encounterSentenceIndex = 0;
+  loadEncounterWord();
+}
+
+function loadEncounterWord() {
+  if (encounterIndex >= words.length) {
+    startEx1();
+    return;
+  }
+  encounterSentenceIndex = 0;
+  const w = words[encounterIndex];
+  document.getElementById('enc-word').textContent = w.english;
+  document.getElementById('enc-translation').textContent = w.french;
+  document.getElementById('stepLabel').textContent = `Mot ${encounterIndex + 1} / ${words.length}`;
+  loadEncounterSentence();
+}
+
+function loadEncounterSentence() {
+  const w = words[encounterIndex];
+  document.getElementById('enc-sent-counter').textContent = `Phrase ${encounterSentenceIndex + 1} sur 2`;
+  document.getElementById('enc-sent-text').innerHTML = w.sentences[encounterSentenceIndex].fr;
+  const isLast = encounterSentenceIndex === 1;
+  document.getElementById('enc-next-btn').textContent = isLast ? (encounterIndex < words.length - 1 ? '→ Mot suivant' : '→ Commencer les exercices') : '✓ J\'ai lu cette phrase';
+  
+  if (encounterSentenceIndex === 0 && autoPlayAudio) {
+    playAudio(false);
+  }
+}
+
+function encounterNext() {
+  if (encounterSentenceIndex < 1) {
+    encounterSentenceIndex++;
+    loadEncounterSentence();
+  } else {
+    stepsCompleted++;
+    updateProgress();
+    encounterIndex++;
+    loadEncounterWord();
+  }
+}
+
+// ══════════════════════════════════════════
+// EX 1 — MCQ French word → choose English
+// ══════════════════════════════════════════
+function startEx1() {
+  ex1Queue     = [...words];
+  ex1Index     = 0;
+  ex1Incorrect = [];
+  document.getElementById('stepLabel').textContent = 'Exercice 1';
+  showScreen('screen-ex1');
+  loadEx1();
+}
+
+function loadEx1() {
+  if (ex1Index >= ex1Queue.length) {
+    if (ex1Incorrect.length > 0) {
+      startEx1Retest();
+    } else {
+      startEx2();
+    }
+    return;
+  }
+  const w = ex1Queue[ex1Index];
+  document.getElementById('ex1-word').textContent = w.french;
+  document.getElementById('ex1-counter').textContent = `${ex1Index + 1} / ${ex1Queue.length}`;
+  document.getElementById('ex1-feedback').className = 'feedback-banner';
+  document.getElementById('ex1-next-btn').classList.add('hidden');
+
+  const options = getMCQOptions(w.english);
+  const grid = document.getElementById('ex1-options');
+  grid.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt;
+    btn.onclick = () => checkEx1(btn, opt, w.english, w);
+    grid.appendChild(btn);
+  });
+}
+
+function checkEx1(btn, chosen, correct, wordObj) {
+  const allBtns = document.querySelectorAll('#ex1-options .option-btn');
+  allBtns.forEach(b => b.disabled = true);
+
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    triggerGlow('correct');
+    showFeedback('ex1-feedback', 'correct', '✓ Correct !');
+    stepsCompleted++;
+    updateProgress();
+    document.getElementById('ex1-next-btn').classList.remove('hidden');
+  } else {
+    btn.classList.add('wrong');
+    allBtns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
+    triggerGlow('wrong');
+    showFeedback('ex1-feedback', 'wrong', `✗ La bonne réponse est : "${correct}"`);
+    if (!ex1Incorrect.find(w => w.english === wordObj.english)) ex1Incorrect.push(wordObj);
+    // Re-queue this word immediately
+    ex1Queue.splice(ex1Index + 1, 0, wordObj);
+    document.getElementById('ex1-next-btn').classList.remove('hidden');
+  }
+}
+
+function ex1Next() {
+  ex1Index++;
+  showScreen('screen-ex1');
+  loadEx1();
+}
+
+// EX1 RETEST
+function startEx1Retest() {
+  ex1RetestQueue = [...ex1Incorrect];
+  ex1RetestIndex = 0;
+  document.getElementById('stepLabel').textContent = 'Exercice 1 — Révision';
+  showScreen('screen-ex1-retest');
+  loadEx1Retest();
+}
+
+function loadEx1Retest() {
+  if (ex1RetestIndex >= ex1RetestQueue.length) {
+    startEx2();
+    return;
+  }
+  const w = ex1RetestQueue[ex1RetestIndex];
+  document.getElementById('ex1rt-word').textContent = w.english;
+  document.getElementById('ex1rt-counter').textContent = `${ex1RetestIndex + 1} / ${ex1RetestQueue.length}`;
+  document.getElementById('ex1rt-feedback').className = 'feedback-banner';
+  document.getElementById('ex1rt-next-btn').classList.add('hidden');
+
+  const options = getFrenchMCQOptions(w.french);
+  const grid = document.getElementById('ex1rt-options');
+  grid.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt;
+    btn.onclick = () => checkEx1Retest(btn, opt, w.french);
+    grid.appendChild(btn);
+  });
+}
+
+function checkEx1Retest(btn, chosen, correct) {
+  const allBtns = document.querySelectorAll('#ex1rt-options .option-btn');
+  allBtns.forEach(b => b.disabled = true);
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    triggerGlow('correct');
+    showFeedback('ex1rt-feedback', 'correct', '✓ Correct !');
+  } else {
+    btn.classList.add('wrong');
+    allBtns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
+    triggerGlow('wrong');
+    showFeedback('ex1rt-feedback', 'wrong', `✗ La bonne réponse est : "${correct}"`);
+  }
+  stepsCompleted++;
+  updateProgress();
+  document.getElementById('ex1rt-next-btn').classList.remove('hidden');
+}
+
+function ex1RetestNext() {
+  ex1RetestIndex++;
+  showScreen('screen-ex1-retest');
+  loadEx1Retest();
+}
+
+// ══════════════════════════════════════════
+// EX 2 — CLOZE
+// ══════════════════════════════════════════
+function startEx2() {
+  ex2Queue     = [...words];
+  ex2Index     = 0;
+  ex2Incorrect = [];
+  document.getElementById('stepLabel').textContent = 'Exercice 2';
+  showScreen('screen-ex2');
+  loadEx2();
+}
+
+function loadEx2() {
+  if (ex2Index >= ex2Queue.length) {
+    if (ex2Incorrect.length > 0) {
+      startEx2Retest();
+    } else {
+      startEx3();
+    }
+    return;
+  }
+
+  const w = ex2Queue[ex2Index];
+  document.getElementById('ex2-word').textContent = w.french;
+  document.getElementById('ex2-counter').textContent = `${ex2Index + 1} / ${ex2Queue.length}`;
+  document.getElementById('ex2-feedback').className = 'feedback-banner';
+  document.getElementById('ex2-next-btn').classList.add('hidden');
+
+  // Build sentences with gap
+  const card = document.getElementById('ex2-sentences-card');
+  card.innerHTML = '';
+  w.sentences.forEach((s, i) => {
+    // Replace the highlighted word with a gap span
+    const sentWithGap = s.fr.replace(/<b class='highlight'>.*?<\/b>/, `<span class='gap'>_____</span>`);
+    const p = document.createElement('p');
+    p.className = 'cloze-sentence';
+    p.style.marginBottom = i < 2 ? '10px' : '0';
+    p.innerHTML = `<span style="color:var(--ink-light);font-size:0.8rem;">${i+1}.</span> ${sentWithGap}`;
+    card.appendChild(p);
+  });
+
+  // Build options: correct + 1 from session words + 1 random English adjective
+  const otherWords = allEnglish.filter(e => e !== w.english);
+  const sessionDistractor = shuffle(otherWords)[0];
+  const randomDistractors = ['bright', 'heavy', 'cold', 'small', 'loud', 'rough', 'fast', 'old', 'tall', 'thin'];
+  const randomDistractor = shuffle(randomDistractors)[0];
+  const options = shuffle([w.english, sessionDistractor, randomDistractor]);
+
+  const optContainer = document.getElementById('ex2-options');
+  optContainer.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'cloze-option';
+    btn.textContent = opt;
+    btn.onclick = () => checkEx2(btn, opt, w.english, w);
+    optContainer.appendChild(btn);
+  });
+}
+
+function checkEx2(btn, chosen, correct, wordObj) {
+  const allBtns = document.querySelectorAll('#ex2-options .cloze-option');
+  allBtns.forEach(b => b.disabled = true);
+
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    triggerGlow('correct');
+    showFeedback('ex2-feedback', 'correct', '✓ Correct !');
+    stepsCompleted++;
+    updateProgress();
+  } else {
+    btn.classList.add('wrong');
+    allBtns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
+    triggerGlow('wrong');
+    showFeedback('ex2-feedback', 'wrong', `✗ La bonne réponse est : "${correct}"`);
+    if (!ex2Incorrect.find(w => w.english === wordObj.english)) ex2Incorrect.push(wordObj);
+  }
+  document.getElementById('ex2-next-btn').classList.remove('hidden');
+}
+
+function ex2Next() {
+  ex2Index++;
+  showScreen('screen-ex2');
+  loadEx2();
+}
+
+// EX2 RETEST
+function startEx2Retest() {
+  ex2RetestQueue = [...ex2Incorrect];
+  ex2RetestIndex = 0;
+  document.getElementById('stepLabel').textContent = 'Exercice 2 — Révision';
+  showScreen('screen-ex2-retest');
+  loadEx2Retest();
+}
+
+function loadEx2Retest() {
+  if (ex2RetestIndex >= ex2RetestQueue.length) {
+    startEx3();
+    return;
+  }
+  const w = ex2RetestQueue[ex2RetestIndex];
+  document.getElementById('ex2rt-french').textContent = w.french;
+  document.getElementById('ex2rt-english-shown').textContent = w.english;
+  document.getElementById('ex2rt-counter').textContent = `${ex2RetestIndex + 1} / ${ex2RetestQueue.length}`;
+  document.getElementById('ex2rt-feedback').className = 'feedback-banner';
+  document.getElementById('ex2rt-next-btn').classList.add('hidden');
+  document.getElementById('ex2rt-reveal-area').classList.remove('hidden');
+  document.getElementById('ex2rt-type-area').classList.add('hidden');
+  document.getElementById('ex2rt-input').value = '';
+  document.getElementById('ex2rt-input').className = 'type-input';
+}
+
+function ex2RetestRevealHide() {
+  document.getElementById('ex2rt-reveal-area').classList.add('hidden');
+  document.getElementById('ex2rt-type-area').classList.remove('hidden');
+  document.getElementById('ex2rt-type-area').style.display = 'flex';
+  document.getElementById('ex2rt-input').focus();
+}
+
+function ex2RetestCheck() {
+  const w = ex2RetestQueue[ex2RetestIndex];
+  const val = document.getElementById('ex2rt-input').value.trim().toLowerCase();
+  const correct = w.english.toLowerCase();
+  if (val === correct) {
+    document.getElementById('ex2rt-input').classList.add('correct');
+    triggerGlow('correct');
+    showFeedback('ex2rt-feedback', 'correct', '✓ Correct !');
+  } else {
+    document.getElementById('ex2rt-input').classList.add('wrong');
+    triggerGlow('wrong');
+    showFeedback('ex2rt-feedback', 'wrong', `✗ La bonne réponse est : "${w.english}"`);
+  }
+  stepsCompleted++;
+  updateProgress();
+  document.getElementById('ex2rt-next-btn').classList.remove('hidden');
+}
+
+function ex2RetestNext() {
+  ex2RetestIndex++;
+  showScreen('screen-ex2-retest');
+  loadEx2Retest();
+}
+
+// ══════════════════════════════════════════
+// EX 3 — Partial word typing
+// ══════════════════════════════════════════
+function startEx3() {
+  ex3Queue = shuffle([...words]);
+  ex3Index = 0;
+  document.getElementById('stepLabel').textContent = 'Exercice 3';
+  showScreen('screen-ex3');
+  loadEx3();
+}
+
+function makePartialWord(word) {
+  // Remove ~50% of letters, keeping first letter always visible
+  const letters = word.split('');
+  const toHide = Math.ceil(letters.length * 0.5);
+  // Positions to hide (never position 0)
+  const positions = shuffle([...Array(letters.length).keys()].slice(1)).slice(0, toHide);
+  return letters.map((l, i) => positions.includes(i) ? '_' : l).join('');
+}
+
+function getHiddenPositions(word, partial) {
+  return [...partial].map((c, i) => c === '_' ? i : -1).filter(i => i !== -1);
+}
+
+function loadEx3() {
+  if (ex3Index >= ex3Queue.length) {
+    showScreen('screen-complete');
+    document.getElementById('stepLabel').textContent = 'Terminé !';
+    document.getElementById('progressBar').style.width = '100%';
+    return;
+  }
+
+  const w = ex3Queue[ex3Index];
+  const partial = makePartialWord(w.english);
+  document.getElementById('ex3-french').textContent = w.french;
+
+  // Display partial word nicely
+  const display = [...partial].map(c =>
+    c === '_' ? `<span class='blank'>_</span>` : c
+  ).join('');
+  document.getElementById('ex3-partial').innerHTML = display;
+
+  document.getElementById('ex3-counter').textContent = `${ex3Index + 1} / ${ex3Queue.length}`;
+  document.getElementById('ex3-feedback').className = 'feedback-banner';
+  document.getElementById('ex3-next-btn').classList.add('hidden');
+  document.getElementById('ex3-input').value = '';
+  document.getElementById('ex3-input').className = 'type-input';
+  document.getElementById('ex3-input').placeholder = 'Tapez le mot anglais complet...';
+
+  // Store partial for checking
+  document.getElementById('ex3-input').dataset.answer = w.english;
+  document.getElementById('ex3-input').dataset.partial = partial;
+}
+
+function ex3Check() {
+  const input = document.getElementById('ex3-input');
+  const answer = input.dataset.answer.toLowerCase();
+  const val = input.value.trim().toLowerCase();
+
+  if (val === answer) {
+    input.classList.add('correct');
+    triggerGlow('correct');
+    showFeedback('ex3-feedback', 'correct', '✓ Correct !');
+  } else {
+    input.classList.add('wrong');
+    triggerGlow('wrong');
+    showFeedback('ex3-feedback', 'wrong', `✗ La bonne réponse était : "${input.dataset.answer}"`);
+  }
+  stepsCompleted++;
+  updateProgress();
+  document.getElementById('ex3-next-btn').classList.remove('hidden');
+}
+
+function ex3Next() {
+  ex3Index++;
+  showScreen('screen-ex3');
+  loadEx3();
+}
+
+// ══════════════════════════════════════════
+// SHARED HELPERS
+// ══════════════════════════════════════════
+function showFeedback(id, type, msg) {
+  const el = document.getElementById(id);
+  el.className = `feedback-banner show ${type}`;
+  el.innerHTML = (type === 'correct' ? '✓ ' : '✗ ') + msg.replace(/^[✓✗] /, '');
+}
+
+function restartApp() {
+  stepsCompleted = 0;
+  totalSteps = words.length * 4; // rough estimate
+  updateProgress();
+  showScreen('screen-encounter');
+  startEncounter();
+}
+
+async function loadCourse(jsonPath) {
+  try {
+    const res = await fetch(jsonPath);
+    const data = await res.json();
+    words = data.words;
+    allEnglish = words.map(w => w.english);
+    allFrench = words.map(w => w.french);
+    autoPlayAudio = document.getElementById('autoplay-toggle').checked;
+    
+    totalSteps = words.length * 5;
+    document.getElementById('stepLabel').textContent = 'Première rencontre';
+    showScreen('screen-encounter');
+    startEncounter();
+  } catch (err) {
+    console.error(err);
+    alert("Impossible de charger le cours. Assurez-vous d'utiliser un serveur local.");
+  }
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+showScreen('screen-home');
+document.getElementById('stepLabel').textContent = 'Accueil';
+</script>
+</body>
+</html>

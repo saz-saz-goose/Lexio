@@ -1,0 +1,106 @@
+{
+  "meta": {
+    "id": "yle-starters-animals-1",
+    "title": "Animaux - Cambridge Starters",
+    "source": "Cambridge YLE Starters",
+    "level": "A1",
+    "category": "curriculum",
+    "subcategory": "Cambridge YLE Starters",
+    "theme": "animals",
+    "native_language": "fr",
+    "target_language": "en",
+    "word_count": 10
+  },
+  "words": [
+    {
+      "id": "w1",
+      "french": "chien",
+      "english": "dog",
+      "sentences": [
+        { "fr": "Le <b class='highlight'>dog</b> aboie dans le jardin.", "en": "The dog is barking in the garden." },
+        { "fr": "Je promène mon <b class='highlight'>dog</b> tous les matins.", "en": "I walk my dog every morning." }
+      ]
+    },
+    {
+      "id": "w2",
+      "french": "chat",
+      "english": "cat",
+      "sentences": [
+        { "fr": "Le <b class='highlight'>cat</b> dort sur le canapé.", "en": "The cat is sleeping on the sofa." },
+        { "fr": "Elle a un petit <b class='highlight'>cat</b> noir.", "en": "She has a small black cat." }
+      ]
+    },
+    {
+      "id": "w3",
+      "french": "oiseau",
+      "english": "bird",
+      "sentences": [
+        { "fr": "Un <b class='highlight'>bird</b> chante dans l'arbre.", "en": "A bird is singing in the tree." },
+        { "fr": "Regarde ce bel <b class='highlight'>bird</b> bleu !", "en": "Look at this beautiful blue bird!" }
+      ]
+    },
+    {
+      "id": "w4",
+      "french": "cheval",
+      "english": "horse",
+      "sentences": [
+        { "fr": "Il sait monter à <b class='highlight'>horse</b>.", "en": "He knows how to ride a horse." },
+        { "fr": "Le <b class='highlight'>horse</b> court très vite.", "en": "The horse runs very fast." }
+      ]
+    },
+    {
+      "id": "w5",
+      "french": "vache",
+      "english": "cow",
+      "sentences": [
+        { "fr": "La <b class='highlight'>cow</b> donne du lait.", "en": "The cow gives milk." },
+        { "fr": "Nous avons vu une <b class='highlight'>cow</b> dans le champ.", "en": "We saw a cow in the field." }
+      ]
+    },
+    {
+      "id": "w6",
+      "french": "cochon",
+      "english": "pig",
+      "sentences": [
+        { "fr": "Le <b class='highlight'>pig</b> aime jouer dans la boue.", "en": "The pig likes to play in the mud." },
+        { "fr": "C'est un gros <b class='highlight'>pig</b> rose.", "en": "It is a big pink pig." }
+      ]
+    },
+    {
+      "id": "w7",
+      "french": "mouton",
+      "english": "sheep",
+      "sentences": [
+        { "fr": "Le <b class='highlight'>sheep</b> a de la laine blanche.", "en": "The sheep has white wool." },
+        { "fr": "Il y a un <b class='highlight'>sheep</b> dans la ferme.", "en": "There is a sheep on the farm." }
+      ]
+    },
+    {
+      "id": "w8",
+      "french": "canard",
+      "english": "duck",
+      "sentences": [
+        { "fr": "Le <b class='highlight'>duck</b> nage sur le lac.", "en": "The duck is swimming on the lake." },
+        { "fr": "J'ai donné du pain au <b class='highlight'>duck</b>.", "en": "I gave some bread to the duck." }
+      ]
+    },
+    {
+      "id": "w9",
+      "french": "chèvre",
+      "english": "goat",
+      "sentences": [
+        { "fr": "La <b class='highlight'>goat</b> mange de l'herbe.", "en": "The goat is eating grass." },
+        { "fr": "Mon oncle a une petite <b class='highlight'>goat</b>.", "en": "My uncle has a small goat." }
+      ]
+    },
+    {
+      "id": "w10",
+      "french": "souris",
+      "english": "mouse",
+      "sentences": [
+        { "fr": "La <b class='highlight'>mouse</b> se cache sous la table.", "en": "The mouse is hiding under the table." },
+        { "fr": "Le chat a attrapé une <b class='highlight'>mouse</b>.", "en": "The cat caught a mouse." }
+      ]
+    }
+  ]
+}
