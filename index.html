@@ -1774,7 +1774,12 @@
     // ══════════════════════════════════════════
     const SUPABASE_URL = 'https://abouaxqxnsmigvicpxoo.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFib3VheHF4bnNtaWd2aWNweG9vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyNzA1ODksImV4cCI6MjA5NDg0NjU4OX0.oP2f_IyKkM-cBmMhVrKU7fmgsnuggGBnAargfi6si4I';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let supabase;
+    try {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch (e) {
+      console.error('Supabase client failed to initialize:', e);
+    }
 
     let currentUser = null;
     let currentProfile = null;
@@ -1783,49 +1788,59 @@
 
     async function initAuth() {
       console.log('initAuth started');
-      const { data: { session }, error } = await supabase.auth.getSession();
-      console.log('getSession finished', { session, error });
-      if (session) {
-        currentUser = session.user;
-        await fetchProfile();
-        // Check if OAuth but no profile (needs setup)
-        if (!currentProfile) {
-          showScreen('screen-oauth-setup');
-        } else {
-          // Normal flow
-          initializeDashboard();
-        }
-      } else {
-        // No session, check url for hash (password reset or email verification)
-        const hash = window.location.hash;
-        if (hash && hash.includes('type=recovery')) {
-          showScreen('screen-reset-password');
-        } else if (hash && hash.includes('error=')) {
-          showScreen('screen-link-expired');
-        } else {
-          // Go to Login by default
+      try {
+        if (!supabase) {
+          console.error('Supabase not initialized');
           showScreen('screen-login');
+          return;
         }
-      }
-
-      // Listen for auth state changes
-      supabase.auth.onAuthStateChange(async (event, session) => {
-        if (event === 'SIGNED_IN') {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        console.log('getSession finished', { session, error });
+        if (session) {
           currentUser = session.user;
           await fetchProfile();
+          // Check if OAuth but no profile (needs setup)
           if (!currentProfile) {
             showScreen('screen-oauth-setup');
           } else {
+            // Normal flow
             initializeDashboard();
           }
-        } else if (event === 'SIGNED_OUT') {
-          currentUser = null;
-          currentProfile = null;
-          showScreen('screen-login');
-        } else if (event === 'PASSWORD_RECOVERY') {
-          showScreen('screen-reset-password');
+        } else {
+          // No session, check url for hash (password reset or email verification)
+          const hash = window.location.hash;
+          if (hash && hash.includes('type=recovery')) {
+            showScreen('screen-reset-password');
+          } else if (hash && hash.includes('error=')) {
+            showScreen('screen-link-expired');
+          } else {
+            // Go to Login by default
+            showScreen('screen-login');
+          }
         }
-      });
+
+        // Listen for auth state changes
+        supabase.auth.onAuthStateChange(async (event, session) => {
+          if (event === 'SIGNED_IN') {
+            currentUser = session.user;
+            await fetchProfile();
+            if (!currentProfile) {
+              showScreen('screen-oauth-setup');
+            } else {
+              initializeDashboard();
+            }
+          } else if (event === 'SIGNED_OUT') {
+            currentUser = null;
+            currentProfile = null;
+            showScreen('screen-login');
+          } else if (event === 'PASSWORD_RECOVERY') {
+            showScreen('screen-reset-password');
+          }
+        });
+      } catch (err) {
+        console.error('initAuth error:', err);
+        showScreen('screen-login');
+      }
     }
 
     async function fetchProfile() {
@@ -3376,7 +3391,10 @@
     }
 
     console.log('Calling initAuth now');
-    initAuth();
+    initAuth().catch(err => {
+      console.error('initAuth uncaught error:', err);
+      showScreen('screen-login');
+    });
   </script>
 </body>
 
