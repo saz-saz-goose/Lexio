@@ -1774,9 +1774,9 @@
     // ══════════════════════════════════════════
     const SUPABASE_URL = 'https://abouaxqxnsmigvicpxoo.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFib3VheHF4bnNtaWd2aWNweG9vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyNzA1ODksImV4cCI6MjA5NDg0NjU4OX0.oP2f_IyKkM-cBmMhVrKU7fmgsnuggGBnAargfi6si4I';
-    let supabase;
+    let sbClient;
     try {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     } catch (e) {
       console.error('Supabase client failed to initialize:', e);
     }
@@ -1789,12 +1789,12 @@
     async function initAuth() {
       console.log('initAuth started');
       try {
-        if (!supabase) {
+        if (!sbClient) {
           console.error('Supabase not initialized');
           showScreen('screen-login');
           return;
         }
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const { data: { session }, error } = await sbClient.auth.getSession();
         console.log('getSession finished', { session, error });
         if (session) {
           currentUser = session.user;
@@ -1820,7 +1820,7 @@
         }
 
         // Listen for auth state changes
-        supabase.auth.onAuthStateChange(async (event, session) => {
+        sbClient.auth.onAuthStateChange(async (event, session) => {
           if (event === 'SIGNED_IN') {
             currentUser = session.user;
             await fetchProfile();
@@ -1845,7 +1845,7 @@
 
     async function fetchProfile() {
       if (!currentUser) return;
-      const { data, error } = await supabase.from('profiles').select('*').eq('id', currentUser.id).single();
+      const { data, error } = await sbClient.from('profiles').select('*').eq('id', currentUser.id).single();
       if (!error && data) {
         currentProfile = data;
         // Update last_seen and check streak
@@ -1872,7 +1872,7 @@
         newStreak = 1;
       }
 
-      await supabase.from('profiles').update({ last_seen: now.toISOString(), streak_days: newStreak }).eq('id', currentUser.id);
+      await sbClient.from('profiles').update({ last_seen: now.toISOString(), streak_days: newStreak }).eq('id', currentUser.id);
       currentProfile.streak_days = newStreak;
       currentProfile.last_seen = now.toISOString();
     }
@@ -1911,13 +1911,13 @@
       }
 
       // Check username
-      const { data: existingUser } = await supabase.from('profiles').select('id').eq('username', username).single();
+      const { data: existingUser } = await sbClient.from('profiles').select('id').eq('username', username).single();
       if (existingUser) {
         document.getElementById('err-signup-username').textContent = "Ce nom d'utilisateur est déjà pris.";
         return;
       }
 
-      const { data, error } = await supabase.auth.signUp({
+      const { data, error } = await sbClient.auth.signUp({
         email,
         password,
         options: {
@@ -1943,7 +1943,7 @@
       const errGeneral = document.getElementById('err-login-general');
       errGeneral.textContent = '';
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
       
       if (error) {
         errGeneral.textContent = "Email ou mot de passe incorrect.";
@@ -1954,15 +1954,15 @@
     }
 
     async function signInWithGoogle() {
-      await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } });
+      await sbClient.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } });
     }
 
     async function signInWithGitHub() {
-      await supabase.auth.signInWithOAuth({ provider: 'github', options: { redirectTo: window.location.origin } });
+      await sbClient.auth.signInWithOAuth({ provider: 'github', options: { redirectTo: window.location.origin } });
     }
 
     async function handleSignOut() {
-      await supabase.auth.signOut();
+      await sbClient.auth.signOut();
     }
 
     async function resendVerificationEmail() {
@@ -1971,7 +1971,7 @@
         alert("Veuillez saisir votre email dans le formulaire de connexion.");
         return;
       }
-      const { error } = await supabase.auth.resend({ type: 'signup', email });
+      const { error } = await sbClient.auth.resend({ type: 'signup', email });
       if (!error) {
         alert("Email de confirmation renvoyé !");
       } else {
@@ -1982,7 +1982,7 @@
     async function handleForgotPassword(e) {
       e.preventDefault();
       const email = document.getElementById('forgot-email').value;
-      const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '#type=recovery' });
+      const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '#type=recovery' });
       if (!error) {
         document.getElementById('msg-forgot-success').textContent = "Lien envoyé ! Vérifiez vos emails.";
         document.getElementById('msg-forgot-success').style.display = 'block';
@@ -1999,7 +1999,7 @@
         document.getElementById('err-reset-confirm-password').textContent = "Les mots de passe ne correspondent pas.";
         return;
       }
-      const { error } = await supabase.auth.updateUser({ password: pwd });
+      const { error } = await sbClient.auth.updateUser({ password: pwd });
       if (!error) {
         document.getElementById('msg-reset-success').textContent = "Mot de passe mis à jour !";
         document.getElementById('msg-reset-success').style.display = 'block';
@@ -2012,7 +2012,7 @@
     async function handleOAuthSetup(e) {
       e.preventDefault();
       const username = document.getElementById('oauth-username').value;
-      const { data: existingUser } = await supabase.from('profiles').select('id').eq('username', username).single();
+      const { data: existingUser } = await sbClient.from('profiles').select('id').eq('username', username).single();
       if (existingUser) {
         document.getElementById('err-oauth-username').textContent = "Ce nom d'utilisateur est déjà pris.";
         return;
@@ -2020,7 +2020,7 @@
 
       // Create profile since OAuth doesn't trigger the trigger if we don't have username? 
       // Actually Supabase trigger creates empty profile. We just update it.
-      const { error } = await supabase.from('profiles').upsert({
+      const { error } = await sbClient.from('profiles').upsert({
         id: currentUser.id,
         username: username,
         avatar_id: selectedAvatar,
@@ -2109,14 +2109,14 @@
       document.getElementById('err-edit-username').textContent = '';
 
       if (username !== currentProfile.username) {
-        const { data: existing } = await supabase.from('profiles').select('id').eq('username', username).single();
+        const { data: existing } = await sbClient.from('profiles').select('id').eq('username', username).single();
         if (existing && existing.id !== currentProfile.id) {
           document.getElementById('err-edit-username').textContent = "Ce nom d'utilisateur est déjà pris.";
           return;
         }
       }
 
-      const { error } = await supabase.from('profiles').update({
+      const { error } = await sbClient.from('profiles').update({
         username: username,
         avatar_id: selectedAvatar
       }).eq('id', currentProfile.id);
@@ -2171,7 +2171,7 @@
       // Wait, client can't easily delete user without an admin token or edge function.
       // We will delete the profile data and sign out.
       
-      const { error } = await supabase.from('profiles').delete().eq('id', currentUser.id);
+      const { error } = await sbClient.from('profiles').delete().eq('id', currentUser.id);
       if (error) {
         document.getElementById('err-delete-general').textContent = "Erreur lors de la suppression du profil: " + error.message;
         return;
@@ -3265,7 +3265,7 @@
       const tbody = document.getElementById('leaderboard-body');
       tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Chargement...</td></tr>';
 
-      const { data, error } = await supabase
+      const { data, error } = await sbClient
         .from('profiles')
         .select('username, avatar_id, total_score, id')
         .order('total_score', { ascending: false })
@@ -3384,7 +3384,7 @@
       }
       currentProfile.courses_progress[courseKey].learnt += words.length;
 
-      await supabase.from('profiles').update({
+      await sbClient.from('profiles').update({
         total_score: currentProfile.total_score,
         courses_progress: currentProfile.courses_progress
       }).eq('id', currentUser.id);
