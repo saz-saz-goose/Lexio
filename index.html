@@ -236,6 +236,54 @@
     color: var(--accent);
   }
 
+  /* ── MODE SELECTION CARDS ── */
+  .mode-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  }
+  .mode-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    background: var(--accent-light);
+  }
+  .mode-icon {
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .mode-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .mode-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .mode-desc {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    line-height: 1.4;
+  }
+
   /* ── CARDS ── */
   .card {
     width: 100%;
@@ -695,11 +743,22 @@
 <div class="screen" id="screen-home">
   <div class="home-hero">
     <div class="home-title">Lexio</div>
-    <div class="home-subtitle">Choisissez votre liste de vocabulaire pour commencer à apprendre</div>
+    <div class="home-subtitle" id="home-subtitle-text">Comment voulez-vous apprendre aujourd'hui ?</div>
   </div>
 
-  <div id="home-categories-container" style="width: 100%;">
-    <!-- Dynamically populated categories and course cards -->
+  <!-- Mode Selection (The 3 main options) -->
+  <div id="home-mode-select" style="width: 100%; display: flex; flex-direction: column; gap: 16px;">
+    <!-- Rendered by JS -->
+  </div>
+
+  <!-- Category View (Lists within a mode) -->
+  <div id="home-category-view" style="width: 100%; display: none; flex-direction: column; gap: 16px;">
+    <button class="back-home-btn" onclick="backToModeSelect()" style="align-self: flex-start; margin-bottom: 8px;">
+      ← Retour aux options
+    </button>
+    <div id="home-categories-container" style="width: 100%;">
+      <!-- Dynamically populated course cards -->
+    </div>
   </div>
 </div>
 
@@ -1057,120 +1116,157 @@ async function translateAndGenerateSentencesForSession(selectedWords) {
 // ══════════════════════════════════════════
 // HOME DASHBOARD & NAVIGATION
 // ══════════════════════════════════════════
+const homeCategoriesData = [
+  {
+    id: "curriculum",
+    title: "Learn by curriculum",
+    icon: "📚",
+    description: "Listes de vocabulaire alignées sur les examens de Cambridge et le programme national.",
+    files: [
+      { filename: "CAMBRIDGE STARTERS ANIMALS.json", title: "Les Animaux (Starters)", level: "A1" },
+      { filename: "CAMBRIDGE STARTERS.json", title: "Cambridge YLE Starters", level: "Pre-A1" },
+      { filename: "CAMBRIDGE MOVERS.json", title: "Cambridge YLE Movers", level: "A1" },
+      { filename: "CAMBRIDGE FLYERS.json", title: "Cambridge YLE Flyers", level: "A2" },
+      { filename: "BREVET.json", title: "Brevet - Vocabulaire", level: "B1" },
+      { filename: "BAC - axes thematiques.json", title: "Bac - Axes Thématiques", level: "B2" }
+    ]
+  },
+  {
+    id: "theme",
+    title: "Learn by theme",
+    icon: "🌍",
+    description: "Listes thématiques couvrant la vie quotidienne et les sujets d'intérêt.",
+    files: [
+      { filename: "THEMES A1-A2.json", title: "Thèmes A1-A2", level: "A1-A2" },
+      { filename: "THEMES B1-B2.json", title: "Thèmes B1-B2", level: "B1-B2" },
+      { filename: "THEMES C1-C2.json", title: "Thèmes C1-C2", level: "C1-C2" },
+      { filename: "BUSINESS AND FINANCE.json", title: "Business and Finance", level: "C1-C2" },
+      { filename: "MEDICAL AND PSYCHOLOGICAL.json", title: "Medical and Psychological", level: "C1-C2" },
+      { filename: "PRACTICAL ENGLISH.json", title: "Practical English", level: "B1-B2" }
+    ]
+  },
+  {
+    id: "level",
+    title: "Learn by level",
+    icon: "📈",
+    description: "Vocabulaire classé par nature grammaticale et par niveau CEFR.",
+    files: [
+      { filename: "WORD GROUPS A1-A2.json", title: "Groupes de Mots A1-A2", level: "A1-A2" },
+      { filename: "WORD GROUPS B1-B2.json", title: "Groupes de Mots B1-B2", level: "B1-B2" },
+      { filename: "WORD GROUPS C1-C2.json", title: "Groupes de Mots C1-C2", level: "C1-C2" }
+    ]
+  }
+];
+
 function goToHome() {
   document.getElementById('header-home-btn').classList.add('hidden');
   document.getElementById('header-logo').style.display = 'block';
   document.getElementById('header-progress-wrap').style.display = 'none';
   document.getElementById('stepLabel').style.display = 'none';
+  backToModeSelect();
   showScreen('screen-home');
 }
 
 function renderHomeDashboard(indexData) {
+  const modeContainer = document.getElementById('home-mode-select');
+  modeContainer.innerHTML = '';
+  
+  homeCategoriesData.forEach((cat, index) => {
+    const card = document.createElement('div');
+    card.className = 'mode-card';
+    card.onclick = () => showCategory(index);
+    
+    card.innerHTML = `
+      <div class="mode-icon">${cat.icon}</div>
+      <div class="mode-info">
+        <div class="mode-title">${cat.title}</div>
+        <div class="mode-desc">${cat.description}</div>
+      </div>
+    `;
+    modeContainer.appendChild(card);
+  });
+}
+
+function showCategory(index) {
+  document.getElementById('home-mode-select').style.display = 'none';
+  const catView = document.getElementById('home-category-view');
+  catView.style.display = 'flex';
+  
+  const cat = homeCategoriesData[index];
+  document.getElementById('home-subtitle-text').textContent = cat.title;
+  
   const container = document.getElementById('home-categories-container');
   container.innerHTML = '';
 
-  const structure = indexData.structure;
-
-  const categories = [
-    {
-      title: "Curriculum Officiel",
-      description: "Listes de vocabulaire alignées sur les examens de Cambridge et le programme national.",
-      files: [
-        { filename: "CAMBRIDGE STARTERS ANIMALS.json", title: "Les Animaux (Starters)", level: "A1" },
-        { filename: "CAMBRIDGE STARTERS.json", title: "Cambridge YLE Starters", level: "Pre-A1" },
-        { filename: "CAMBRIDGE MOVERS.json", title: "Cambridge YLE Movers", level: "A1" },
-        { filename: "CAMBRIDGE FLYERS.json", title: "Cambridge YLE Flyers", level: "A2" },
-        { filename: "BREVET.json", title: "Brevet - Vocabulaire", level: "B1" },
-        { filename: "BAC - axes thematiques.json", title: "Bac - Axes Thématiques", level: "B2" }
-      ]
-    },
-    {
-      title: "Par Groupes de Mots",
-      description: "Vocabulaire classé par nature grammaticale et par niveau CEFR.",
-      files: [
-        { filename: "WORD GROUPS A1-A2.json", title: "Groupes de Mots A1-A2", level: "A1-A2" },
-        { filename: "WORD GROUPS B1-B2.json", title: "Groupes de Mots B1-B2", level: "B1-B2" },
-        { filename: "WORD GROUPS C1-C2.json", title: "Groupes de Mots C1-C2", level: "C1-C2" }
-      ]
-    },
-    {
-      title: "Par Thèmes",
-      description: "Listes thématiques couvrant la vie quotidienne et les sujets d'intérêt.",
-      files: [
-        { filename: "THEMES A1-A2.json", title: "Thèmes A1-A2", level: "A1-A2" },
-        { filename: "THEMES B1-B2.json", title: "Thèmes B1-B2", level: "B1-B2" },
-        { filename: "THEMES C1-C2.json", title: "Thèmes C1-C2", level: "C1-C2" },
-        { filename: "BUSINESS AND FINANCE.json", title: "Business and Finance", level: "C1-C2" },
-        { filename: "MEDICAL AND PSYCHOLOGICAL.json", title: "Medical and Psychological", level: "C1-C2" },
-        { filename: "PRACTICAL ENGLISH.json", title: "Practical English", level: "B1-B2" }
-      ]
-    }
-  ];
-
-  categories.forEach(cat => {
-    const sec = document.createElement('div');
-    sec.className = 'category-section';
+  const sec = document.createElement('div');
+  sec.className = 'category-section';
+  sec.style.marginTop = '0';
+  
+  const h3 = document.createElement('h3');
+  h3.className = 'category-title';
+  h3.textContent = cat.title;
+  sec.appendChild(h3);
+  
+  const grid = document.createElement('div');
+  grid.className = 'courses-grid';
+  
+  cat.files.forEach(file => {
+    const card = document.createElement('div');
+    card.className = 'course-card';
+    card.onclick = () => selectCourse(file.filename);
     
-    const h3 = document.createElement('h3');
-    h3.className = 'category-title';
-    h3.textContent = cat.title;
-    sec.appendChild(h3);
+    const top = document.createElement('div');
+    top.className = 'course-card-top';
     
-    const grid = document.createElement('div');
-    grid.className = 'courses-grid';
+    let lvlClass = 'level-c1-c2';
+    const lvl = (file.level || 'A1').toLowerCase();
+    if (lvl.includes('pre-a1')) lvlClass = 'level-pre-a1';
+    else if (lvl.includes('a1')) lvlClass = 'level-a1';
+    else if (lvl.includes('a2')) lvlClass = 'level-a2';
+    else if (lvl.includes('b1')) lvlClass = 'level-b1';
+    else if (lvl.includes('b2')) lvlClass = 'level-b2';
     
-    cat.files.forEach(file => {
-      const card = document.createElement('div');
-      card.className = 'course-card';
-      card.onclick = () => selectCourse(file.filename);
-      
-      const top = document.createElement('div');
-      top.className = 'course-card-top';
-      
-      let lvlClass = 'level-c1-c2';
-      const lvl = (file.level || 'A1').toLowerCase();
-      if (lvl.includes('pre-a1')) lvlClass = 'level-pre-a1';
-      else if (lvl.includes('a1')) lvlClass = 'level-a1';
-      else if (lvl.includes('a2')) lvlClass = 'level-a2';
-      else if (lvl.includes('b1')) lvlClass = 'level-b1';
-      else if (lvl.includes('b2')) lvlClass = 'level-b2';
-      
-      const badge = document.createElement('span');
-      badge.className = `level-badge ${lvlClass}`;
-      badge.textContent = file.level || 'A1';
-      top.appendChild(badge);
-      
-      const name = document.createElement('div');
-      name.className = 'course-name';
-      name.textContent = file.title;
-      top.appendChild(name);
-      
-      const desc = document.createElement('div');
-      desc.className = 'course-desc';
-      desc.textContent = file.notes || file.description || 'Vocabulaire thématique pour l\'apprentissage.';
-      top.appendChild(desc);
-      
-      card.appendChild(top);
-      
-      const footer = document.createElement('div');
-      footer.className = 'course-footer';
-      
-      const count = document.createElement('span');
-      count.className = 'course-count';
-      count.textContent = file.approximate_word_count ? `~${file.approximate_word_count} mots` : '10 mots';
-      footer.appendChild(count);
-      
-      const act = document.createElement('span');
-      act.textContent = 'Étudier →';
-      footer.appendChild(act);
-      
-      card.appendChild(footer);
-      grid.appendChild(card);
-    });
+    const badge = document.createElement('span');
+    badge.className = `level-badge ${lvlClass}`;
+    badge.textContent = file.level || 'A1';
+    top.appendChild(badge);
     
-    sec.appendChild(grid);
-    container.appendChild(sec);
+    const name = document.createElement('div');
+    name.className = 'course-name';
+    name.textContent = file.title;
+    top.appendChild(name);
+    
+    const desc = document.createElement('div');
+    desc.className = 'course-desc';
+    desc.textContent = file.notes || file.description || 'Vocabulaire thématique pour l\'apprentissage.';
+    top.appendChild(desc);
+    
+    card.appendChild(top);
+    
+    const footer = document.createElement('div');
+    footer.className = 'course-footer';
+    
+    const count = document.createElement('span');
+    count.className = 'course-count';
+    count.textContent = file.approximate_word_count ? `~${file.approximate_word_count} mots` : '10 mots';
+    footer.appendChild(count);
+    
+    const act = document.createElement('span');
+    act.textContent = 'Étudier →';
+    footer.appendChild(act);
+    
+    card.appendChild(footer);
+    grid.appendChild(card);
   });
+  
+  sec.appendChild(grid);
+  container.appendChild(sec);
+}
+
+function backToModeSelect() {
+  document.getElementById('home-category-view').style.display = 'none';
+  document.getElementById('home-mode-select').style.display = 'flex';
+  document.getElementById('home-subtitle-text').textContent = "Comment voulez-vous apprendre aujourd'hui ?";
 }
 
 function selectCourse(filename) {
