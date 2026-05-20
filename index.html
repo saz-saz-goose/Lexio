@@ -3376,13 +3376,21 @@
       if (!currentProfile) return;
       currentProfile.total_score = (currentProfile.total_score || 0) + scoreGained;
       
-      // Basic progress tracking by course
+      // Track progress by course
       if (!currentProfile.courses_progress) currentProfile.courses_progress = {};
       const courseKey = WORD_LIST_FILE || 'default_course';
       if (!currentProfile.courses_progress[courseKey]) {
         currentProfile.courses_progress[courseKey] = { seen: 0, learning: 0, learnt: 0 };
       }
-      currentProfile.courses_progress[courseKey].learnt += words.length;
+
+      const progress = currentProfile.courses_progress[courseKey];
+      const wordsInSession = words.length;
+      const wordsLearnt = firstTryCorrect; // words correct on first try = mastered
+      const wordsLearning = wordsInSession - wordsLearnt; // the rest still need practice
+
+      progress.seen += wordsInSession;
+      progress.learnt += wordsLearnt;
+      progress.learning += wordsLearning;
 
       await sbClient.from('profiles').update({
         total_score: currentProfile.total_score,
