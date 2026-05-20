@@ -1131,17 +1131,20 @@
     <div class="card">
       <div class="phase-tag" style="background:#FFE5E5;color:#9B2226;">Révision</div>
       <div class="section-title mt-4">Révision des mots manqués (Ex3)</div>
-      <div class="section-sub mt-8">Tapez le mot en anglais de mémoire, sans aide !</div>
+      <div class="section-sub mt-8">Mémorisez le mot puis tapez-le de mémoire !</div>
     </div>
 
     <div class="question-prompt">
       <div class="q-label">Traduisez en anglais</div>
       <div class="q-word" id="ex3rt-french"></div>
+      <div class="q-word" id="ex3rt-english-display" style="color: var(--accent); margin-top: 8px;"></div>
     </div>
 
-    <input class="type-input" id="ex3rt-input" type="text" placeholder="Tapez le mot anglais..." autocomplete="off"
+    <input class="type-input hidden" id="ex3rt-input" type="text" placeholder="Tapez le mot anglais..." autocomplete="off"
       autocorrect="off" spellcheck="false" />
-    <button class="btn-primary" onclick="ex3RetestCheck()">Vérifier</button>
+    
+    <button class="btn-primary" id="ex3rt-memorized-btn" onclick="ex3RetestMemorized()">J'ai mémorisé</button>
+    <button class="btn-primary hidden" id="ex3rt-verify-btn" onclick="ex3RetestCheck()">Vérifier</button>
 
     <div class="feedback-banner" id="ex3rt-feedback"></div>
     <button class="btn-primary hidden" id="ex3rt-next-btn" onclick="ex3RetestNext()">Continuer →</button>
@@ -2101,19 +2104,34 @@
       ex3RetestAttempts = 0;
       const w = ex3Incorrect[ex3RetestIndex];
       document.getElementById('ex3rt-french').textContent = w.french;
+      
+      const engDisplay = document.getElementById('ex3rt-english-display');
+      engDisplay.textContent = w.english;
+      engDisplay.style.display = 'block';
+
       document.getElementById('ex3rt-counter').textContent = `${ex3RetestIndex + 1} / ${ex3Incorrect.length}`;
       document.getElementById('ex3rt-feedback').className = 'feedback-banner';
       document.getElementById('ex3rt-next-btn').classList.add('hidden');
 
       const input = document.getElementById('ex3rt-input');
       input.value = '';
-      input.className = 'type-input';
+      input.className = 'type-input hidden';
       input.placeholder = 'Tapez le mot anglais...';
       input.dataset.answer = w.english;
       input.disabled = false;
 
-      const verifyBtn = document.querySelector('#screen-ex3-retest .btn-primary:not(#ex3rt-next-btn)');
-      verifyBtn.style.display = 'block';
+      document.getElementById('ex3rt-memorized-btn').classList.remove('hidden');
+      document.getElementById('ex3rt-verify-btn').classList.add('hidden');
+    }
+
+    function ex3RetestMemorized() {
+      document.getElementById('ex3rt-english-display').style.display = 'none';
+      document.getElementById('ex3rt-memorized-btn').classList.add('hidden');
+      document.getElementById('ex3rt-verify-btn').classList.remove('hidden');
+      
+      const input = document.getElementById('ex3rt-input');
+      input.classList.remove('hidden');
+      input.focus();
     }
 
     function ex3RetestCheck() {
@@ -2121,7 +2139,7 @@
       const answer = input.dataset.answer.toLowerCase();
       const val = input.value.trim().toLowerCase();
 
-      const verifyBtn = document.querySelector('#screen-ex3-retest .btn-primary:not(#ex3rt-next-btn)');
+      const verifyBtn = document.getElementById('ex3rt-verify-btn');
 
       if (val === answer) {
         input.classList.add('correct');
@@ -2129,7 +2147,7 @@
         showFeedback('ex3rt-feedback', 'correct', '✓ Correct !');
         playAudio(false, answer);
         input.disabled = true;
-        verifyBtn.style.display = 'none';
+        verifyBtn.classList.add('hidden');
         document.getElementById('ex3rt-next-btn').classList.remove('hidden');
       } else {
         ex3RetestAttempts++;
@@ -2139,7 +2157,7 @@
         if (ex3RetestAttempts >= 2) {
           showFeedback('ex3rt-feedback', 'wrong', `✗ La bonne réponse était : "${input.dataset.answer}"`);
           input.disabled = true;
-          verifyBtn.style.display = 'none';
+          verifyBtn.classList.add('hidden');
           document.getElementById('ex3rt-next-btn').classList.remove('hidden');
         } else {
           showFeedback('ex3rt-feedback', 'wrong', '✗ Presque... (1 tentative restante)');
