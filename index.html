@@ -1781,7 +1781,9 @@
     let hasUnsavedChanges = false;
 
     async function initAuth() {
+      console.log('initAuth started');
       const { data: { session }, error } = await supabase.auth.getSession();
+      console.log('getSession finished', { session, error });
       if (session) {
         currentUser = session.user;
         await fetchProfile();
@@ -2219,6 +2221,7 @@
     // UTILS
     // ══════════════════════════════════════════
     function showScreen(id) {
+      console.log('showScreen called with id:', id);
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       const el = document.getElementById(id);
       if (el) {
@@ -3371,7 +3374,7 @@
       }).eq('id', currentUser.id);
     }
 
-    window.onload = initAuth;
+    initAuth();
   </script>
 </body>
 
