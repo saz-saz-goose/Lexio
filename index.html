@@ -2022,18 +2022,7 @@
     // ══════════════════════════════════════════
     // PROFILE & SETTINGS FUNCTIONS
     // ══════════════════════════════════════════
-    function showScreen(screenId) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      const target = document.getElementById(screenId);
-      if (target) {
-        target.classList.add('active');
-        if (screenId === 'screen-profile-own') {
-          renderProfileOwn();
-        } else if (screenId === 'screen-profile-edit') {
-          prepareProfileEdit();
-        }
-      }
-    }
+
 
     function renderProfileOwn() {
       if (!currentProfile) return;
@@ -2232,10 +2221,18 @@
     function showScreen(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       const el = document.getElementById(id);
-      el.classList.add('active');
-      el.style.animation = 'none';
-      el.offsetHeight; // reflow
-      el.style.animation = '';
+      if (el) {
+        el.classList.add('active');
+        el.style.animation = 'none';
+        el.offsetHeight; // reflow
+        el.style.animation = '';
+        
+        if (id === 'screen-profile-own' && typeof renderProfileOwn === 'function') {
+          renderProfileOwn();
+        } else if (id === 'screen-profile-edit' && typeof prepareProfileEdit === 'function') {
+          prepareProfileEdit();
+        }
+      }
     }
 
     function triggerGlow(type) {
