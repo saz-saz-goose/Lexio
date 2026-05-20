@@ -900,7 +900,7 @@
 ══════════════════════════════════════════ -->
 <div class="screen" id="screen-complete">
   <div class="complete-icon">🎉</div>
-  <div class="complete-title">Session terminée !</div>
+  <div class="complete-title" id="complete-title">Session terminée !</div>
   
   <div class="card" style="margin-top:10px; margin-bottom:10px; width:100%; text-align:center; padding:20px;">
     <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
@@ -920,8 +920,11 @@
     </div>
   </div>
   
-  <button class="btn-primary" onclick="restartApp()">Recommencer la session</button>
-  <button class="btn-primary" onclick="goToHome()" style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent); margin-top:8px;">Retour à l'accueil</button>
+  <div id="complete-buttons" style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+    <button class="btn-primary" id="btn-next-group" onclick="nextGroup()" style="display: none;">Groupe suivant →</button>
+    <button class="btn-primary" onclick="restartApp()" style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent);">Recommencer ce groupe</button>
+    <button class="btn-primary" onclick="goToHome()" style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent);">Retour à l'accueil</button>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════
@@ -932,7 +935,7 @@
   <div class="complete-title">Try Again!</div>
   <div class="complete-sub">Vous avez fait 6 erreurs. Ne vous découragez pas, la pratique fait la perfection !</div>
   <div class="divider" style="margin: 24px 0;"></div>
-  <button class="btn-primary" onclick="restartApp()">Recommencer la session</button>
+  <button class="btn-primary" onclick="restartApp()">Recommencer ce groupe</button>
   <button class="btn-primary" onclick="goToHome()" style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent); margin-top:8px;">Retour à l'accueil</button>
 </div>
 
@@ -946,6 +949,9 @@ let words = [];
 let allEnglish = [];
 let allFrench = [];
 let indexDataCached = null;
+
+let fullWordList = [];
+let currentChunkIndex = 0;
 
 // ══════════════════════════════════════════
 // STATE
@@ -1823,6 +1829,9 @@ function showSessionComplete() {
   document.getElementById('stepLabel').textContent = 'Terminé !';
   document.getElementById('progressBar').style.width = '100%';
   
+  const totalChunks = Math.ceil(fullWordList.length / 10);
+  document.getElementById('complete-title').textContent = `Session terminée ! (${currentChunkIndex + 1}/${totalChunks})`;
+  
   const now = Date.now();
   const diffSecs = Math.floor((now - sessionStartTime) / 1000);
   const m = Math.floor(diffSecs / 60);
@@ -1831,7 +1840,6 @@ function showSessionComplete() {
   document.getElementById('stat-time').textContent = `${m}m ${s}s`;
   document.getElementById('stat-words').textContent = words.length;
 
-  
   const reviseList = document.getElementById('stat-revise-list');
   reviseList.innerHTML = '';
   
@@ -1846,6 +1854,13 @@ function showSessionComplete() {
       li.textContent = w + ` (${wordErrors[w]} erreur${wordErrors[w] > 1 ? 's' : ''})`;
       reviseList.appendChild(li);
     });
+  }
+  
+  const btnNext = document.getElementById('btn-next-group');
+  if ((currentChunkIndex + 1) * 10 < fullWordList.length) {
+    btnNext.style.display = 'block';
+  } else {
+    btnNext.style.display = 'none';
   }
   
   showScreen('screen-complete');
@@ -1864,6 +1879,11 @@ function restartApp() {
   document.getElementById('stepLabel').style.display = 'block';
   showScreen('screen-encounter');
   startEncounter();
+}
+
+function nextGroup() {
+  currentChunkIndex++;
+  startCurrentChunk();
 }
 
 // ══════════════════════════════════════════
@@ -1914,34 +1934,41 @@ async function loadWordList() {
       throw new Error("No words found in JSON.");
     }
     
-    if (parsedWords.length > 10) {
-      parsedWords = shuffle(parsedWords).slice(0, 10);
-    }
+    fullWordList = shuffle(parsedWords);
+    currentChunkIndex = 0;
     
-    document.getElementById('loading-status').textContent = 'Traduction et génération des phrases...';
-    
-    words = await translateAndGenerateSentencesForSession(parsedWords);
-    allEnglish = words.map(w => w.english);
-    allFrench  = words.map(w => w.french);
-    
-    totalSteps = words.length * 4;
-    stepsCompleted = 0;
-    sessionStartTime = Date.now();
-    firstTryCorrect = 0;
-    wordErrors = {};
-    initLives();
-    updateProgress();
-    
-    document.getElementById('header-home-btn').classList.remove('hidden');
-    document.getElementById('header-progress-wrap').style.display = 'block';
-    document.getElementById('stepLabel').style.display = 'block';
-    
-    showScreen('screen-encounter');
-    startEncounter();
+    await startCurrentChunk();
   } catch (err) {
     console.error("Failed to load words:", err);
     showScreen('screen-error');
   }
+}
+
+async function startCurrentChunk() {
+  showScreen('screen-loading');
+  document.getElementById('loading-status').textContent = 'Traduction et génération des phrases...';
+  
+  const startIndex = currentChunkIndex * 10;
+  const chunk = fullWordList.slice(startIndex, startIndex + 10);
+  
+  words = await translateAndGenerateSentencesForSession(chunk);
+  allEnglish = words.map(w => w.english);
+  allFrench  = words.map(w => w.french);
+  
+  totalSteps = words.length * 4;
+  stepsCompleted = 0;
+  sessionStartTime = Date.now();
+  firstTryCorrect = 0;
+  wordErrors = {};
+  initLives();
+  updateProgress();
+  
+  document.getElementById('header-home-btn').classList.remove('hidden');
+  document.getElementById('header-progress-wrap').style.display = 'block';
+  document.getElementById('stepLabel').style.display = 'block';
+  
+  showScreen('screen-encounter');
+  startEncounter();
 }
 
 function handleRetry() {
