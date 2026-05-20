@@ -1629,24 +1629,6 @@
         startEx1();
         return;
       }
-      encounterSentenceIndex = 0;
-      const w = words[encounterIndex];
-      document.getElementById('enc-word').textContent = w.english;
-      document.getElementById('enc-translation').textContent = w.french;
-      document.getElementById('stepLabel').textContent = `Mot ${encounterIndex + 1} / ${words.length}`;
-      loadEncounterSentence();
-
-      setTimeout(() => {
-        playAudio(false);
-      }, 300);
-    }
-
-    function loadEncounterWord() {
-      if (encounterIndex >= words.length) {
-        const msgs = ["Great job so far!", "Keep going!", "You're doing so well!"];
-        showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx2Part1);
-        return;
-      }
       const w = words[encounterIndex];
       document.getElementById('enc-word').textContent = w.english;
       document.getElementById('enc-translation').textContent = w.french;
