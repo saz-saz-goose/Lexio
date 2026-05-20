@@ -1,0 +1,15 @@
+{
+  "name": "lexio-app",
+  "version": "1.0.0",
+  "description": "Lexio vocabulary app",
+  "scripts": {
+    "lint": "eslint . --ext .js,.html",
+    "format": "prettier --write \"**/*.{js,css,html,json}\"",
+    "format:check": "prettier --check \"**/*.{js,css,html,json}\""
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-plugin-html": "^8.0.0",
+    "prettier": "^3.2.5"
+  }
+}
