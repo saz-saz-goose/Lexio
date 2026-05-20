@@ -896,6 +896,29 @@
 </div>
 
 <!-- ══════════════════════════════════════════
+     SCREEN: EX3 RETEST
+══════════════════════════════════════════ -->
+<div class="screen" id="screen-ex3-retest">
+  <div class="card">
+    <div class="phase-tag" style="background:#FFE5E5;color:#9B2226;">Révision</div>
+    <div class="section-title mt-4">Révision des mots manqués (Ex3)</div>
+    <div class="section-sub mt-8">Tapez le mot en anglais de mémoire, sans aide !</div>
+  </div>
+
+  <div class="question-prompt">
+    <div class="q-label">Traduisez en anglais</div>
+    <div class="q-word" id="ex3rt-french"></div>
+  </div>
+
+  <input class="type-input" id="ex3rt-input" type="text" placeholder="Tapez le mot anglais..." autocomplete="off" autocorrect="off" spellcheck="false" />
+  <button class="btn-primary" onclick="ex3RetestCheck()">Vérifier</button>
+
+  <div class="feedback-banner" id="ex3rt-feedback"></div>
+  <button class="btn-primary hidden" id="ex3rt-next-btn" onclick="ex3RetestNext()">Continuer →</button>
+  <div class="word-counter" id="ex3rt-counter"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
      SCREEN: SESSION COMPLETE
 ══════════════════════════════════════════ -->
 <div class="screen" id="screen-complete">
@@ -981,6 +1004,9 @@ const MAX_LIVES = 6;
 
 let ex3Queue        = [];
 let ex3Index        = 0;
+let ex3Incorrect    = [];
+let ex3RetestIndex  = 0;
+let ex3RetestAttempts = 0;
 
 let totalSteps      = 0;
 let stepsCompleted  = 0;
@@ -1129,12 +1155,12 @@ const homeCategoriesData = [
     icon: "📚",
     description: "Listes de vocabulaire alignées sur les examens de Cambridge et le programme national.",
     files: [
-      { filename: "CAMBRIDGE STARTERS ANIMALS.json", title: "Les Animaux (Starters)", level: "A1" },
-      { filename: "CAMBRIDGE STARTERS.json", title: "Cambridge YLE Starters", level: "Pre-A1" },
-      { filename: "CAMBRIDGE MOVERS.json", title: "Cambridge YLE Movers", level: "A1" },
-      { filename: "CAMBRIDGE FLYERS.json", title: "Cambridge YLE Flyers", level: "A2" },
-      { filename: "BREVET.json", title: "Brevet - Vocabulaire", level: "B1" },
-      { filename: "BAC - axes thematiques.json", title: "Bac - Axes Thématiques", level: "B2" }
+      { filename: "CAMBRIDGE STARTERS ANIMALS.json", title: "Les Animaux (Starters)", level: "A1", approximate_word_count: 30 },
+      { filename: "CAMBRIDGE STARTERS.json", title: "Cambridge YLE Starters", level: "Pre-A1", approximate_word_count: 200 },
+      { filename: "CAMBRIDGE MOVERS.json", title: "Cambridge YLE Movers", level: "A1", approximate_word_count: 220 },
+      { filename: "CAMBRIDGE FLYERS.json", title: "Cambridge YLE Flyers", level: "A2", approximate_word_count: 200 },
+      { filename: "BREVET.json", title: "Brevet - Vocabulaire", level: "B1", approximate_word_count: 160 },
+      { filename: "BAC - axes thematiques.json", title: "Bac - Axes Thématiques", level: "B2", approximate_word_count: 125 }
     ]
   },
   {
@@ -1143,12 +1169,12 @@ const homeCategoriesData = [
     icon: "🌍",
     description: "Listes thématiques couvrant la vie quotidienne et les sujets d'intérêt.",
     files: [
-      { filename: "THEMES A1-A2.json", title: "Thèmes A1-A2", level: "A1-A2" },
-      { filename: "THEMES B1-B2.json", title: "Thèmes B1-B2", level: "B1-B2" },
-      { filename: "THEMES C1-C2.json", title: "Thèmes C1-C2", level: "C1-C2" },
-      { filename: "BUSINESS AND FINANCE.json", title: "Business and Finance", level: "C1-C2" },
-      { filename: "MEDICAL AND PSYCHOLOGICAL.json", title: "Medical and Psychological", level: "C1-C2" },
-      { filename: "PRACTICAL ENGLISH.json", title: "Practical English", level: "B1-B2" }
+      { filename: "THEMES A1-A2.json", title: "Thèmes A1-A2", level: "A1-A2", approximate_word_count: 200 },
+      { filename: "THEMES B1-B2.json", title: "Thèmes B1-B2", level: "B1-B2", approximate_word_count: 210 },
+      { filename: "THEMES C1-C2.json", title: "Thèmes C1-C2", level: "C1-C2", approximate_word_count: 210 },
+      { filename: "BUSINESS AND FINANCE.json", title: "Business and Finance", level: "C1-C2", approximate_word_count: 140 },
+      { filename: "MEDICAL AND PSYCHOLOGICAL.json", title: "Medical and Psychological", level: "C1-C2", approximate_word_count: 165 },
+      { filename: "PRACTICAL ENGLISH.json", title: "Practical English", level: "B1-B2", approximate_word_count: 140 }
     ]
   },
   {
@@ -1157,9 +1183,9 @@ const homeCategoriesData = [
     icon: "📈",
     description: "Vocabulaire classé par nature grammaticale et par niveau CEFR.",
     files: [
-      { filename: "WORD GROUPS A1-A2.json", title: "Groupes de Mots A1-A2", level: "A1-A2" },
-      { filename: "WORD GROUPS B1-B2.json", title: "Groupes de Mots B1-B2", level: "B1-B2" },
-      { filename: "WORD GROUPS C1-C2.json", title: "Groupes de Mots C1-C2", level: "C1-C2" }
+      { filename: "WORD GROUPS A1-A2.json", title: "Groupes de Mots A1-A2", level: "A1-A2", approximate_word_count: 230 },
+      { filename: "WORD GROUPS B1-B2.json", title: "Groupes de Mots B1-B2", level: "B1-B2", approximate_word_count: 330 },
+      { filename: "WORD GROUPS C1-C2.json", title: "Groupes de Mots C1-C2", level: "C1-C2", approximate_word_count: 330 }
     ]
   }
 ];
@@ -1736,6 +1762,7 @@ function spawnEx2Distractor(correctWord) {
 function startEx3() {
   ex3Queue = shuffle([...words]);
   ex3Index = 0;
+  ex3Incorrect = [];
   document.getElementById('stepLabel').textContent = 'Exercice 3';
   showScreen('screen-ex3');
   loadEx3();
@@ -1755,7 +1782,11 @@ function makeAnagramWord(word) {
 
 function loadEx3() {
   if (ex3Index >= ex3Queue.length) {
-    showSessionComplete();
+    if (ex3Incorrect.length > 0) {
+      startEx3Retest();
+    } else {
+      showSessionComplete();
+    }
     return;
   }
 
@@ -1803,6 +1834,9 @@ function ex3Check() {
     if (!wordErrors[answer]) wordErrors[answer] = 0;
     wordErrors[answer]++;
     loseLife();
+    if (!ex3Incorrect.find(w => w.english.toLowerCase() === answer)) {
+      ex3Incorrect.push(ex3Queue[ex3Index]);
+    }
     input.dataset.ex3Tried = "true";
   }
   stepsCompleted++;
@@ -1814,6 +1848,74 @@ function ex3Next() {
   ex3Index++;
   showScreen('screen-ex3');
   loadEx3();
+}
+
+function startEx3Retest() {
+  ex3RetestIndex = 0;
+  document.getElementById('stepLabel').textContent = 'Exercice 3 — Révision';
+  showScreen('screen-ex3-retest');
+  loadEx3Retest();
+}
+
+function loadEx3Retest() {
+  if (ex3RetestIndex >= ex3Incorrect.length) {
+    showSessionComplete();
+    return;
+  }
+  
+  ex3RetestAttempts = 0;
+  const w = ex3Incorrect[ex3RetestIndex];
+  document.getElementById('ex3rt-french').textContent = w.french;
+  document.getElementById('ex3rt-counter').textContent = `${ex3RetestIndex + 1} / ${ex3Incorrect.length}`;
+  document.getElementById('ex3rt-feedback').className = 'feedback-banner';
+  document.getElementById('ex3rt-next-btn').classList.add('hidden');
+  
+  const input = document.getElementById('ex3rt-input');
+  input.value = '';
+  input.className = 'type-input';
+  input.placeholder = 'Tapez le mot anglais...';
+  input.dataset.answer = w.english;
+  input.disabled = false;
+  
+  const verifyBtn = document.querySelector('#screen-ex3-retest .btn-primary:not(#ex3rt-next-btn)');
+  verifyBtn.style.display = 'block';
+}
+
+function ex3RetestCheck() {
+  const input = document.getElementById('ex3rt-input');
+  const answer = input.dataset.answer.toLowerCase();
+  const val = input.value.trim().toLowerCase();
+  
+  const verifyBtn = document.querySelector('#screen-ex3-retest .btn-primary:not(#ex3rt-next-btn)');
+  
+  if (val === answer) {
+    input.classList.add('correct');
+    triggerGlow('correct');
+    showFeedback('ex3rt-feedback', 'correct', '✓ Correct !');
+    playAudio(false, answer);
+    input.disabled = true;
+    verifyBtn.style.display = 'none';
+    document.getElementById('ex3rt-next-btn').classList.remove('hidden');
+  } else {
+    ex3RetestAttempts++;
+    input.classList.add('wrong');
+    triggerGlow('wrong');
+    
+    if (ex3RetestAttempts >= 2) {
+      showFeedback('ex3rt-feedback', 'wrong', `✗ La bonne réponse était : "${input.dataset.answer}"`);
+      input.disabled = true;
+      verifyBtn.style.display = 'none';
+      document.getElementById('ex3rt-next-btn').classList.remove('hidden');
+    } else {
+      showFeedback('ex3rt-feedback', 'wrong', '✗ Presque... (1 tentative restante)');
+    }
+  }
+}
+
+function ex3RetestNext() {
+  ex3RetestIndex++;
+  showScreen('screen-ex3-retest');
+  loadEx3Retest();
 }
 
 // ══════════════════════════════════════════
