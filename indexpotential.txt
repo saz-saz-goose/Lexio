@@ -2292,7 +2292,6 @@
         // ══════════════════════════════════════════
         const INDEX_FILE = 'word-lists/INDEX.json';
         let WORD_LIST_FILE = '';
-	currentCourseName = '';
 	let currentCourseName = '';
         let words = [];
         let allEnglish = [];
