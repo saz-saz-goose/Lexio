@@ -3384,29 +3384,48 @@
             }
         }
 
-        async function fetchLeaderboard() {
+        async function fetchLeaderboard(courseKey = 'global') {
             document.getElementById('home-leaderboard').style.display = 'block';
             const tbody = document.getElementById('leaderboard-body');
             tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Chargement...</td></tr>';
 
-            const { data, error } = await sbClient
-                .from('profiles')
-                .select('username, avatar_id, total_score, id')
-                .order('total_score', { ascending: false })
-                .limit(10);
+            let dataToDisplay = [];
 
-            if (error || !data) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--wrong);">Erreur de chargement.</td></tr>';
-                return;
+            if (courseKey === 'global') {
+                const { data, error } = await sbClient
+                    .from('profiles')
+                    .select('username, avatar_id, total_score, id')
+                    .order('total_score', { ascending: false })
+                    .limit(10);
+
+                if (error || !data) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--wrong);">Erreur de chargement.</td></tr>';
+                    return;
+                }
+                dataToDisplay = data.map(p => ({ ...p, displayScore: p.total_score || 0 }));
+            } else {
+                const { data, error } = await sbClient
+                    .from('profiles')
+                    .select('username, avatar_id, courses_progress, id');
+                
+                if (error || !data) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--wrong);">Erreur de chargement.</td></tr>';
+                    return;
+                }
+
+                let filtered = data.filter(p => p.courses_progress && p.courses_progress[courseKey] && p.courses_progress[courseKey].score > 0);
+                filtered.sort((a, b) => b.courses_progress[courseKey].score - a.courses_progress[courseKey].score);
+                filtered = filtered.slice(0, 10);
+                dataToDisplay = filtered.map(p => ({ ...p, displayScore: p.courses_progress[courseKey].score }));
             }
 
-            if (data.length === 0) {
+            if (dataToDisplay.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Aucun joueur pour le moment.</td></tr>';
                 return;
             }
 
             let html = '';
-            data.forEach((p, index) => {
+            dataToDisplay.forEach((p, index) => {
                 const isMe = p.id === currentUser?.id;
                 const rank = index + 1;
                 let rankDisplay = rank;
@@ -3423,7 +3442,7 @@
                 <span>${p.username || 'Joueur anonyme'} ${isMe ? '(Toi)' : ''}</span>
               </div>
             </td>
-            <td style="font-weight: 600; color: var(--accent);">${p.total_score || 0}</td>
+            <td style="font-weight: 600; color: var(--accent);">${p.displayScore}</td>
           </tr>
         `;
             });
@@ -3504,7 +3523,7 @@
             if (!currentProfile.courses_progress) currentProfile.courses_progress = {};
             const courseKey = WORD_LIST_FILE || 'default_course';
             if (!currentProfile.courses_progress[courseKey]) {
-                currentProfile.courses_progress[courseKey] = { seen: 0, learning: 0, learnt: 0 };
+                currentProfile.courses_progress[courseKey] = { seen: 0, learning: 0, learnt: 0, score: 0 };
             }
 
             const progress = currentProfile.courses_progress[courseKey];
@@ -3515,6 +3534,7 @@
             progress.seen += wordsInSession;
             progress.learnt += wordsLearnt;
             progress.learning += wordsLearning;
+            progress.score = (progress.score || 0) + scoreGained;
 
             await sbClient.from('profiles').update({
                 total_score: currentProfile.total_score,
