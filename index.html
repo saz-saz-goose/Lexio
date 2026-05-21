@@ -1917,6 +1917,15 @@
                 <span style="color:var(--ink-light)">Mots rencontrés :</span>
                 <strong id="stat-words">0</strong>
             </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                <span style="color:var(--ink-light)">Score gagné :</span>
+                <strong id="stat-score" style="color:var(--accent);">0 pts</strong>
+            </div>
+
+            <div id="stat-bonuses" style="display:none; border-top: 1px solid var(--border); margin-top: 8px; padding-top: 12px; text-align:left;">
+                <div style="font-size:0.8rem; color:var(--ink-light); margin-bottom:6px;">Bonus :</div>
+                <div id="stat-bonus-list" style="display:flex; flex-direction:column; gap:4px; font-size:0.85rem;"></div>
+            </div>
 
             <div class="divider" style="margin: 16px 0;"></div>
             <div style="text-align:left;">
@@ -2412,6 +2421,8 @@
 
         let sessionStartTime = 0;
         let firstTryCorrect = 0;
+        let secondTryCorrect = 0;
+        let retestAllCorrect = true;
         let wordErrors = {};
 
         let playerLives = 4;
@@ -3000,6 +3011,9 @@
                 updateProgress();
                 if (!ex1Incorrect.find(w => w.english === wordObj.english)) {
                     firstTryCorrect++;
+                } else {
+                    // Word was wrong before — this is a second-attempt correct
+                    secondTryCorrect++;
                 }
                 document.getElementById('ex1-next-btn').classList.remove('hidden');
             } else {
@@ -3072,6 +3086,7 @@
                 triggerGlow('wrong');
                 showFeedback('ex1rt-feedback', 'wrong', `✗ La bonne réponse est : "${correct}"`);
                 loseLife();
+                retestAllCorrect = false;
             }
             stepsCompleted++;
             updateProgress();
@@ -3440,6 +3455,7 @@
                 ex3RetestAttempts++;
                 input.classList.add('wrong');
                 triggerGlow('wrong');
+                retestAllCorrect = false;
 
                 if (ex3RetestAttempts >= 2) {
                     showFeedback('ex3rt-feedback', 'wrong', `✗ La bonne réponse était : "${input.dataset.answer}"`);
@@ -3505,8 +3521,30 @@
                 btnNext.style.display = 'none';
             }
 
-            // Sync progress! 10 points per word correct on first try, + basic course progress
-            const scoreGained = firstTryCorrect * 10;
+            // Calculate score with bonuses
+            const baseScore = (firstTryCorrect * 10) + (secondTryCorrect * 5);
+            const perfectLivesBonus = playerLives === MAX_LIVES ? 10 : 0;
+            const hasRetest = (ex1Incorrect.length > 0 || ex3Incorrect.length > 0);
+            const perfectRetestBonus = hasRetest && retestAllCorrect ? 10 : 0;
+            const scoreGained = baseScore + perfectLivesBonus + perfectRetestBonus;
+
+            // Update score display
+            document.getElementById('stat-score').textContent = `${scoreGained} pts`;
+
+            // Show bonus breakdown if any bonuses earned
+            const bonuses = [];
+            if (firstTryCorrect > 0) bonuses.push({ label: `${firstTryCorrect} × premier essai correct`, pts: firstTryCorrect * 10 });
+            if (secondTryCorrect > 0) bonuses.push({ label: `${secondTryCorrect} × deuxième essai correct`, pts: secondTryCorrect * 5 });
+            if (perfectLivesBonus) bonuses.push({ label: '🛡️ Toutes vies conservées', pts: 10 });
+            if (perfectRetestBonus) bonuses.push({ label: '⭐ Révision parfaite', pts: 10 });
+
+            const bonusDiv = document.getElementById('stat-bonuses');
+            const bonusList = document.getElementById('stat-bonus-list');
+            bonusList.innerHTML = bonuses.map(b =>
+                `<div style="display:flex; justify-content:space-between;"><span>${b.label}</span><span style="color:var(--accent); font-weight:600;">+${b.pts}</span></div>`
+            ).join('');
+            bonusDiv.style.display = bonuses.length > 0 ? 'block' : 'none';
+
             syncProgressToServer(scoreGained);
 
             showScreen('screen-complete');
@@ -3517,6 +3555,8 @@
             totalSteps = words.length * 4;
             sessionStartTime = Date.now();
             firstTryCorrect = 0;
+            secondTryCorrect = 0;
+            retestAllCorrect = true;
             wordErrors = {};
             initLives();
             updateProgress();
@@ -3689,6 +3729,8 @@ async function fetchLeaderboard(courseKey) {
             stepsCompleted = 0;
             sessionStartTime = Date.now();
             firstTryCorrect = 0;
+            secondTryCorrect = 0;
+            retestAllCorrect = true;
             wordErrors = {};
             initLives();
             updateProgress();
