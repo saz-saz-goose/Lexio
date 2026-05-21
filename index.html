@@ -2647,6 +2647,7 @@
 
         function showCategory(index) {
             document.getElementById('home-mode-select').style.display = 'none';
+            document.getElementById('home-leaderboard').style.display = 'none';
             const catView = document.getElementById('home-category-view');
             catView.style.display = 'flex';
 
@@ -2725,6 +2726,9 @@
             document.getElementById('home-category-view').style.display = 'none';
             document.getElementById('home-mode-select').style.display = 'flex';
             document.getElementById('home-subtitle-text').textContent = "Comment voulez-vous apprendre aujourd'hui ?";
+            if (document.getElementById('home-leaderboard').innerHTML.includes('leaderboard-body')) {
+                document.getElementById('home-leaderboard').style.display = 'block';
+            }
         }
 
     function selectCourse(filename, title) {
