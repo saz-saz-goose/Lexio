@@ -1619,7 +1619,11 @@
 
         <!-- Leaderboard -->
         <div id="home-leaderboard" style="width: 100%; margin-top: 32px; display: none;">
-            <div class="section-title" style="font-size: 1.2rem; text-align: left; margin-bottom: 12px;">Classement
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div class="section-title" style="font-size: 1.2rem; text-align: left; margin: 0;">Classement</div>
+                <select id="leaderboard-course-select" class="form-input" style="width: auto; padding: 6px 12px; font-size: 0.85rem;" onchange="fetchLeaderboard(this.value)">
+                    <option value="global">Global</option>
+                </select>
             </div>
             <table class="leaderboard-table" id="leaderboard-table">
                 <thead>
@@ -2553,6 +2557,19 @@
     `;
                 modeContainer.appendChild(card);
             });
+
+            // Populate leaderboard select
+            const select = document.getElementById('leaderboard-course-select');
+            if (select && select.options.length === 1) { // Only 'global' is there
+                homeCategoriesData.forEach(cat => {
+                    cat.files.forEach(file => {
+                        const opt = document.createElement('option');
+                        opt.value = file.filename;
+                        opt.textContent = file.title;
+                        select.appendChild(opt);
+                    });
+                });
+            }
         }
 
         function showCategory(index) {
