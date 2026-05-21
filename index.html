@@ -1133,6 +1133,56 @@
             opacity: 0.3;
             filter: grayscale(100%);
         }
+
+        /* ── WORD PREVIEW SCREEN ── */
+        .word-preview-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            max-height: 55vh;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .word-preview-grid::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .word-preview-grid::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        .word-preview-grid::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .word-chip {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            transition: border-color 0.2s;
+        }
+
+        .word-chip:hover {
+            border-color: var(--accent);
+        }
+
+        .word-chip-en {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--ink);
+        }
+
+        .word-chip-fr {
+            font-size: 0.78rem;
+            color: var(--ink-light);
+        }
     </style>
 </head>
 
@@ -1645,6 +1695,27 @@
                 <!-- Dynamically populated course cards -->
             </div>
         </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+     SCREEN: COURSE WORD PREVIEW
+══════════════════════════════════════════ -->
+    <div class="screen" id="screen-word-preview">
+        <div class="card" style="padding: 24px; width: 100%;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                <div class="phase-tag" style="margin-bottom: 0;">Liste de vocabulaire</div>
+                <span class="word-counter" id="preview-word-count"></span>
+            </div>
+            <div class="section-title" id="preview-course-title" style="margin-bottom: 4px; font-size: 1.3rem;"></div>
+            <div class="section-sub" id="preview-level-badge" style="margin-bottom: 16px; font-size: 0.8rem;"></div>
+            <div class="word-preview-grid" id="preview-word-grid">
+                <div style="grid-column: span 2; text-align: center; padding: 20px; color: var(--ink-light);">
+                    <div class="spinner" style="width: 28px; height: 28px; border-width: 3px;"></div>
+                </div>
+            </div>
+        </div>
+        <button class="btn-primary" id="preview-start-btn" onclick="startCourseFromPreview()">Commencer l'apprentissage →</button>
+        <button class="btn-primary" onclick="showScreen('screen-home')" style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent);">← Retour</button>
     </div>
 
     <!-- ══════════════════════════════════════════
@@ -2641,6 +2712,56 @@
     function selectCourse(filename, title) {
     WORD_LIST_FILE = 'word-lists/' + filename;
     currentCourseName = title || filename;
+    showCoursePreview(filename, title);
+}
+
+    async function showCoursePreview(filename, title) {
+    // Show the preview screen immediately with a loading state
+    showScreen('screen-word-preview');
+    document.getElementById('preview-course-title').textContent = title || filename;
+    document.getElementById('preview-word-count').textContent = '';
+    document.getElementById('preview-level-badge').textContent = '';
+    document.getElementById('preview-word-grid').innerHTML = `
+        <div style="grid-column: span 2; text-align: center; padding: 20px; color: var(--ink-light);">
+            <div class="spinner" style="width: 28px; height: 28px; border-width: 3px; margin-bottom: 12px;"></div>
+            Chargement des mots...
+        </div>`;
+
+    // Also find level info from homeCategoriesData
+    let levelText = '';
+    for (const cat of homeCategoriesData) {
+        const found = cat.files.find(f => f.filename === filename);
+        if (found) { levelText = found.level || ''; break; }
+    }
+    if (levelText) document.getElementById('preview-level-badge').textContent = `Niveau ${levelText}`;
+
+    try {
+        const response = await fetch('word-lists/' + filename);
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const data = await response.json();
+        const parsed = parseWordList(data);
+
+        document.getElementById('preview-word-count').textContent = `${parsed.length} mots`;
+
+        const grid = document.getElementById('preview-word-grid');
+        if (parsed.length === 0) {
+            grid.innerHTML = `<div style="grid-column: span 2; text-align: center; color: var(--ink-light);">Aucun mot trouvé.</div>`;
+            return;
+        }
+
+        grid.innerHTML = parsed.map(w => `
+            <div class="word-chip">
+                <span class="word-chip-en">${w.english}</span>
+                <span class="word-chip-fr">${w.french || '—'}</span>
+            </div>
+        `).join('');
+    } catch (err) {
+        document.getElementById('preview-word-grid').innerHTML =
+            `<div style="grid-column: span 2; text-align: center; color: var(--wrong);">Impossible de charger la liste.</div>`;
+    }
+}
+
+    function startCourseFromPreview() {
     loadWordList();
 }
 
