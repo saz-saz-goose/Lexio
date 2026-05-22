@@ -1183,10 +1183,39 @@
             font-size: 0.78rem;
             color: var(--ink-light);
         }
-    </style>
-</head>
 
-<body>
+	/* ── MATCH TABLE ── */
+	.match-table-wrap {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+	}
+	.match-table { width: 100%; border-collapse: collapse; }
+	.match-table th {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--ink-light);
+    padding: 12px 16px; background: var(--bg);
+    border-bottom: 1px solid var(--border); text-align: left;
+	}
+	.match-table td { padding: 0; border-bottom: 1px solid var(--border); width: 50%; }
+	.match-table tr:last-child td { border-bottom: none; }
+	.match-cell {
+    display: block; width: 100%; padding: 16px; cursor: pointer;
+    font-size: 0.95rem; color: var(--ink);
+    transition: background 0.15s, color 0.15s;
+    user-select: none; -webkit-user-select: none;
+	}
+	.match-cell.selected { background: var(--accent-light); color: var(--accent); font-weight: 500; }
+	.match-cell.wrong { background: var(--wrong-bg); color: var(--wrong); }
+	.match-cell.matched { opacity: 0; transition: opacity 0.4s ease; pointer-events: none; 
+	}
+    </style>
+	</head>
+
+	<body>
 
     <div class="app-header">
         <div class="logo-area">
@@ -1207,7 +1236,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: LOADING SCREEN
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-loading">
         <div class="card" style="text-align: center; padding: 40px 20px;">
             <div class="logo" style="font-size: 2.5rem; margin-bottom: 20px;">Lexio</div>
@@ -1218,7 +1247,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: ERROR SCREEN (CORS / HTTP)
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-error">
         <div class="card" style="border-color: var(--wrong); background: var(--card); padding: 32px 24px;">
             <div class="phase-tag" style="background: var(--wrong-bg); color: var(--wrong); margin-bottom: 20px;">Erreur
@@ -1255,7 +1284,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: AUTH & PROFILE
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-signup">
         <div class="card">
             <div class="logo" style="text-align: center; font-size: 2rem; margin-bottom: 24px;">Lexio</div>
@@ -1640,7 +1669,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: HOME SCREEN (Course Dashboard)
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-home">
         <div class="home-hero">
             <div class="home-title">Lexio</div>
@@ -1684,7 +1713,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: COURSE WORD PREVIEW
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-word-preview">
         <div class="card" style="padding: 24px; width: 100%;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
@@ -1723,7 +1752,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: FIRST ENCOUNTER — word intro
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-encounter">
         <div class="card">
             <div class="word-display" id="enc-word"></div>
@@ -1747,10 +1776,9 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: EX1 — MCQ (FR word → EN options)
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex1">
         <div class="question-prompt">
-            <div class="q-label">Exercice 1 — Choisissez la bonne traduction</div>
             <div class="q-word" id="ex1-word"></div>
             <div class="q-sub">Quel est le sens de ce mot en anglais ?</div>
         </div>
@@ -1785,7 +1813,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: TRANSITION
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-transition">
         <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
             <svg class="transition-icon" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"
@@ -1803,7 +1831,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: EX2 INTRO
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex2-intro">
         <div class="card" style="text-align:center;">
             <div class="section-title mt-4">Tap the Translation</div>
@@ -1818,10 +1846,9 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: EX2 GAME
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex2-game">
         <div class="question-prompt">
-            <div class="q-label">Exercice 2 — Game</div>
             <div class="game-timer" id="ex2-game-timer">15s</div>
         </div>
 
@@ -1830,14 +1857,30 @@
         </div>
 
         <div class="word-counter" id="ex2-game-counter" style="margin-top:16px;"></div>
+    </div>	
+	<!-- ══════════════════════════════════════════
+ 	SCREEN: EX2 MATCH — Matching table
+	══════════════════════════════════════════ -->
+	<div class="screen" id="screen-match">
+    <div class="question-prompt">
+
+        <div class="q-sub" style="margin-top:8px;">Associez chaque mot à sa traduction</div>
     </div>
+    <div class="match-table-wrap">
+        <table class="match-table">
+            <thead><tr><th>English</th><th>Français</th></tr></thead>
+            <tbody id="match-tbody"></tbody>
+        </table>
+    </div>
+    <div class="feedback-banner" id="match-feedback"></div>
+    <div class="word-counter" id="match-counter"></div>
+	</div>
 
     <!-- ══════════════════════════════════════════
      SCREEN: EX3 — Partial word typing
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex3">
         <div class="question-prompt">
-            <div class="q-label">Exercice 3 — Anagramme</div>
             <div class="q-word" id="ex3-french"></div>
             <div class="q-sub">Remettez les lettres dans le bon ordre pour trouver le mot anglais</div>
         </div>
@@ -1858,7 +1901,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: EX3 RETEST
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex3-retest">
         <div class="card">
             <div class="section-title mt-4">Révision des mots manqués (Ex3)</div>
@@ -1884,7 +1927,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: SESSION COMPLETE
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-complete">
         <div class="complete-icon">🎉</div>
         <div class="complete-title" id="complete-title">Session terminée !</div>
@@ -1931,7 +1974,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: GAME OVER
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-game-over">
         <div class="complete-icon">💔</div>
         <div class="complete-title">Try Again!</div>
@@ -2000,7 +2043,7 @@
                 sbClient.auth.onAuthStateChange(async (event, session) => {
                     if (event === 'SIGNED_IN') {
                         // Don't interrupt an active game session (e.g. on token refresh)
-                        const activeGameScreens = ['screen-encounter','screen-ex1','screen-ex2-game','screen-ex3','screen-ex1-retest','screen-ex3-retest','screen-transition'];
+                        const activeGameScreens = ['screen-encounter','screen-ex1','screen-ex2-game','screen-match','screen-ex3','screen-ex1-retest','screen-ex3-retest','screen-transition'];
                         const inGame = activeGameScreens.some(id => document.getElementById(id)?.classList.contains('active'));
                         if (inGame) return;
                         currentUser = session.user;
@@ -2319,11 +2362,6 @@
                 user: currentUser,
                 profile: currentProfile
             };
-            let ex2FullQueue = [];
-            let ex2GameQueue = [];
-            let ex2GameIndex = 0;
-            let ex2CurrentPart = 1;
-            let ex2GameTimerInterval = null;
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -2399,6 +2437,7 @@
 
         let ex2GameQueue = [];
         let ex2GameIndex = 0;
+        let ex2CurrentPart = 1;
         let ex2GameTimerInterval = null;
         let ex2GameLoopInterval = null;
         let ex2GameTimeLeft = 15;
@@ -3126,17 +3165,20 @@
                 stepsCompleted++;
                 updateProgress();
                 // Determine which part just finished
-                if (ex2CurrentPart === 1) {
+               if (ex2CurrentPart === 1) {
                     // Part 1 done: go to EX1
                     const msgs = ["Now let's test your memory!", "Exercise time!", "Keep going!"];
                     showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx1);
                 } else {
-                    // Part 2 done: go to EX3
+                    // Part 2 done: go to Match
                     const msgs = ["You're doing so well!", "Almost there!", "Fantastic!"];
-                    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx3);
+                    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startMatch);
                 }
-                return;
-            }
+
+               return;
+
+           	}
+
 
             const w = ex2GameQueue[ex2GameIndex];
             document.getElementById('ex2-game-french').textContent = w.french;
@@ -3275,8 +3317,107 @@
                 }
             }, 4000);
         }
+	// ══════════════════════════════════════════
+	// EX2 MATCH — Matching Table
+	// ══════════════════════════════════════════
+        let matchPairs = [];
+        let matchSelected = null;
 
-        // ══════════════════════════════════════════
+        function startMatch() {
+            console.log('🎯 startMatch called, words:', words.length);
+            matchPairs = words.map(w => ({ english: w.english, french: w.french }));
+            matchSelected = null;
+            buildMatchTable();
+            updateMatchCounter();
+            showScreen('screen-match');
+	}
+
+	function buildMatchTable() {
+    const englishWords = shuffle(matchPairs.map(p => p.english));
+    const frenchWords  = shuffle(matchPairs.map(p => p.french));
+    const tbody = document.getElementById('match-tbody');
+    tbody.innerHTML = '';
+    for (let i = 0; i < matchPairs.length; i++) {
+        const tr = document.createElement('tr');
+        const makeCell = (lang, word) => {
+            const td = document.createElement('td');
+            const span = document.createElement('span');
+            span.className = 'match-cell';
+            span.textContent = word;
+            span.dataset.lang = lang;
+            span.dataset.word = word;
+            span.addEventListener('click', () => onMatchCellClick(span));
+            td.appendChild(span);
+            return td;
+        };
+        tr.appendChild(makeCell('en', englishWords[i]));
+        tr.appendChild(makeCell('fr', frenchWords[i]));
+        tbody.appendChild(tr);
+    }
+	}
+
+	function onMatchCellClick(cell) {
+    if (cell.classList.contains('matched')) return;
+
+    // Tap same cell again = deselect
+    if (matchSelected && matchSelected.cell === cell) {
+        cell.classList.remove('selected');
+        matchSelected = null;
+        return;
+    }
+
+    // Tap same language = switch selection
+    if (matchSelected && matchSelected.lang === cell.dataset.lang) {
+        matchSelected.cell.classList.remove('selected');
+        cell.classList.add('selected');
+        matchSelected = { lang: cell.dataset.lang, word: cell.dataset.word, cell };
+        return;
+    }
+
+    // Nothing selected yet = select
+    if (!matchSelected) {
+        cell.classList.add('selected');
+        matchSelected = { lang: cell.dataset.lang, word: cell.dataset.word, cell };
+        return;
+    }
+
+    // Two different languages selected — check pair
+    const enWord = matchSelected.lang === 'en' ? matchSelected.word : cell.dataset.word;
+    const frWord = matchSelected.lang === 'fr' ? matchSelected.word : cell.dataset.word;
+    const isCorrect = words.some(w => w.english === enWord && w.french === frWord);
+
+    if (isCorrect) {
+        matchSelected.cell.classList.remove('selected');
+        matchSelected.cell.classList.add('matched');
+        cell.classList.add('matched');
+        matchSelected = null;
+        matchPairs = matchPairs.filter(p => !(p.english === enWord && p.french === frWord));
+        updateMatchCounter();
+        if (matchPairs.length === 0) {
+            setTimeout(() => {
+                const msgs = ["All matched!", "Parfait !", "Excellent !"];
+                showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx3);
+            }, 600);
+        }
+    } else {
+        const cellA = matchSelected.cell;
+        matchSelected.cell.classList.remove('selected');
+        matchSelected.cell.classList.add('wrong');
+        cell.classList.add('wrong');
+        matchSelected = null;
+        loseLife();
+        setTimeout(() => {
+            cellA.classList.remove('wrong');
+            cell.classList.remove('wrong');
+        }, 700);
+    }
+	}
+
+	function updateMatchCounter() {
+    const matched = words.length - matchPairs.length;
+    document.getElementById('match-counter').textContent = `${matched} / ${words.length} paires trouvées`;
+	}
+    	// ══════════════════════════════════════════
         // EX 3 — Partial word typing
         // ══════════════════════════════════════════
         function startEx3() {
@@ -3749,7 +3890,7 @@ async function fetchLeaderboard(courseKey) {
         total_score: currentProfile.total_score,
         courses_progress: currentProfile.courses_progress
     }).eq('id', currentUser.id);
-}
+	}
         console.log('Calling initAuth now');
         initAuth().catch(err => {
             console.error('initAuth uncaught error:', err);
