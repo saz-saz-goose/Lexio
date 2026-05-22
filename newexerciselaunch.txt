@@ -3323,7 +3323,6 @@ let matchSelected = null;
 function startMatch() {
     matchPairs = words.map(w => ({ english: w.english, french: w.french }));
     matchSelected = null;
-    document.getElementById('stepLabel').textContent = 'Exercice 2 — Association';
     buildMatchTable();
     updateMatchCounter();
     showScreen('screen-match');
