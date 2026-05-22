@@ -2319,6 +2319,11 @@
                 user: currentUser,
                 profile: currentProfile
             };
+            let ex2FullQueue = [];
+            let ex2GameQueue = [];
+            let ex2GameIndex = 0;
+            let ex2CurrentPart = 1;
+            let ex2GameTimerInterval = null;
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -2611,7 +2616,6 @@
             document.getElementById('header-home-btn').classList.add('hidden');
             document.getElementById('header-logo').style.display = 'block';
             document.getElementById('header-progress-wrap').style.display = 'none';
-            document.getElementById('stepLabel').style.display = 'none';
             document.getElementById('lives-container').style.display = 'none';
             backToModeSelect();
             showScreen('screen-home');
@@ -3086,6 +3090,7 @@
             ex2FullQueue = shuffle([...words]);
             ex2GameQueue = ex2FullQueue.slice(0, 5);
             ex2GameIndex = 0;
+            ex2CurrentPart = 1;
             showScreen('screen-ex2-intro');
             document.querySelector('#screen-ex2-intro .btn-primary').setAttribute('onclick', 'startEx2Part1Game()');
         }
@@ -3099,6 +3104,7 @@
         function startEx2Part2() {
             ex2GameQueue = ex2FullQueue.slice(5);
             ex2GameIndex = 0;
+            ex2CurrentPart = 2;
             showScreen('screen-ex2-intro');
             document.querySelector('#screen-ex2-intro .btn-primary').setAttribute('onclick', 'startEx2Part2Game()');
         }
@@ -3119,9 +3125,8 @@
             if (ex2GameIndex >= ex2GameQueue.length) {
                 stepsCompleted++;
                 updateProgress();
-                // Determine which part just finished based on stepLabel
-                const label = document.getElementById('stepLabel').textContent;
-                if (label.includes('1/2')) {
+                // Determine which part just finished
+                if (ex2CurrentPart === 1) {
                     // Part 1 done: go to EX1
                     const msgs = ["Now let's test your memory!", "Exercise time!", "Keep going!"];
                     showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx1);
@@ -3535,7 +3540,6 @@
             updateProgress();
             document.getElementById('header-home-btn').classList.remove('hidden');
             document.getElementById('header-progress-wrap').style.display = 'block';
-            document.getElementById('stepLabel').style.display = 'block';
             showScreen('screen-encounter');
             startEncounter();
         }
@@ -3560,7 +3564,6 @@
             document.getElementById('header-home-btn').classList.add('hidden');
             document.getElementById('header-logo').style.display = 'block';
             document.getElementById('header-progress-wrap').style.display = 'none';
-            document.getElementById('stepLabel').style.display = 'none';
 
             try {
                 const response = await fetch(INDEX_FILE);
@@ -3662,7 +3665,6 @@ async function fetchLeaderboard(courseKey) {
             document.getElementById('header-home-btn').classList.add('hidden');
             document.getElementById('header-logo').style.display = 'none';
             document.getElementById('header-progress-wrap').style.display = 'none';
-            document.getElementById('stepLabel').style.display = 'none';
 
             try {
                 const response = await fetch(WORD_LIST_FILE);
@@ -3710,7 +3712,6 @@ async function fetchLeaderboard(courseKey) {
 
             document.getElementById('header-home-btn').classList.remove('hidden');
             document.getElementById('header-progress-wrap').style.display = 'block';
-            document.getElementById('stepLabel').style.display = 'block';
 
             showScreen('screen-encounter');
             startEncounter();
