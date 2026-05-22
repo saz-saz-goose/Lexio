@@ -1133,34 +1133,57 @@
             opacity: 0.3;
             filter: grayscale(100%);
         }
+
+        /* ── WORD PREVIEW SCREEN ── */
+        .word-preview-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            max-height: 55vh;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .word-preview-grid::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .word-preview-grid::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        .word-preview-grid::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .word-chip {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            transition: border-color 0.2s;
+        }
+
+        .word-chip:hover {
+            border-color: var(--accent);
+        }
+
+        .word-chip-en {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--ink);
+        }
+
+        .word-chip-fr {
+            font-size: 0.78rem;
+            color: var(--ink-light);
+        }
     </style>
-/* ── MATCH TABLE ── */
-.match-table-wrap {
-    width: 100%;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-}
-.match-table { width: 100%; border-collapse: collapse; }
-.match-table th {
-    font-size: 0.72rem; font-weight: 600; letter-spacing: 1.2px;
-    text-transform: uppercase; color: var(--ink-light);
-    padding: 12px 16px; background: var(--bg);
-    border-bottom: 1px solid var(--border); text-align: left;
-}
-.match-table td { padding: 0; border-bottom: 1px solid var(--border); width: 50%; }
-.match-table tr:last-child td { border-bottom: none; }
-.match-cell {
-    display: block; width: 100%; padding: 16px; cursor: pointer;
-    font-size: 0.95rem; color: var(--ink);
-    transition: background 0.15s, color 0.15s;
-    user-select: none; -webkit-user-select: none;
-}
-.match-cell.selected { background: var(--accent-light); color: var(--accent); font-weight: 500; }
-.match-cell.wrong { background: var(--wrong-bg); color: var(--wrong); }
-.match-cell.matched { opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
 </head>
 
 <body>
@@ -1176,7 +1199,6 @@
             <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
         </div>
         <div class="lives-container" id="lives-container" style="display:none;"></div>
-        <div class="step-label" id="stepLabel" style="display:none;">Première rencontre</div>
         <div id="header-profile-btn-container" style="display:none; margin-left: auto;">
             <button class="avatar-btn" id="header-avatar-btn" style="width: 40px; height: 40px; font-size: 1.2rem;"
                 onclick="showScreen('screen-profile-own')">🐍</button>
@@ -1186,7 +1208,7 @@
     <!-- ══════════════════════════════════════════
      SCREEN: LOADING SCREEN
 ══════════════════════════════════════════ -->
-    <div class="screen active" id="screen-loading">
+    <div class="screen" id="screen-loading">
         <div class="card" style="text-align: center; padding: 40px 20px;">
             <div class="logo" style="font-size: 2.5rem; margin-bottom: 20px;">Lexio</div>
             <div class="spinner"></div>
@@ -1240,14 +1262,7 @@
             <div class="section-title">Créer un compte</div>
             <div class="section-sub" style="margin-bottom: 24px;">Inscris-toi pour sauvegarder ta progression</div>
 
-            <button class="oauth-btn" id="btn-oauth-google" onclick="signInWithGoogle()">
-                <span style="font-size:1.2rem;">G</span> Continuer avec Google
-            </button>
-            <button class="oauth-btn" id="btn-oauth-github" onclick="signInWithGitHub()">
-                <span style="font-size:1.2rem;">GH</span> Continuer avec GitHub
-            </button>
 
-            <div class="divider-text">ou s'inscrire par email</div>
 
             <form id="form-signup" onsubmit="handleSignup(event)">
                 <div class="form-group">
@@ -1314,14 +1329,7 @@
             <div class="section-title">Connexion</div>
             <div class="section-sub" style="margin-bottom: 24px;">Content de te revoir !</div>
 
-            <button class="oauth-btn" onclick="signInWithGoogle()">
-                <span style="font-size:1.2rem;">G</span> Continuer avec Google
-            </button>
-            <button class="oauth-btn" onclick="signInWithGitHub()">
-                <span style="font-size:1.2rem;">GH</span> Continuer avec GitHub
-            </button>
 
-            <div class="divider-text">ou se connecter par email</div>
 
             <form id="form-login" onsubmit="handleLogin(event)">
                 <div class="form-group">
@@ -1646,7 +1654,7 @@
 
         <!-- Leaderboard -->
         <div id="home-leaderboard" style="width: 100%; margin-top: 32px; display: none;">
-            <div class="section-title" style="font-size: 1.2rem; text-align: left; margin-bottom: 12px;">Classement
+            <div id="leaderboard-title" class="section-title" style="font-size: 1.2rem; text-align: left; margin-bottom: 12px;">Classement
             </div>
             <table class="leaderboard-table" id="leaderboard-table">
                 <thead>
@@ -1675,11 +1683,49 @@
     </div>
 
     <!-- ══════════════════════════════════════════
+     SCREEN: COURSE WORD PREVIEW
+══════════════════════════════════════════ -->
+    <div class="screen" id="screen-word-preview">
+        <div class="card" style="padding: 24px; width: 100%;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                <div class="phase-tag" style="margin-bottom: 0;">Liste de vocabulaire</div>
+                <span class="word-counter" id="preview-word-count"></span>
+            </div>
+            <div class="section-title" id="preview-course-title" style="margin-bottom: 4px; font-size: 1.3rem;"></div>
+            <div class="section-sub" id="preview-level-badge" style="margin-bottom: 16px; font-size: 0.8rem;"></div>
+            <div class="word-preview-grid" id="preview-word-grid">
+                <div style="grid-column: span 2; text-align: center; padding: 20px; color: var(--ink-light);">
+                    <div class="spinner" style="width: 28px; height: 28px; border-width: 3px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Per-course leaderboard -->
+        <div id="preview-leaderboard" style="width: 100%; display: none;">
+            <div class="section-title" id="preview-leaderboard-title" style="font-size: 1.1rem; text-align: left; margin-bottom: 12px;">Classement pour ce cours</div>
+            <table class="leaderboard-table" id="preview-leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rang</th>
+                        <th>Joueur</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="preview-leaderboard-body">
+                    <tr><td colspan="3" style="text-align: center;">Chargement...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <button class="btn-primary" id="preview-start-btn" onclick="startCourseFromPreview()">Commencer l'apprentissage →</button>
+        <button class="btn-primary" onclick="showScreen('screen-home')" style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent);">← Retour</button>
+    </div>
+
+    <!-- ══════════════════════════════════════════
      SCREEN: FIRST ENCOUNTER — word intro
 ══════════════════════════════════════════ -->
     <div class="screen" id="screen-encounter">
         <div class="card">
-            <div class="phase-tag">Première rencontre</div>
             <div class="word-display" id="enc-word"></div>
             <div class="translation-display" id="enc-translation"></div>
             <div style="display: flex; gap: 10px; width: 100%; margin-bottom: 8px;">
@@ -1720,7 +1766,6 @@
     <!-- EX1 RETEST (native → TL) -->
     <div class="screen" id="screen-ex1-retest">
         <div class="card">
-            <div class="phase-tag" style="background:#FFE5E5;color:#9B2226;">Révision</div>
             <div class="section-title mt-4">Révision des mots manqués</div>
             <div class="section-sub mt-8">Cette fois, vous voyez le mot en anglais et choisissez la bonne traduction
                 française.</div>
@@ -1761,7 +1806,6 @@
 ══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex2-intro">
         <div class="card" style="text-align:center;">
-            <div class="phase-tag">Exercice 2</div>
             <div class="section-title mt-4">Tap the Translation</div>
             <div class="section-sub mt-8">
                 Trouvez et tapez sur la bonne traduction en anglais le plus de fois possible en 15 secondes !<br><br>
@@ -1776,7 +1820,9 @@
      SCREEN: EX2 GAME
 ══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex2-game">
-        <div class="question-prompt">    
+        <div class="question-prompt">
+            <div class="q-label">Exercice 2 — Game</div>
+            <div class="game-timer" id="ex2-game-timer">15s</div>
         </div>
 
         <div class="game-area" id="ex2-game-area">
@@ -1785,23 +1831,7 @@
 
         <div class="word-counter" id="ex2-game-counter" style="margin-top:16px;"></div>
     </div>
-<!-- ══════════════════════════════════════════
- SCREEN: EX2 MATCH — Matching table
-══════════════════════════════════════════ -->
-<div class="screen" id="screen-match">
-    <div class="question-prompt">
-        <div class="q-label">Exercice 2 — Association</div>
-        <div class="q-sub" style="margin-top:8px;">Associez chaque mot à sa traduction</div>
-    </div>
-    <div class="match-table-wrap">
-        <table class="match-table">
-            <thead><tr><th>English</th><th>Français</th></tr></thead>
-            <tbody id="match-tbody"></tbody>
-        </table>
-    </div>
-    <div class="feedback-banner" id="match-feedback"></div>
-    <div class="word-counter" id="match-counter"></div>
-</div>
+
     <!-- ══════════════════════════════════════════
      SCREEN: EX3 — Partial word typing
 ══════════════════════════════════════════ -->
@@ -1831,7 +1861,6 @@
 ══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex3-retest">
         <div class="card">
-            <div class="phase-tag" style="background:#FFE5E5;color:#9B2226;">Révision</div>
             <div class="section-title mt-4">Révision des mots manqués (Ex3)</div>
             <div class="section-sub mt-8">Mémorisez le mot puis tapez-le de mémoire !</div>
         </div>
@@ -1868,6 +1897,15 @@
             <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
                 <span style="color:var(--ink-light)">Mots rencontrés :</span>
                 <strong id="stat-words">0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+                <span style="color:var(--ink-light)">Score gagné :</span>
+                <strong id="stat-score" style="color:var(--accent);">0 pts</strong>
+            </div>
+
+            <div id="stat-bonuses" style="display:none; border-top: 1px solid var(--border); margin-top: 8px; padding-top: 12px; text-align:left;">
+                <div style="font-size:0.8rem; color:var(--ink-light); margin-bottom:6px;">Bonus :</div>
+                <div id="stat-bonus-list" style="display:flex; flex-direction:column; gap:4px; font-size:0.85rem;"></div>
             </div>
 
             <div class="divider" style="margin: 16px 0;"></div>
@@ -1962,7 +2000,7 @@
                 sbClient.auth.onAuthStateChange(async (event, session) => {
                     if (event === 'SIGNED_IN') {
                         // Don't interrupt an active game session (e.g. on token refresh)
-                        const activeGameScreens = ['screen-encounter','screen-ex1','screen-ex2-game', 'screen-match','screen-ex3','screen-ex1-retest','screen-ex3-retest','screen-transition'];
+                        const activeGameScreens = ['screen-encounter','screen-ex1','screen-ex2-game','screen-ex3','screen-ex1-retest','screen-ex3-retest','screen-transition'];
                         const inGame = activeGameScreens.some(id => document.getElementById(id)?.classList.contains('active'));
                         if (inGame) return;
                         currentUser = session.user;
@@ -2281,6 +2319,11 @@
                 user: currentUser,
                 profile: currentProfile
             };
+            let ex2FullQueue = [];
+            let ex2GameQueue = [];
+            let ex2GameIndex = 0;
+            let ex2CurrentPart = 1;
+            let ex2GameTimerInterval = null;
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -2358,12 +2401,14 @@
         let ex2GameIndex = 0;
         let ex2GameTimerInterval = null;
         let ex2GameLoopInterval = null;
-        let ex2GameTimeLeft = 10;
+        let ex2GameTimeLeft = 15;
         let ex2GameCorrectHits = 0;
         let ex2GameActive = false;
 
         let sessionStartTime = 0;
         let firstTryCorrect = 0;
+        let secondTryCorrect = 0;
+        let retestAllCorrect = true;
         let wordErrors = {};
 
         let playerLives = 4;
@@ -2571,7 +2616,6 @@
             document.getElementById('header-home-btn').classList.add('hidden');
             document.getElementById('header-logo').style.display = 'block';
             document.getElementById('header-progress-wrap').style.display = 'none';
-            document.getElementById('stepLabel').style.display = 'none';
             document.getElementById('lives-container').style.display = 'none';
             backToModeSelect();
             showScreen('screen-home');
@@ -2599,6 +2643,7 @@
 
         function showCategory(index) {
             document.getElementById('home-mode-select').style.display = 'none';
+            document.getElementById('home-leaderboard').style.display = 'none';
             const catView = document.getElementById('home-category-view');
             catView.style.display = 'flex';
 
@@ -2677,11 +2722,123 @@
             document.getElementById('home-category-view').style.display = 'none';
             document.getElementById('home-mode-select').style.display = 'flex';
             document.getElementById('home-subtitle-text').textContent = "Comment voulez-vous apprendre aujourd'hui ?";
+            if (document.getElementById('home-leaderboard').innerHTML.includes('leaderboard-body')) {
+                document.getElementById('home-leaderboard').style.display = 'block';
+            }
         }
 
     function selectCourse(filename, title) {
     WORD_LIST_FILE = 'word-lists/' + filename;
     currentCourseName = title || filename;
+    showCoursePreview(filename, title);
+}
+
+    async function showCoursePreview(filename, title) {
+    // Show the preview screen immediately with a loading state
+    showScreen('screen-word-preview');
+    document.getElementById('preview-course-title').textContent = title || filename;
+    document.getElementById('preview-word-count').textContent = '';
+    document.getElementById('preview-level-badge').textContent = '';
+    document.getElementById('preview-leaderboard').style.display = 'none';
+    document.getElementById('preview-word-grid').innerHTML = `
+        <div style="grid-column: span 2; text-align: center; padding: 20px; color: var(--ink-light);">
+            <div class="spinner" style="width: 28px; height: 28px; border-width: 3px; margin-bottom: 12px;"></div>
+            Chargement des mots...
+        </div>`;
+
+    // Find level info from homeCategoriesData
+    let levelText = '';
+    for (const cat of homeCategoriesData) {
+        const found = cat.files.find(f => f.filename === filename);
+        if (found) { levelText = found.level || ''; break; }
+    }
+    if (levelText) document.getElementById('preview-level-badge').textContent = `Niveau ${levelText}`;
+
+    // Load word list and course leaderboard in parallel
+    const courseKey = 'word-lists/' + filename;
+
+    const [wordResult] = await Promise.allSettled([
+        fetch('word-lists/' + filename).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }),
+    ]);
+
+    if (wordResult.status === 'fulfilled') {
+        const parsed = parseWordList(wordResult.value);
+        document.getElementById('preview-word-count').textContent = `${parsed.length} mots`;
+        const grid = document.getElementById('preview-word-grid');
+        if (parsed.length === 0) {
+            grid.innerHTML = `<div style="grid-column: span 2; text-align: center; color: var(--ink-light);">Aucun mot trouvé.</div>`;
+        } else {
+            grid.innerHTML = parsed.map(w => `
+                <div class="word-chip">
+                    <span class="word-chip-en">${w.english}</span>
+                    <span class="word-chip-fr">${w.french || '—'}</span>
+                </div>
+            `).join('');
+        }
+    } else {
+        document.getElementById('preview-word-grid').innerHTML =
+            `<div style="grid-column: span 2; text-align: center; color: var(--wrong);">Impossible de charger la liste.</div>`;
+    }
+
+    // Load the per-course leaderboard (only if logged in)
+    if (currentProfile && sbClient) {
+        await fetchCourseLeaderboard(courseKey, title || filename);
+    }
+}
+
+    async function fetchCourseLeaderboard(courseKey, courseName) {
+    const leaderboardDiv = document.getElementById('preview-leaderboard');
+    const tbody = document.getElementById('preview-leaderboard-body');
+    document.getElementById('preview-leaderboard-title').textContent = `Classement — ${courseName}`;
+    leaderboardDiv.style.display = 'block';
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Chargement...</td></tr>';
+
+    const { data, error } = await sbClient
+        .from('profiles')
+        .select('username, avatar_id, courses_progress, id');
+
+    if (error || !data) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--wrong);">Erreur de chargement.</td></tr>';
+        return;
+    }
+
+    // Only include players who have earned points for this specific course
+    const ranked = data
+        .filter(p => (p.courses_progress?.[courseKey]?.score || 0) > 0)
+        .map(p => ({ ...p, displayScore: p.courses_progress[courseKey].score }))
+        .sort((a, b) => b.displayScore - a.displayScore)
+        .slice(0, 10);
+
+    if (ranked.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--ink-light);">Personne n\'a encore étudié ce cours. Sois le premier !</td></tr>';
+        return;
+    }
+
+    let html = '';
+    ranked.forEach((p, index) => {
+        const isMe = p.id === currentUser?.id;
+        const rank = index + 1;
+        let rankDisplay = rank;
+        if (rank === 1) rankDisplay = '🥇 1';
+        if (rank === 2) rankDisplay = '🥈 2';
+        if (rank === 3) rankDisplay = '🥉 3';
+        html += `
+            <tr class="${isMe ? 'highlight' : ''}">
+                <td>${rankDisplay}</td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.2rem;">${getAvatarEmoji(p.avatar_id)}</span>
+                        <span>${p.username || 'Joueur anonyme'} ${isMe ? '(Toi)' : ''}</span>
+                    </div>
+                </td>
+                <td style="font-weight: 600; color: var(--accent);">${p.displayScore}</td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+}
+
+    function startCourseFromPreview() {
     loadWordList();
 }
 
@@ -2772,7 +2929,6 @@
             const w = words[encounterIndex];
             document.getElementById('enc-word').textContent = w.english;
             document.getElementById('enc-translation').textContent = w.french;
-            document.getElementById('stepLabel').textContent = `Mot ${encounterIndex + 1} / ${words.length}`;
 
             setTimeout(() => {
                 playAudio(false);
@@ -2793,7 +2949,6 @@
             ex1Queue = [...words];
             ex1Index = 0;
             ex1Incorrect = [];
-            document.getElementById('stepLabel').textContent = 'Exercice 1';
             showScreen('screen-ex1');
             loadEx1();
         }
@@ -2839,6 +2994,9 @@
                 updateProgress();
                 if (!ex1Incorrect.find(w => w.english === wordObj.english)) {
                     firstTryCorrect++;
+                } else {
+                    // Word was wrong before — this is a second-attempt correct
+                    secondTryCorrect++;
                 }
                 document.getElementById('ex1-next-btn').classList.remove('hidden');
             } else {
@@ -2868,7 +3026,6 @@
         function startEx1Retest() {
             ex1RetestQueue = [...ex1Incorrect];
             ex1RetestIndex = 0;
-            document.getElementById('stepLabel').textContent = 'Exercice 1 — Révision';
             showScreen('screen-ex1-retest');
             loadEx1Retest();
         }
@@ -2911,6 +3068,7 @@
                 triggerGlow('wrong');
                 showFeedback('ex1rt-feedback', 'wrong', `✗ La bonne réponse est : "${correct}"`);
                 loseLife();
+                retestAllCorrect = false;
             }
             stepsCompleted++;
             updateProgress();
@@ -2932,7 +3090,7 @@
             ex2FullQueue = shuffle([...words]);
             ex2GameQueue = ex2FullQueue.slice(0, 5);
             ex2GameIndex = 0;
-            document.getElementById('stepLabel').textContent = 'Exercice 2 (1/2)';
+            ex2CurrentPart = 1;
             showScreen('screen-ex2-intro');
             document.querySelector('#screen-ex2-intro .btn-primary').setAttribute('onclick', 'startEx2Part1Game()');
         }
@@ -2946,7 +3104,7 @@
         function startEx2Part2() {
             ex2GameQueue = ex2FullQueue.slice(5);
             ex2GameIndex = 0;
-            document.getElementById('stepLabel').textContent = 'Exercice 2 (2/2)';
+            ex2CurrentPart = 2;
             showScreen('screen-ex2-intro');
             document.querySelector('#screen-ex2-intro .btn-primary').setAttribute('onclick', 'startEx2Part2Game()');
         }
@@ -2967,16 +3125,15 @@
             if (ex2GameIndex >= ex2GameQueue.length) {
                 stepsCompleted++;
                 updateProgress();
-                // Determine which part just finished based on stepLabel
-                const label = document.getElementById('stepLabel').textContent;
-                if (label.includes('1/2')) {
+                // Determine which part just finished
+                if (ex2CurrentPart === 1) {
                     // Part 1 done: go to EX1
                     const msgs = ["Now let's test your memory!", "Exercise time!", "Keep going!"];
                     showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx1);
                 } else {
                     // Part 2 done: go to EX3
                     const msgs = ["You're doing so well!", "Almost there!", "Fantastic!"];
-                    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startMatch);
+                    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx3);
                 }
                 return;
             }
@@ -2985,7 +3142,7 @@
             document.getElementById('ex2-game-french').textContent = w.french;
             document.getElementById('ex2-game-counter').textContent = `Mot ${ex2GameIndex + 1} / ${ex2GameQueue.length}`;
 
-            ex2GameTimeLeft = 10;
+            ex2GameTimeLeft = 15;
             ex2GameCorrectHits = 0;
             document.getElementById('ex2-game-timer').textContent = ex2GameTimeLeft + 's';
             const area = document.getElementById('ex2-game-area');
@@ -3118,106 +3275,6 @@
                 }
             }, 4000);
         }
-// ══════════════════════════════════════════
-// EX2 MATCH — Matching Table
-// ══════════════════════════════════════════
-let matchPairs = [];
-let matchSelected = null;
-
-function startMatch() {
-    matchPairs = words.map(w => ({ english: w.english, french: w.french }));
-    matchSelected = null;
-    document.getElementById('stepLabel').textContent = 'Exercice 2 — Association';
-    buildMatchTable();
-    updateMatchCounter();
-    showScreen('screen-match');
-}
-
-function buildMatchTable() {
-    const englishWords = shuffle(matchPairs.map(p => p.english));
-    const frenchWords  = shuffle(matchPairs.map(p => p.french));
-    const tbody = document.getElementById('match-tbody');
-    tbody.innerHTML = '';
-    for (let i = 0; i < matchPairs.length; i++) {
-        const tr = document.createElement('tr');
-        const makeCell = (lang, word) => {
-            const td = document.createElement('td');
-            const span = document.createElement('span');
-            span.className = 'match-cell';
-            span.textContent = word;
-            span.dataset.lang = lang;
-            span.dataset.word = word;
-            span.addEventListener('click', () => onMatchCellClick(span));
-            td.appendChild(span);
-            return td;
-        };
-        tr.appendChild(makeCell('en', englishWords[i]));
-        tr.appendChild(makeCell('fr', frenchWords[i]));
-        tbody.appendChild(tr);
-    }
-}
-
-function onMatchCellClick(cell) {
-    if (cell.classList.contains('matched')) return;
-
-    // Tap same cell again = deselect
-    if (matchSelected && matchSelected.cell === cell) {
-        cell.classList.remove('selected');
-        matchSelected = null;
-        return;
-    }
-
-    // Tap same language = switch selection
-    if (matchSelected && matchSelected.lang === cell.dataset.lang) {
-        matchSelected.cell.classList.remove('selected');
-        cell.classList.add('selected');
-        matchSelected = { lang: cell.dataset.lang, word: cell.dataset.word, cell };
-        return;
-    }
-
-    // Nothing selected yet = select
-    if (!matchSelected) {
-        cell.classList.add('selected');
-        matchSelected = { lang: cell.dataset.lang, word: cell.dataset.word, cell };
-        return;
-    }
-
-    // Two different languages selected — check pair
-    const enWord = matchSelected.lang === 'en' ? matchSelected.word : cell.dataset.word;
-    const frWord = matchSelected.lang === 'fr' ? matchSelected.word : cell.dataset.word;
-    const isCorrect = words.some(w => w.english === enWord && w.french === frWord);
-
-    if (isCorrect) {
-        matchSelected.cell.classList.remove('selected');
-        matchSelected.cell.classList.add('matched');
-        cell.classList.add('matched');
-        matchSelected = null;
-        matchPairs = matchPairs.filter(p => !(p.english === enWord && p.french === frWord));
-        updateMatchCounter();
-        if (matchPairs.length === 0) {
-            setTimeout(() => {
-                const msgs = ["All matched!", "Parfait !", "Excellent !"];
-                showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx3);
-            }, 600);
-        }
-    } else {
-        const cellA = matchSelected.cell;
-        matchSelected.cell.classList.remove('selected');
-        matchSelected.cell.classList.add('wrong');
-        cell.classList.add('wrong');
-        matchSelected = null;
-        loseLife();
-        setTimeout(() => {
-            cellA.classList.remove('wrong');
-            cell.classList.remove('wrong');
-        }, 700);
-    }
-}
-
-function updateMatchCounter() {
-    const matched = words.length - matchPairs.length;
-    document.getElementById('match-counter').textContent = `${matched} / ${words.length} paires trouvées`;
-}
 
         // ══════════════════════════════════════════
         // EX 3 — Partial word typing
@@ -3226,7 +3283,6 @@ function updateMatchCounter() {
             ex3Queue = shuffle([...words]);
             ex3Index = 0;
             ex3Incorrect = [];
-            document.getElementById('stepLabel').textContent = 'Exercice 3';
             showScreen('screen-ex3');
             loadEx3();
         }
@@ -3316,7 +3372,6 @@ function updateMatchCounter() {
 
         function startEx3Retest() {
             ex3RetestIndex = 0;
-            document.getElementById('stepLabel').textContent = 'Exercice 3 — Révision';
             showScreen('screen-ex3-retest');
             loadEx3Retest();
         }
@@ -3379,6 +3434,7 @@ function updateMatchCounter() {
                 ex3RetestAttempts++;
                 input.classList.add('wrong');
                 triggerGlow('wrong');
+                retestAllCorrect = false;
 
                 if (ex3RetestAttempts >= 2) {
                     showFeedback('ex3rt-feedback', 'wrong', `✗ La bonne réponse était : "${input.dataset.answer}"`);
@@ -3407,7 +3463,6 @@ function updateMatchCounter() {
         }
 
         function showSessionComplete() {
-            document.getElementById('stepLabel').textContent = 'Terminé !';
             document.getElementById('progressBar').style.width = '100%';
 
             const totalChunks = Math.ceil(fullWordList.length / 10);
@@ -3444,8 +3499,30 @@ function updateMatchCounter() {
                 btnNext.style.display = 'none';
             }
 
-            // Sync progress! 10 points per word correct on first try, + basic course progress
-            const scoreGained = firstTryCorrect * 10;
+            // Calculate score with bonuses
+            const baseScore = (firstTryCorrect * 10) + (secondTryCorrect * 5);
+            const perfectLivesBonus = playerLives === MAX_LIVES ? 10 : 0;
+            const hasRetest = (ex1Incorrect.length > 0 || ex3Incorrect.length > 0);
+            const perfectRetestBonus = hasRetest && retestAllCorrect ? 10 : 0;
+            const scoreGained = baseScore + perfectLivesBonus + perfectRetestBonus;
+
+            // Update score display
+            document.getElementById('stat-score').textContent = `${scoreGained} pts`;
+
+            // Show bonus breakdown if any bonuses earned
+            const bonuses = [];
+            if (firstTryCorrect > 0) bonuses.push({ label: `${firstTryCorrect} × premier essai correct`, pts: firstTryCorrect * 10 });
+            if (secondTryCorrect > 0) bonuses.push({ label: `${secondTryCorrect} × deuxième essai correct`, pts: secondTryCorrect * 5 });
+            if (perfectLivesBonus) bonuses.push({ label: '🛡️ Toutes vies conservées', pts: 10 });
+            if (perfectRetestBonus) bonuses.push({ label: '⭐ Révision parfaite', pts: 10 });
+
+            const bonusDiv = document.getElementById('stat-bonuses');
+            const bonusList = document.getElementById('stat-bonus-list');
+            bonusList.innerHTML = bonuses.map(b =>
+                `<div style="display:flex; justify-content:space-between;"><span>${b.label}</span><span style="color:var(--accent); font-weight:600;">+${b.pts}</span></div>`
+            ).join('');
+            bonusDiv.style.display = bonuses.length > 0 ? 'block' : 'none';
+
             syncProgressToServer(scoreGained);
 
             showScreen('screen-complete');
@@ -3456,12 +3533,13 @@ function updateMatchCounter() {
             totalSteps = words.length * 4;
             sessionStartTime = Date.now();
             firstTryCorrect = 0;
+            secondTryCorrect = 0;
+            retestAllCorrect = true;
             wordErrors = {};
             initLives();
             updateProgress();
             document.getElementById('header-home-btn').classList.remove('hidden');
             document.getElementById('header-progress-wrap').style.display = 'block';
-            document.getElementById('stepLabel').style.display = 'block';
             showScreen('screen-encounter');
             startEncounter();
         }
@@ -3486,7 +3564,6 @@ function updateMatchCounter() {
             document.getElementById('header-home-btn').classList.add('hidden');
             document.getElementById('header-logo').style.display = 'block';
             document.getElementById('header-progress-wrap').style.display = 'none';
-            document.getElementById('stepLabel').style.display = 'none';
 
             try {
                 const response = await fetch(INDEX_FILE);
@@ -3588,7 +3665,6 @@ async function fetchLeaderboard(courseKey) {
             document.getElementById('header-home-btn').classList.add('hidden');
             document.getElementById('header-logo').style.display = 'none';
             document.getElementById('header-progress-wrap').style.display = 'none';
-            document.getElementById('stepLabel').style.display = 'none';
 
             try {
                 const response = await fetch(WORD_LIST_FILE);
@@ -3628,13 +3704,14 @@ async function fetchLeaderboard(courseKey) {
             stepsCompleted = 0;
             sessionStartTime = Date.now();
             firstTryCorrect = 0;
+            secondTryCorrect = 0;
+            retestAllCorrect = true;
             wordErrors = {};
             initLives();
             updateProgress();
 
             document.getElementById('header-home-btn').classList.remove('hidden');
             document.getElementById('header-progress-wrap').style.display = 'block';
-            document.getElementById('stepLabel').style.display = 'block';
 
             showScreen('screen-encounter');
             startEncounter();
