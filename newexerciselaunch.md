@@ -3169,24 +3169,24 @@
                     // Part 1 done: go to EX1
                     const msgs = ["Now let's test your memory!", "Exercise time!", "Keep going!"];
                     showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx1);
-} else {
-    // Part 2 done: go to Match
-    const msgs = ["You're doing so well!", "Almost there!", "Fantastic!"];
-    document.getElementById('transition-msg-text').textContent = msgs[Math.floor(Math.random() * msgs.length)];
-    showScreen('screen-transition');
-    setTimeout(() => {
-        try {
-            console.log('⭐ match setTimeout fired, words:', words ? words.length : 'UNDEFINED');
-            matchPairs = words.map(w => ({ english: w.english, french: w.french }));
-            matchSelected = null;
-            buildMatchTable();
-            updateMatchCounter();
-            showScreen('screen-match');
-        } catch(e) {
-            console.error('💥 Match error:', e.message, e.stack);
+				} else {
+    			// Part 2 done: go to Match
+    			const msgs = ["You're doing so well!", "Almost there!", "Fantastic!"];
+    			document.getElementById('transition-msg-text').textContent = msgs[Math.floor(Math.random() * msgs.length)];
+    			showScreen('screen-transition');
+    			setTimeout(() => {
+        		try {
+            		console.log('⭐ match setTimeout fired, words:', words ? words.length : 'UNDEFINED');
+            		matchPairs = words.map(w => ({ english: w.english, french: w.french }));
+            		matchSelected = null;
+            		buildMatchTable();
+            		updateMatchCounter();
+            		showScreen('screen-match');
+        	} catch(e) {
+            	console.error('💥 Match error:', e.message, e.stack);
         }
     }, 2500);
-}
+	}
                 return;
             }
 
