@@ -1199,7 +1199,6 @@
             <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
         </div>
         <div class="lives-container" id="lives-container" style="display:none;"></div>
-        <div class="step-label" id="stepLabel" style="display:none;">Première rencontre</div>
         <div id="header-profile-btn-container" style="display:none; margin-left: auto;">
             <button class="avatar-btn" id="header-avatar-btn" style="width: 40px; height: 40px; font-size: 1.2rem;"
                 onclick="showScreen('screen-profile-own')">🐍</button>
@@ -1727,7 +1726,6 @@
 ══════════════════════════════════════════ -->
     <div class="screen" id="screen-encounter">
         <div class="card">
-            <div class="phase-tag">Première rencontre</div>
             <div class="word-display" id="enc-word"></div>
             <div class="translation-display" id="enc-translation"></div>
             <div style="display: flex; gap: 10px; width: 100%; margin-bottom: 8px;">
@@ -1768,7 +1766,6 @@
     <!-- EX1 RETEST (native → TL) -->
     <div class="screen" id="screen-ex1-retest">
         <div class="card">
-            <div class="phase-tag" style="background:#FFE5E5;color:#9B2226;">Révision</div>
             <div class="section-title mt-4">Révision des mots manqués</div>
             <div class="section-sub mt-8">Cette fois, vous voyez le mot en anglais et choisissez la bonne traduction
                 française.</div>
@@ -1809,7 +1806,6 @@
 ══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex2-intro">
         <div class="card" style="text-align:center;">
-            <div class="phase-tag">Exercice 2</div>
             <div class="section-title mt-4">Tap the Translation</div>
             <div class="section-sub mt-8">
                 Trouvez et tapez sur la bonne traduction en anglais le plus de fois possible en 15 secondes !<br><br>
@@ -1865,7 +1861,6 @@
 ══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex3-retest">
         <div class="card">
-            <div class="phase-tag" style="background:#FFE5E5;color:#9B2226;">Révision</div>
             <div class="section-title mt-4">Révision des mots manqués (Ex3)</div>
             <div class="section-sub mt-8">Mémorisez le mot puis tapez-le de mémoire !</div>
         </div>
@@ -2930,7 +2925,6 @@
             const w = words[encounterIndex];
             document.getElementById('enc-word').textContent = w.english;
             document.getElementById('enc-translation').textContent = w.french;
-            document.getElementById('stepLabel').textContent = `Mot ${encounterIndex + 1} / ${words.length}`;
 
             setTimeout(() => {
                 playAudio(false);
@@ -2951,7 +2945,6 @@
             ex1Queue = [...words];
             ex1Index = 0;
             ex1Incorrect = [];
-            document.getElementById('stepLabel').textContent = 'Exercice 1';
             showScreen('screen-ex1');
             loadEx1();
         }
@@ -3029,7 +3022,6 @@
         function startEx1Retest() {
             ex1RetestQueue = [...ex1Incorrect];
             ex1RetestIndex = 0;
-            document.getElementById('stepLabel').textContent = 'Exercice 1 — Révision';
             showScreen('screen-ex1-retest');
             loadEx1Retest();
         }
@@ -3094,7 +3086,6 @@
             ex2FullQueue = shuffle([...words]);
             ex2GameQueue = ex2FullQueue.slice(0, 5);
             ex2GameIndex = 0;
-            document.getElementById('stepLabel').textContent = 'Exercice 2 (1/2)';
             showScreen('screen-ex2-intro');
             document.querySelector('#screen-ex2-intro .btn-primary').setAttribute('onclick', 'startEx2Part1Game()');
         }
@@ -3108,7 +3099,6 @@
         function startEx2Part2() {
             ex2GameQueue = ex2FullQueue.slice(5);
             ex2GameIndex = 0;
-            document.getElementById('stepLabel').textContent = 'Exercice 2 (2/2)';
             showScreen('screen-ex2-intro');
             document.querySelector('#screen-ex2-intro .btn-primary').setAttribute('onclick', 'startEx2Part2Game()');
         }
@@ -3288,7 +3278,6 @@
             ex3Queue = shuffle([...words]);
             ex3Index = 0;
             ex3Incorrect = [];
-            document.getElementById('stepLabel').textContent = 'Exercice 3';
             showScreen('screen-ex3');
             loadEx3();
         }
@@ -3378,7 +3367,6 @@
 
         function startEx3Retest() {
             ex3RetestIndex = 0;
-            document.getElementById('stepLabel').textContent = 'Exercice 3 — Révision';
             showScreen('screen-ex3-retest');
             loadEx3Retest();
         }
@@ -3470,7 +3458,6 @@
         }
 
         function showSessionComplete() {
-            document.getElementById('stepLabel').textContent = 'Terminé !';
             document.getElementById('progressBar').style.width = '100%';
 
             const totalChunks = Math.ceil(fullWordList.length / 10);
