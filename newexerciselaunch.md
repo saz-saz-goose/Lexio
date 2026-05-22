@@ -3165,27 +3165,19 @@
                 stepsCompleted++;
                 updateProgress();
                 // Determine which part just finished
-                if (ex2CurrentPart === 1) {
-
-                   // Part 1 done: go to EX1
-
-                   const msgs = \["Now let's test your memory!", "Exercise time!", "Keep going!"];
-
-                   showTransition(msgs\[Math.floor(Math.random() \* msgs.length)], startEx1);
-
-               } else {
-
-                   // Part 2 done: go to Match
-
-                   const msgs = \["You're doing so well!", "Almost there!", "Fantastic!"];
-
-                   showTransition(msgs\[Math.floor(Math.random() \* msgs.length)], startMatch);
-
-               }
+               if (ex2CurrentPart === 1) {
+                    // Part 1 done: go to EX1
+                    const msgs = ["Now let's test your memory!", "Exercise time!", "Keep going!"];
+                    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx1);
+                } else {
+                    // Part 2 done: go to Match
+                    const msgs = ["You're doing so well!", "Almost there!", "Fantastic!"];
+                    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startMatch);
+                }
 
                return;
 
-           }
+           	}
 
 
             const w = ex2GameQueue[ex2GameIndex];
