@@ -1184,38 +1184,38 @@
             color: var(--ink-light);
         }
 
-/* ── MATCH TABLE ── */
-.match-table-wrap {
+	/* ── MATCH TABLE ── */
+	.match-table-wrap {
     width: 100%;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-}
-.match-table { width: 100%; border-collapse: collapse; }
-.match-table th {
+	}
+	.match-table { width: 100%; border-collapse: collapse; }
+	.match-table th {
     font-size: 0.72rem; font-weight: 600; letter-spacing: 1.2px;
     text-transform: uppercase; color: var(--ink-light);
     padding: 12px 16px; background: var(--bg);
     border-bottom: 1px solid var(--border); text-align: left;
-}
-.match-table td { padding: 0; border-bottom: 1px solid var(--border); width: 50%; }
-.match-table tr:last-child td { border-bottom: none; }
-.match-cell {
+	}
+	.match-table td { padding: 0; border-bottom: 1px solid var(--border); width: 50%; }
+	.match-table tr:last-child td { border-bottom: none; }
+	.match-cell {
     display: block; width: 100%; padding: 16px; cursor: pointer;
     font-size: 0.95rem; color: var(--ink);
     transition: background 0.15s, color 0.15s;
     user-select: none; -webkit-user-select: none;
-}
-.match-cell.selected { background: var(--accent-light); color: var(--accent); font-weight: 500; }
-.match-cell.wrong { background: var(--wrong-bg); color: var(--wrong); }
-.match-cell.matched { opacity: 0; transition: opacity 0.4s ease; pointer-events: none; 
-}
+	}
+	.match-cell.selected { background: var(--accent-light); color: var(--accent); font-weight: 500; }
+	.match-cell.wrong { background: var(--wrong-bg); color: var(--wrong); }
+	.match-cell.matched { opacity: 0; transition: opacity 0.4s ease; pointer-events: none; 
+	}
     </style>
-</head>
+	</head>
 
-<body>
+	<body>
 
     <div class="app-header">
         <div class="logo-area">
@@ -1236,7 +1236,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: LOADING SCREEN
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-loading">
         <div class="card" style="text-align: center; padding: 40px 20px;">
             <div class="logo" style="font-size: 2.5rem; margin-bottom: 20px;">Lexio</div>
@@ -1247,7 +1247,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: ERROR SCREEN (CORS / HTTP)
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-error">
         <div class="card" style="border-color: var(--wrong); background: var(--card); padding: 32px 24px;">
             <div class="phase-tag" style="background: var(--wrong-bg); color: var(--wrong); margin-bottom: 20px;">Erreur
@@ -1284,7 +1284,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: AUTH & PROFILE
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-signup">
         <div class="card">
             <div class="logo" style="text-align: center; font-size: 2rem; margin-bottom: 24px;">Lexio</div>
@@ -1669,7 +1669,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: HOME SCREEN (Course Dashboard)
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-home">
         <div class="home-hero">
             <div class="home-title">Lexio</div>
@@ -1713,7 +1713,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: COURSE WORD PREVIEW
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-word-preview">
         <div class="card" style="padding: 24px; width: 100%;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
@@ -1752,7 +1752,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: FIRST ENCOUNTER — word intro
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-encounter">
         <div class="card">
             <div class="word-display" id="enc-word"></div>
@@ -1776,7 +1776,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: EX1 — MCQ (FR word → EN options)
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex1">
         <div class="question-prompt">
             <div class="q-word" id="ex1-word"></div>
@@ -1813,7 +1813,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: TRANSITION
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-transition">
         <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
             <svg class="transition-icon" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"
@@ -1831,7 +1831,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: EX2 INTRO
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex2-intro">
         <div class="card" style="text-align:center;">
             <div class="section-title mt-4">Tap the Translation</div>
@@ -1846,7 +1846,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: EX2 GAME
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex2-game">
         <div class="question-prompt">
             <div class="game-timer" id="ex2-game-timer">15s</div>
@@ -1857,11 +1857,11 @@
         </div>
 
         <div class="word-counter" id="ex2-game-counter" style="margin-top:16px;"></div>
-    </div>
-<!-- ══════════════════════════════════════════
- SCREEN: EX2 MATCH — Matching table
-══════════════════════════════════════════ -->
-<div class="screen" id="screen-match">
+    </div>	
+	<!-- ══════════════════════════════════════════
+ 	SCREEN: EX2 MATCH — Matching table
+	══════════════════════════════════════════ -->
+	<div class="screen" id="screen-match">
     <div class="question-prompt">
 
         <div class="q-sub" style="margin-top:8px;">Associez chaque mot à sa traduction</div>
@@ -1874,11 +1874,11 @@
     </div>
     <div class="feedback-banner" id="match-feedback"></div>
     <div class="word-counter" id="match-counter"></div>
-</div>
+	</div>
 
     <!-- ══════════════════════════════════════════
      SCREEN: EX3 — Partial word typing
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex3">
         <div class="question-prompt">
             <div class="q-word" id="ex3-french"></div>
@@ -1901,7 +1901,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: EX3 RETEST
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex3-retest">
         <div class="card">
             <div class="section-title mt-4">Révision des mots manqués (Ex3)</div>
@@ -1927,7 +1927,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: SESSION COMPLETE
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-complete">
         <div class="complete-icon">🎉</div>
         <div class="complete-title" id="complete-title">Session terminée !</div>
@@ -1974,7 +1974,7 @@
 
     <!-- ══════════════════════════════════════════
      SCREEN: GAME OVER
-══════════════════════════════════════════ -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-game-over">
         <div class="complete-icon">💔</div>
         <div class="complete-title">Try Again!</div>
@@ -3329,9 +3329,9 @@
             buildMatchTable();
             updateMatchCounter();
             showScreen('screen-match');
-}
+	}
 
-function buildMatchTable() {
+	function buildMatchTable() {
     const englishWords = shuffle(matchPairs.map(p => p.english));
     const frenchWords  = shuffle(matchPairs.map(p => p.french));
     const tbody = document.getElementById('match-tbody');
@@ -3353,9 +3353,9 @@ function buildMatchTable() {
         tr.appendChild(makeCell('fr', frenchWords[i]));
         tbody.appendChild(tr);
     }
-}
+	}
 
-function onMatchCellClick(cell) {
+	function onMatchCellClick(cell) {
     if (cell.classList.contains('matched')) return;
 
     // Tap same cell again = deselect
@@ -3410,13 +3410,13 @@ function onMatchCellClick(cell) {
             cell.classList.remove('wrong');
         }, 700);
     }
-}
+	}
 
-function updateMatchCounter() {
+	function updateMatchCounter() {
     const matched = words.length - matchPairs.length;
     document.getElementById('match-counter').textContent = `${matched} / ${words.length} paires trouvées`;
-}
-        // ══════════════════════════════════════════
+	}
+    	// ══════════════════════════════════════════
         // EX 3 — Partial word typing
         // ══════════════════════════════════════════
         function startEx3() {
