@@ -3081,7 +3081,7 @@
             society_and_politics: '🏛️', arts_and_culture: '🎭',
             science_and_nature: '🔬', sport: '⚽', money_and_shopping: '🛍️',
             emotions_and_personality: '😊', clothes_and_appearance: '👗',
-            default: ' '
+            default: '📖'
         };
 
         let _themeNavStack = []; // for back navigation: [{label, fn}]
@@ -3104,16 +3104,15 @@
                     </div>
                     <div class="theme-topic-arrow">›</div>
                 `;
-                card.onclick = () => showThemeTopics(file);
+                card.onclick = () => showThemeTopics(file, cat);
                 grid.appendChild(card);
             });
             container.appendChild(grid);
         }
 
-        async function showThemeTopics(file) {
+        async function showThemeTopics(file, cat) {
             _themeNavStack.push({ label: `← ${file.title}`, fn: () => {
                 _themeNavStack.pop();
-                const cat = homeCategoriesData.find(c => c.type === 'themed');
                 showThemeLevels(cat);
             }});
             _renderThemeBackBtn();
