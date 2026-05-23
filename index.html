@@ -738,7 +738,57 @@
             text-align: center;
         }
 
-        /* ── LOADING SPINNER ── */
+        /* ── TEST OUT BUTTON (on course cards) ── */
+        .test-out-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .test-out-btn:hover {
+            background: var(--accent-light);
+        }
+
+        /* ── TEST OUT RESULTS ── */
+        .test-out-results-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+        .test-out-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .test-out-stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            font-weight: 600;
+            line-height: 1;
+        }
+        .test-out-stat-label {
+            font-size: 0.78rem;
+            color: var(--ink-light);
+            text-align: center;
+        }
+
+        
         .spinner {
             border: 4px solid var(--accent-light);
             border-top: 4px solid var(--accent);
@@ -1987,6 +2037,68 @@
             l'accueil</button>
     </div>
 
+    <!-- ══════════════════════════════════════════
+     SCREEN: TEST OUT — typing test
+    ══════════════════════════════════════════ -->
+    <div class="screen" id="screen-test-out">
+        <div class="card" style="text-align: center; padding: 20px 28px 16px;">
+            <div class="phase-tag">Test de niveau</div>
+            <div class="section-sub" style="margin-bottom: 0;">Tapez le mot anglais correspondant</div>
+        </div>
+
+        <div class="question-prompt">
+            <div class="q-label">En anglais, comment dit-on :</div>
+            <div class="q-word" id="test-out-french" style="margin: 12px 0;"></div>
+        </div>
+
+        <input class="type-input" id="test-out-input" type="text"
+            placeholder="Tapez le mot anglais..."
+            autocomplete="off" autocorrect="off" spellcheck="false"
+            onkeydown="if(event.key==='Enter') testOutCheck()" />
+
+        <button class="btn-primary" onclick="testOutCheck()">Vérifier</button>
+
+        <div class="feedback-banner" id="test-out-feedback"></div>
+        <button class="btn-primary hidden" id="test-out-next-btn" onclick="testOutNext()">Continuer →</button>
+
+        <div class="word-counter" id="test-out-counter"></div>
+
+        <button class="btn-primary" onclick="saveAndExitTestOut()"
+            style="background:#FFF; border: 1.5px solid var(--border); color: var(--ink-light); margin-top: 8px;">
+            💾 Sauvegarder et quitter
+        </button>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+     SCREEN: TEST OUT RESULTS
+    ══════════════════════════════════════════ -->
+    <div class="screen" id="screen-test-out-results">
+        <div class="complete-icon">📊</div>
+        <div class="complete-title">Résultats du test</div>
+        <div class="section-sub" id="test-out-results-sub" style="text-align: center; margin-top: 4px; line-height: 1.6;"></div>
+
+        <div class="test-out-results-bar">
+            <div class="test-out-stat">
+                <div class="test-out-stat-num" id="test-out-known-count" style="color: var(--correct);">0</div>
+                <div class="test-out-stat-label">Mots connus ✓</div>
+            </div>
+            <div class="test-out-stat" style="border-left: 1px solid var(--border); padding-left: 24px;">
+                <div class="test-out-stat-num" id="test-out-unknown-count" style="color: var(--wrong);">0</div>
+                <div class="test-out-stat-label">À apprendre</div>
+            </div>
+        </div>
+
+        <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn-primary" id="test-out-start-filtered-btn" onclick="startCourseFromTestOut()">
+                Étudier les mots à apprendre →
+            </button>
+            <button class="btn-primary" onclick="goToHome()"
+                style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent);">
+                Retour à l'accueil
+            </button>
+        </div>
+    </div>
+
     <script>
         console.log('Script tag started parsing');
         // ══════════════════════════════════════════
@@ -2043,7 +2155,7 @@
                 sbClient.auth.onAuthStateChange(async (event, session) => {
                     if (event === 'SIGNED_IN') {
                         // Don't interrupt an active game session (e.g. on token refresh)
-                        const activeGameScreens = ['screen-encounter','screen-ex1','screen-ex2-game','screen-match','screen-ex3','screen-ex1-retest','screen-ex3-retest','screen-transition'];
+                        const activeGameScreens = ['screen-encounter','screen-ex1','screen-ex2-game','screen-match','screen-ex3','screen-ex1-retest','screen-ex3-retest','screen-transition','screen-test-out'];
                         const inGame = activeGameScreens.some(id => document.getElementById(id)?.classList.contains('active'));
                         if (inGame) return;
                         currentUser = session.user;
@@ -2462,6 +2574,15 @@
         let totalSteps = 0;
         let stepsCompleted = 0;
 
+        // ── TEST OUT STATE ──
+        let testOutQueue = [];
+        let testOutIndex = 0;
+        let testOutKnown = [];
+        let testOutUnknown = [];
+        let testOutCourseKey = '';
+        let testOutCourseName = '';
+        let testOutAllWords = [];
+
         // ══════════════════════════════════════════
         // UTILS
         // ══════════════════════════════════════════
@@ -2748,6 +2869,15 @@
                 const act = document.createElement('span');
                 act.textContent = 'Étudier →';
                 footer.appendChild(act);
+
+                if (currentProfile) {
+                    const testBtn = document.createElement('button');
+                    testBtn.className = 'test-out-btn';
+                    testBtn.textContent = '🎯 Tester';
+                    testBtn.title = 'Tester vos connaissances sur ce cours';
+                    testBtn.onclick = (e) => initiateTestOut(file.filename, file.title, e);
+                    footer.appendChild(testBtn);
+                }
 
                 card.appendChild(footer);
                 grid.appendChild(card);
@@ -3821,6 +3951,12 @@ async function fetchLeaderboard(courseKey) {
                 }
 
                 fullWordList = shuffle(parsedWords);
+
+                // If coming from a test-out, filter out words the user already knows
+                if (window._testOutKnownSet && window._testOutKnownSet.size > 0) {
+                    fullWordList = fullWordList.filter(w => !window._testOutKnownSet.has(normalizeString(w.english)));
+                    window._testOutKnownSet = null;
+                }
                 currentChunkIndex = 0;
 
                 await startCurrentChunk();
@@ -3864,6 +4000,182 @@ async function fetchLeaderboard(courseKey) {
             } else {
                 initializeDashboard();
             }
+        }
+
+        // ══════════════════════════════════════════
+        // TEST OUT
+        // ══════════════════════════════════════════
+        async function initiateTestOut(filename, title, e) {
+            if (e) e.stopPropagation();
+            if (!currentProfile) {
+                alert("Vous devez être connecté pour utiliser le test de niveau.");
+                return;
+            }
+            testOutCourseKey = 'word-lists/' + filename;
+            testOutCourseName = title || filename;
+            WORD_LIST_FILE = testOutCourseKey;
+            currentCourseName = testOutCourseName;
+
+            showScreen('screen-loading');
+            document.getElementById('loading-status').textContent = 'Chargement du test...';
+            document.getElementById('header-home-btn').classList.add('hidden');
+            document.getElementById('header-logo').style.display = 'none';
+            document.getElementById('header-progress-wrap').style.display = 'none';
+
+            try {
+                const response = await fetch(testOutCourseKey);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                const data = await response.json();
+                testOutAllWords = shuffle(parseWordList(data));
+
+                // Load saved progress if any
+                const saved = currentProfile?.courses_progress?.[testOutCourseKey]?.test_out;
+                const savedKnown = saved?.known_words || [];
+                const savedTested = new Set(saved?.tested_words || []);
+
+                testOutKnown = [...savedKnown];
+                // Unknown = tested before but not in known
+                testOutUnknown = testOutAllWords.filter(w =>
+                    savedTested.has(w.english) && !savedKnown.includes(w.english)
+                );
+                // Queue = words not yet tested at all
+                testOutQueue = testOutAllWords.filter(w => !savedTested.has(w.english));
+                testOutIndex = 0;
+
+                // If already fully tested, go straight to results
+                if (testOutQueue.length === 0) {
+                    showTestOutResults();
+                    return;
+                }
+
+                totalSteps = testOutAllWords.length;
+                stepsCompleted = savedTested.size;
+                document.getElementById('header-home-btn').classList.remove('hidden');
+                document.getElementById('header-logo').style.display = 'none';
+                document.getElementById('header-progress-wrap').style.display = 'block';
+                document.getElementById('lives-container').style.display = 'none';
+                updateProgress();
+                showScreen('screen-test-out');
+                loadTestOutWord();
+            } catch (err) {
+                console.error('Test out failed:', err);
+                showScreen('screen-error');
+            }
+        }
+
+        function loadTestOutWord() {
+            if (testOutIndex >= testOutQueue.length) {
+                showTestOutResults();
+                return;
+            }
+            const w = testOutQueue[testOutIndex];
+            document.getElementById('test-out-french').textContent = w.french || w.english;
+            document.getElementById('test-out-counter').textContent =
+                `${testOutIndex + 1} / ${testOutQueue.length} mots restants`;
+            document.getElementById('test-out-feedback').className = 'feedback-banner';
+            document.getElementById('test-out-next-btn').classList.add('hidden');
+            const input = document.getElementById('test-out-input');
+            input.value = '';
+            input.className = 'type-input';
+            input.dataset.answer = w.english;
+            input.dataset.checked = 'false';
+            input.disabled = false;
+            setTimeout(() => input.focus(), 100);
+        }
+
+        function testOutCheck() {
+            const input = document.getElementById('test-out-input');
+            if (input.dataset.checked === 'true') return;
+            const answer = input.dataset.answer;
+            const val = input.value.trim();
+            if (!val) return;
+
+            input.dataset.checked = 'true';
+            input.disabled = true;
+
+            const isCorrect = normalizeString(val) === normalizeString(answer);
+            if (isCorrect) {
+                input.classList.add('correct');
+                triggerGlow('correct');
+                showFeedback('test-out-feedback', 'correct', '✓ Correct — mot connu !');
+                testOutKnown.push(answer);
+            } else {
+                input.classList.add('wrong');
+                triggerGlow('wrong');
+                showFeedback('test-out-feedback', 'wrong', `✗ La bonne réponse était : "${answer}"`);
+                testOutUnknown.push(testOutQueue[testOutIndex]);
+            }
+
+            stepsCompleted++;
+            updateProgress();
+            document.getElementById('test-out-next-btn').classList.remove('hidden');
+            // Auto-save after each answer
+            _persistTestOutProgress();
+        }
+
+        function testOutNext() {
+            testOutIndex++;
+            loadTestOutWord();
+        }
+
+        async function _persistTestOutProgress() {
+            if (!currentProfile || !currentUser) return;
+            if (!currentProfile.courses_progress) currentProfile.courses_progress = {};
+            if (!currentProfile.courses_progress[testOutCourseKey]) {
+                currentProfile.courses_progress[testOutCourseKey] = { seen: 0, learning: 0, learnt: 0, score: 0 };
+            }
+            const testedWords = [
+                ...testOutKnown,
+                ...testOutUnknown.map(w => w.english)
+            ];
+            currentProfile.courses_progress[testOutCourseKey].test_out = {
+                in_progress: testOutIndex < testOutQueue.length,
+                known_words: testOutKnown,
+                tested_words: testedWords,
+                total_words: testOutAllWords.length
+            };
+            currentProfile.courses_progress[testOutCourseKey].learnt = testOutKnown.length;
+            await sbClient.from('profiles').update({
+                courses_progress: currentProfile.courses_progress
+            }).eq('id', currentUser.id);
+        }
+
+        async function saveAndExitTestOut() {
+            await _persistTestOutProgress();
+            goToHome();
+        }
+
+        function showTestOutResults() {
+            const knownCount = testOutKnown.length;
+            const unknownCount = testOutUnknown.length;
+            const total = knownCount + unknownCount;
+
+            document.getElementById('test-out-known-count').textContent = knownCount;
+            document.getElementById('test-out-unknown-count').textContent = unknownCount;
+
+            if (unknownCount === 0) {
+                document.getElementById('test-out-results-sub').textContent =
+                    `Impressionnant ! Vous connaissez déjà tous les mots de ce cours.`;
+                document.getElementById('test-out-start-filtered-btn').style.display = 'none';
+            } else {
+                const pct = total > 0 ? Math.round((knownCount / total) * 100) : 0;
+                document.getElementById('test-out-results-sub').textContent =
+                    `Vous connaissez ${knownCount} mot${knownCount !== 1 ? 's' : ''} sur ${total} (${pct}%). ` +
+                    `Concentrez-vous sur les ${unknownCount} restant${unknownCount !== 1 ? 's' : ''}.`;
+                document.getElementById('test-out-start-filtered-btn').style.display = 'block';
+            }
+
+            _persistTestOutProgress();
+            document.getElementById('header-progress-wrap').style.display = 'none';
+            document.getElementById('header-home-btn').classList.remove('hidden');
+            document.getElementById('header-logo').style.display = 'none';
+            showScreen('screen-test-out-results');
+        }
+
+        function startCourseFromTestOut() {
+            // Pass known words to loadWordList via a temporary global set
+            window._testOutKnownSet = new Set(testOutKnown.map(w => normalizeString(w)));
+            loadWordList();
         }
 
       async function syncProgressToServer(scoreGained) {
