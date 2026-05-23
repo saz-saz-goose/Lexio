@@ -1,160 +1,398 @@
 {
-  "meta": {
-    "title": "Bac-Aligned English Vocabulary",
-    "level": "B2 (approx. end of lycée / Terminale)",
-    "source": "AI-curated based on the French Éducation Nationale programme for English (LV1/LV2) in lycée, aligned with the Baccalauréat. Themes reflect the 5 axes thématiques of the Bac programme (2021 reform).",
-    "description": "English vocabulary for the five thematic axes of the French lycée English curriculum: L'art de vivre ensemble, Territoire et mémoire, Expressions et représentations, Innovations scientifiques et responsabilités, and Rencontres avec l'autre. Suitable for B2 CEFR level.",
-    "notes": "Words are selected for productive use in written and oral baccalauréat tasks."
-  },
-  "axes": {
-    "art_de_vivre_ensemble": {
-      "label": "L'art de vivre ensemble (The Art of Living Together)",
+  "categories": {
+    "L'art de vivre ensemble (The Art of Living Together)": {
       "words": [
-        { "word": "coexistence", "type": "noun" },
-        { "word": "integration", "type": "noun" },
-        { "word": "assimilation", "type": "noun" },
-        { "word": "discrimination", "type": "noun" },
-        { "word": "prejudice", "type": "noun" },
-        { "word": "tolerance", "type": "noun" },
-        { "word": "solidarity", "type": "noun" },
-        { "word": "community", "type": "noun" },
-        { "word": "cohesion", "type": "noun" },
-        { "word": "inclusivity", "type": "noun" },
-        { "word": "marginalization", "type": "noun" },
-        { "word": "inequality", "type": "noun" },
-        { "word": "welfare", "type": "noun" },
-        { "word": "philanthropy", "type": "noun" },
-        { "word": "volunteerism", "type": "noun" },
-        { "word": "civic duty", "type": "noun" },
-        { "word": "governance", "type": "noun" },
-        { "word": "grassroots", "type": "adjective" },
-        { "word": "empathy", "type": "noun" },
-        { "word": "compromise", "type": "noun/verb" },
-        { "word": "dialogue", "type": "noun" },
-        { "word": "mediation", "type": "noun" },
-        { "word": "conflict resolution", "type": "noun" },
-        { "word": "mutual respect", "type": "noun" },
-        { "word": "shared values", "type": "noun" }
+        {
+          "english": "coexistence"
+        },
+        {
+          "english": "integration"
+        },
+        {
+          "english": "assimilation"
+        },
+        {
+          "english": "discrimination"
+        },
+        {
+          "english": "prejudice"
+        },
+        {
+          "english": "tolerance"
+        },
+        {
+          "english": "solidarity"
+        },
+        {
+          "english": "community"
+        },
+        {
+          "english": "cohesion"
+        },
+        {
+          "english": "inclusivity"
+        },
+        {
+          "english": "marginalization"
+        },
+        {
+          "english": "inequality"
+        },
+        {
+          "english": "welfare"
+        },
+        {
+          "english": "philanthropy"
+        },
+        {
+          "english": "volunteerism"
+        },
+        {
+          "english": "civic duty"
+        },
+        {
+          "english": "governance"
+        },
+        {
+          "english": "grassroots"
+        },
+        {
+          "english": "empathy"
+        },
+        {
+          "english": "compromise"
+        },
+        {
+          "english": "dialogue"
+        },
+        {
+          "english": "mediation"
+        },
+        {
+          "english": "conflict resolution"
+        },
+        {
+          "english": "mutual respect"
+        },
+        {
+          "english": "shared values"
+        }
       ]
     },
-    "territoire_et_memoire": {
-      "label": "Territoire et mémoire (Territory and Memory)",
+    "Territoire et mémoire (Territory and Memory)": {
       "words": [
-        { "word": "colonisation", "type": "noun" },
-        { "word": "decolonisation", "type": "noun" },
-        { "word": "empire", "type": "noun" },
-        { "word": "conquest", "type": "noun" },
-        { "word": "indigenous", "type": "adjective" },
-        { "word": "diaspora", "type": "noun" },
-        { "word": "exile", "type": "noun" },
-        { "word": "refugee", "type": "noun" },
-        { "word": "migration", "type": "noun" },
-        { "word": "border", "type": "noun" },
-        { "word": "sovereignty", "type": "noun" },
-        { "word": "identity", "type": "noun" },
-        { "word": "commemoration", "type": "noun" },
-        { "word": "memorial", "type": "noun" },
-        { "word": "genocide", "type": "noun" },
-        { "word": "apartheid", "type": "noun" },
-        { "word": "segregation", "type": "noun" },
-        { "word": "legacy", "type": "noun" },
-        { "word": "reconciliation", "type": "noun" },
-        { "word": "restitution", "type": "noun" },
-        { "word": "reparation", "type": "noun" },
-        { "word": "trauma", "type": "noun" },
-        { "word": "oral history", "type": "noun" },
-        { "word": "archive", "type": "noun" },
-        { "word": "heritage", "type": "noun" }
+        {
+          "english": "colonisation"
+        },
+        {
+          "english": "decolonisation"
+        },
+        {
+          "english": "empire"
+        },
+        {
+          "english": "conquest"
+        },
+        {
+          "english": "indigenous"
+        },
+        {
+          "english": "diaspora"
+        },
+        {
+          "english": "exile"
+        },
+        {
+          "english": "refugee"
+        },
+        {
+          "english": "migration"
+        },
+        {
+          "english": "border"
+        },
+        {
+          "english": "sovereignty"
+        },
+        {
+          "english": "identity"
+        },
+        {
+          "english": "commemoration"
+        },
+        {
+          "english": "memorial"
+        },
+        {
+          "english": "genocide"
+        },
+        {
+          "english": "apartheid"
+        },
+        {
+          "english": "segregation"
+        },
+        {
+          "english": "legacy"
+        },
+        {
+          "english": "reconciliation"
+        },
+        {
+          "english": "restitution"
+        },
+        {
+          "english": "reparation"
+        },
+        {
+          "english": "trauma"
+        },
+        {
+          "english": "oral history"
+        },
+        {
+          "english": "archive"
+        },
+        {
+          "english": "heritage"
+        }
       ]
     },
-    "expressions_et_representations": {
-      "label": "Expressions et représentations (Expressions and Representations)",
+    "Expressions et représentations (Expressions and Representations)": {
       "words": [
-        { "word": "censorship", "type": "noun" },
-        { "word": "propaganda", "type": "noun" },
-        { "word": "satire", "type": "noun" },
-        { "word": "subversion", "type": "noun" },
-        { "word": "counter-culture", "type": "noun" },
-        { "word": "stereotype", "type": "noun" },
-        { "word": "representation", "type": "noun" },
-        { "word": "perspective", "type": "noun" },
-        { "word": "narrative", "type": "noun" },
-        { "word": "discourse", "type": "noun" },
-        { "word": "rhetoric", "type": "noun" },
-        { "word": "metaphor", "type": "noun" },
-        { "word": "symbolism", "type": "noun" },
-        { "word": "allegory", "type": "noun" },
-        { "word": "dystopia", "type": "noun" },
-        { "word": "utopia", "type": "noun" },
-        { "word": "genre", "type": "noun" },
-        { "word": "literary device", "type": "noun" },
-        { "word": "critique", "type": "noun" },
-        { "word": "aesthetic", "type": "noun/adjective" },
-        { "word": "interpretation", "type": "noun" },
-        { "word": "ambiguity", "type": "noun" },
-        { "word": "irony", "type": "noun" },
-        { "word": "self-expression", "type": "noun" },
-        { "word": "artistic freedom", "type": "noun" }
+        {
+          "english": "censorship"
+        },
+        {
+          "english": "propaganda"
+        },
+        {
+          "english": "satire"
+        },
+        {
+          "english": "subversion"
+        },
+        {
+          "english": "counter-culture"
+        },
+        {
+          "english": "stereotype"
+        },
+        {
+          "english": "representation"
+        },
+        {
+          "english": "perspective"
+        },
+        {
+          "english": "narrative"
+        },
+        {
+          "english": "discourse"
+        },
+        {
+          "english": "rhetoric"
+        },
+        {
+          "english": "metaphor"
+        },
+        {
+          "english": "symbolism"
+        },
+        {
+          "english": "allegory"
+        },
+        {
+          "english": "dystopia"
+        },
+        {
+          "english": "utopia"
+        },
+        {
+          "english": "genre"
+        },
+        {
+          "english": "literary device"
+        },
+        {
+          "english": "critique"
+        },
+        {
+          "english": "aesthetic"
+        },
+        {
+          "english": "interpretation"
+        },
+        {
+          "english": "ambiguity"
+        },
+        {
+          "english": "irony"
+        },
+        {
+          "english": "self-expression"
+        },
+        {
+          "english": "artistic freedom"
+        }
       ]
     },
-    "innovations_scientifiques": {
-      "label": "Innovations scientifiques et responsabilités (Scientific Innovations and Responsibilities)",
+    "Innovations scientifiques et responsabilités (Scientific Innovations and Responsibilities)": {
       "words": [
-        { "word": "breakthrough", "type": "noun" },
-        { "word": "research", "type": "noun" },
-        { "word": "clinical trial", "type": "noun" },
-        { "word": "ethics", "type": "noun" },
-        { "word": "bioethics", "type": "noun" },
-        { "word": "genetic engineering", "type": "noun" },
-        { "word": "artificial intelligence", "type": "noun" },
-        { "word": "algorithm", "type": "noun" },
-        { "word": "automation", "type": "noun" },
-        { "word": "disruption", "type": "noun" },
-        { "word": "sustainability", "type": "noun" },
-        { "word": "carbon neutrality", "type": "noun" },
-        { "word": "renewable", "type": "adjective" },
-        { "word": "nanotechnology", "type": "noun" },
-        { "word": "vaccine", "type": "noun" },
-        { "word": "epidemic", "type": "noun" },
-        { "word": "pandemic", "type": "noun" },
-        { "word": "regulation", "type": "noun" },
-        { "word": "accountability", "type": "noun" },
-        { "word": "surveillance", "type": "noun" },
-        { "word": "data privacy", "type": "noun" },
-        { "word": "disinformation", "type": "noun" },
-        { "word": "peer review", "type": "noun" },
-        { "word": "innovation", "type": "noun" },
-        { "word": "prototype", "type": "noun" }
+        {
+          "english": "breakthrough"
+        },
+        {
+          "english": "research"
+        },
+        {
+          "english": "clinical trial"
+        },
+        {
+          "english": "ethics"
+        },
+        {
+          "english": "bioethics"
+        },
+        {
+          "english": "genetic engineering"
+        },
+        {
+          "english": "artificial intelligence"
+        },
+        {
+          "english": "algorithm"
+        },
+        {
+          "english": "automation"
+        },
+        {
+          "english": "disruption"
+        },
+        {
+          "english": "sustainability"
+        },
+        {
+          "english": "carbon neutrality"
+        },
+        {
+          "english": "renewable"
+        },
+        {
+          "english": "nanotechnology"
+        },
+        {
+          "english": "vaccine"
+        },
+        {
+          "english": "epidemic"
+        },
+        {
+          "english": "pandemic"
+        },
+        {
+          "english": "regulation"
+        },
+        {
+          "english": "accountability"
+        },
+        {
+          "english": "surveillance"
+        },
+        {
+          "english": "data privacy"
+        },
+        {
+          "english": "disinformation"
+        },
+        {
+          "english": "peer review"
+        },
+        {
+          "english": "innovation"
+        },
+        {
+          "english": "prototype"
+        }
       ]
     },
-    "rencontres_avec_lautre": {
-      "label": "Rencontres avec l'autre (Encounters with the Other)",
+    "Rencontres avec l'autre (Encounters with the Other)": {
       "words": [
-        { "word": "encounter", "type": "noun/verb" },
-        { "word": "otherness", "type": "noun" },
-        { "word": "intercultural", "type": "adjective" },
-        { "word": "cross-cultural", "type": "adjective" },
-        { "word": "language barrier", "type": "noun" },
-        { "word": "misunderstanding", "type": "noun" },
-        { "word": "cultural shock", "type": "noun" },
-        { "word": "adaptation", "type": "noun" },
-        { "word": "immersion", "type": "noun" },
-        { "word": "exchange programme", "type": "noun" },
-        { "word": "diplomacy", "type": "noun" },
-        { "word": "negotiation", "type": "noun" },
-        { "word": "globalisation", "type": "noun" },
-        { "word": "cosmopolitan", "type": "adjective" },
-        { "word": "xenophobia", "type": "noun" },
-        { "word": "hospitality", "type": "noun" },
-        { "word": "curiosity", "type": "noun" },
-        { "word": "open-mindedness", "type": "noun" },
-        { "word": "ethnocentrism", "type": "noun" },
-        { "word": "cultural relativism", "type": "noun" },
-        { "word": "stereotype", "type": "noun" },
-        { "word": "bias", "type": "noun" },
-        { "word": "empathy", "type": "noun" },
-        { "word": "perspective-taking", "type": "noun" },
-        { "word": "bridge-building", "type": "noun" }
+        {
+          "english": "encounter"
+        },
+        {
+          "english": "otherness"
+        },
+        {
+          "english": "intercultural"
+        },
+        {
+          "english": "cross-cultural"
+        },
+        {
+          "english": "language barrier"
+        },
+        {
+          "english": "misunderstanding"
+        },
+        {
+          "english": "cultural shock"
+        },
+        {
+          "english": "adaptation"
+        },
+        {
+          "english": "immersion"
+        },
+        {
+          "english": "exchange programme"
+        },
+        {
+          "english": "diplomacy"
+        },
+        {
+          "english": "negotiation"
+        },
+        {
+          "english": "globalisation"
+        },
+        {
+          "english": "cosmopolitan"
+        },
+        {
+          "english": "xenophobia"
+        },
+        {
+          "english": "hospitality"
+        },
+        {
+          "english": "curiosity"
+        },
+        {
+          "english": "open-mindedness"
+        },
+        {
+          "english": "ethnocentrism"
+        },
+        {
+          "english": "cultural relativism"
+        },
+        {
+          "english": "stereotype"
+        },
+        {
+          "english": "bias"
+        },
+        {
+          "english": "empathy"
+        },
+        {
+          "english": "perspective-taking"
+        },
+        {
+          "english": "bridge-building"
+        }
       ]
     }
   }
