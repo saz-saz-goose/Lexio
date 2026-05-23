@@ -3598,9 +3598,9 @@
                     const msgs = ["Now let's test your memory!", "Exercise time!", "Keep going!"];
                     showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx1);
                 } else {
-                    // Part 2 done: go to Match
+                    // Part 2 done: go to Match (skip during revision)
                     const msgs = ["You're doing so well!", "Almost there!", "Fantastic!"];
-                    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startMatch);
+                    showTransition(msgs[Math.floor(Math.random() * msgs.length)], isRevisionSession ? startEx3 : startMatch);
                 }
 
                return;
@@ -4624,7 +4624,7 @@
             WORD_LIST_FILE = 'revision_session';
             currentCourseName = 'Révision';
 
-            totalSteps = words.length * 4;
+            totalSteps = words.length * 2; // ex1 + ex3 only
             stepsCompleted = 0;
             sessionStartTime = Date.now();
             firstTryCorrect = 0;
