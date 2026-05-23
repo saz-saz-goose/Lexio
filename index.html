@@ -1234,6 +1234,46 @@
             color: var(--ink-light);
         }
 
+        /* ── TEST OUT REMOVABLE CHIP ── */
+        .word-chip-removable {
+            position: relative;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 28px 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            transition: border-color 0.2s, opacity 0.2s;
+        }
+        .word-chip-removable:hover {
+            border-color: var(--accent);
+        }
+        .word-chip-remove-btn {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--wrong-bg);
+            color: var(--wrong);
+            border: none;
+            font-size: 0.7rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            transition: background 0.15s;
+            padding: 0;
+        }
+        .word-chip-remove-btn:hover {
+            background: var(--wrong);
+            color: white;
+        }
+
 	/* ── MATCH TABLE ── */
 	.match-table-wrap {
     width: 100%;
@@ -2090,6 +2130,14 @@
             </div>
         </div>
 
+        <!-- Words to learn, with French + remove button -->
+        <div id="test-out-words-to-learn" style="width: 100%; display: none;">
+            <div style="font-size: 0.78rem; color: var(--ink-light); margin-bottom: 8px; text-align: center;">
+                Cliquez sur ✕ pour retirer un mot de votre liste d'apprentissage.
+            </div>
+            <div class="word-preview-grid" id="test-out-word-grid" style="max-height: 280px; overflow-y: auto;"></div>
+        </div>
+
         <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
             <button class="btn-primary" id="test-out-start-filtered-btn" onclick="startCourseFromTestOut()">
                 Étudier les mots à apprendre →
@@ -2585,6 +2633,9 @@
         let testOutCourseName = '';
         let testOutAllWords = [];
 
+        // ── PREVIEW EXCLUSIONS ──
+        let previewExcludedWords = new Set(); // english words excluded by user on preview screen
+
         // ══════════════════════════════════════════
         // UTILS
         // ══════════════════════════════════════════
@@ -2934,17 +2985,46 @@
 
     if (wordResult.status === 'fulfilled') {
         const parsed = parseWordList(wordResult.value);
+        previewExcludedWords = new Set();
         document.getElementById('preview-word-count').textContent = `${parsed.length} mots`;
         const grid = document.getElementById('preview-word-grid');
         if (parsed.length === 0) {
             grid.innerHTML = `<div style="grid-column: span 2; text-align: center; color: var(--ink-light);">Aucun mot trouvé.</div>`;
         } else {
-            grid.innerHTML = parsed.map(w => `
-                <div class="word-chip">
+            grid.innerHTML = '';
+            parsed.forEach(w => {
+                const chip = document.createElement('div');
+                chip.className = 'word-chip-removable';
+                chip.dataset.word = w.english;
+                chip.innerHTML = `
                     <span class="word-chip-en">${w.english}</span>
                     <span class="word-chip-fr">${w.french || '—'}</span>
-                </div>
-            `).join('');
+                    <button class="word-chip-remove-btn" title="Ne pas apprendre ce mot">✕</button>
+                `;
+                chip.querySelector('.word-chip-remove-btn').addEventListener('click', () => {
+                    const word = w.english;
+                    if (previewExcludedWords.has(word)) {
+                        previewExcludedWords.delete(word);
+                        chip.style.opacity = '1';
+                        chip.style.borderColor = '';
+                        chip.querySelector('.word-chip-remove-btn').style.background = '';
+                        chip.querySelector('.word-chip-remove-btn').style.color = '';
+                    } else {
+                        previewExcludedWords.add(word);
+                        chip.style.opacity = '0.45';
+                        chip.style.borderColor = 'var(--wrong)';
+                        chip.querySelector('.word-chip-remove-btn').style.background = 'var(--wrong)';
+                        chip.querySelector('.word-chip-remove-btn').style.color = 'white';
+                    }
+                    // Update the word count label
+                    const remaining = parsed.length - previewExcludedWords.size;
+                    document.getElementById('preview-word-count').textContent = 
+                        previewExcludedWords.size > 0
+                            ? `${remaining} / ${parsed.length} mots`
+                            : `${parsed.length} mots`;
+                });
+                grid.appendChild(chip);
+            });
         }
     } else {
         document.getElementById('preview-word-grid').innerHTML =
@@ -3010,8 +3090,9 @@
 }
 
     function startCourseFromPreview() {
-    loadWordList();
-}
+        window._previewExcludedWords = previewExcludedWords.size > 0 ? new Set(previewExcludedWords) : null;
+        loadWordList();
+    }
 
         // ══════════════════════════════════════════
         // SCHEMA PARSER
@@ -3958,6 +4039,12 @@ async function fetchLeaderboard(courseKey) {
                 if (window._testOutKnownSet && window._testOutKnownSet.size > 0) {
                     fullWordList = fullWordList.filter(w => !window._testOutKnownSet.has(normalizeString(w.english)));
                     window._testOutKnownSet = null;
+                }
+
+                // Filter out words the user manually excluded on the preview screen
+                if (window._previewExcludedWords && window._previewExcludedWords.size > 0) {
+                    fullWordList = fullWordList.filter(w => !window._previewExcludedWords.has(w.english));
+                    window._previewExcludedWords = null;
                 }
                 currentChunkIndex = 0;
 
