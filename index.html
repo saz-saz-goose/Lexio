@@ -3077,7 +3077,7 @@
                     chip.innerHTML = `
                         <span class="word-chip-en">${w.english}</span>
                         <span class="word-chip-fr">${w.french || '—'}</span>
-                        <button class="word-chip-remove-btn" title="Ne pas apprendre ce mot">✕</button>
+                        <button class="word-chip-remove-btn" title="Je ne veux pas apprendre ce mot">✕</button>
                     `;
                     chip.querySelector('.word-chip-remove-btn').addEventListener('click', () => {
                         if (previewExcludedWords.has(w.english)) {
