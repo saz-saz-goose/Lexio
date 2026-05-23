@@ -16,9 +16,6 @@
       "id": "Get up",
       "french": "Se lever",
       "english": "Get up",
-      "sentences": [
-        { "fr": "Le <b class='highlight'>dog</b> court après le ballon dans le jardin.", "en": "The dog runs after the ball in the garden." },
-        { "fr": "J'ai un petit <b class='highlight'>dog</b> marron très affectueux.", "en": "I have a small, very affectionate brown dog." }
       ]
     },
     {
