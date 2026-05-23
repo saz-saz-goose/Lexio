@@ -2984,7 +2984,9 @@
     ]);
 
     if (wordResult.status === 'fulfilled') {
-        const parsed = parseWordList(wordResult.value);
+        const rawParsed = parseWordList(wordResult.value);
+        // Translate missing French entries (same as study session)
+        const parsed = await translateAndGenerateSentencesForSession(rawParsed);
         previewExcludedWords = new Set();
         document.getElementById('preview-word-count').textContent = `${parsed.length} mots`;
         const grid = document.getElementById('preview-word-grid');
