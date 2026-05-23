@@ -8,7 +8,7 @@
   },
   "topics": {
     "animals": {
-      "label": "Animals (new at Flyers)",
+      "label": "Animals",
       "words": [
         { "word": "beetle", "type": "noun" },
         { "word": "butterfly", "type": "noun" },
@@ -84,7 +84,7 @@
       ]
     },
     "food_and_drink": {
-      "label": "Food and Drink (new at Flyers)",
+      "label": "Food and Drink",
       "words": [
         { "word": "chopsticks", "type": "noun" },
         { "word": "fork", "type": "noun" },
@@ -97,7 +97,7 @@
       ]
     },
     "health_and_body": {
-      "label": "Health and Body (new at Flyers)",
+      "label": "Health and Body",
       "words": [
         { "word": "asleep", "type": "adjective" },
         { "word": "awake", "type": "adjective" },
@@ -111,7 +111,7 @@
       ]
     },
     "home_and_places": {
-      "label": "Home and Places (new at Flyers)",
+      "label": "Home and Places",
       "words": [
         { "word": "balcony", "type": "noun" },
         { "word": "bin", "type": "noun" },
@@ -153,7 +153,7 @@
       ]
     },
     "sports_and_adventure": {
-      "label": "Sports and Adventure (new at Flyers)",
+      "label": "Sports and Adventure",
       "words": [
         { "word": "adventure", "type": "noun" },
         { "word": "award", "type": "noun" },
