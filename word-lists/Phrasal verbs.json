@@ -9,7 +9,7 @@
     "theme": "Phrasal verbs",
     "native_language": "fr",
     "target_language": "en",
-    "word_count": 7
+    "word_count": 20
   },
   "words": [
     {
@@ -46,6 +46,81 @@
       "id": "Get away with",
       "french": "S'en sortir en toute impunité",
       "english": "Get away with"
+    },
+    {
+      "id": "Go after (something)",
+      "french": "Porsuivre/effectuer (quelque chose)",
+      "english": "Go after (something)"
+    },
+      {
+      "id": "Go up",
+      "french": "monter",
+      "english": "Go up"
+    },
+      {
+      "id": "Go around",
+      "french": "tourner au tour de",
+      "english": "Go around"
+    },
+      {
+      "id": "Go along",
+      "french": "aller au long de",
+      "english": "Go along"
+    },
+      {
+      "id": "Go on about",
+      "french": "parler sans cesse de",
+      "english": "Go on about"
+    },
+    {
+      "id": "Go off",
+      "french": "exploser / sonnedr / se gâter (nourriture)",
+      "english": "Go off"
+    },
+      {
+      "id": "Go over",
+      "french": "re-regarder / passer par dessus ",
+      "english": "Go over"
+    },
+    {
+      "id": "Make up",
+      "french": "inventer / se reconcilier ",
+      "english": "Make up"
+    },
+        {
+      "id": "Keep up",
+      "french": "suivre",
+      "english": "Keep up"
+    },
+      {
+      "id": "Hang on",
+      "french": "Attendre",
+      "english": "Hang on"
+    },
+         {
+      "id": "Figure out",
+      "french": "Comprendre / trouver une solution",
+      "english": "Figure out"
+    },
+        {
+      "id": "Mix up",
+      "french": "confondre / mélanger",
+      "english": "Mix up"
+    },
+        {
+      "id": "Grow up",
+      "french": "Grandir",
+      "english": "Grow up"
+    },
+        {
+      "id": "Keep on",
+      "french": "Continuer",
+      "english": "Keep on"
+    },
+            {
+      "id": "Come up with",
+      "french": "Trouver (une solution)",
+      "english": "Come up with"
     }
   ]
 }
