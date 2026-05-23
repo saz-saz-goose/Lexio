@@ -790,6 +790,46 @@
 
         
         /* ── REVISE CARD (home screen) ── */
+        /* ── THEME TOPIC CARDS ── */
+        .theme-topic-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: box-shadow 0.15s, border-color 0.15s;
+            width: 100%;
+        }
+        .theme-topic-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        .theme-topic-icon {
+            font-size: 1.6rem;
+            width: 40px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .theme-topic-info { flex: 1; }
+        .theme-topic-title {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--ink);
+            margin-bottom: 2px;
+        }
+        .theme-topic-meta {
+            font-size: 0.78rem;
+            color: var(--ink-light);
+        }
+        .theme-topic-arrow {
+            color: var(--accent);
+            font-size: 1rem;
+        }
+
         .revise-card {
             border: 1.5px solid var(--accent) !important;
         }
@@ -2950,6 +2990,7 @@
             },
             {
                 id: "theme",
+                type: "themed",
                 title: "Learn by theme",
                 icon: "🌍",
                 description: "Listes thématiques couvrant la vie quotidienne et les sujets d'intérêt.",
@@ -3024,6 +3065,150 @@
             }
         }
 
+        // ══════════════════════════════════════════
+        // THEME NAVIGATION (level → topics → session)
+        // ══════════════════════════════════════════
+
+        // emoji map for known theme keys
+        const THEME_ICONS = {
+            everyday_objects: '🎒', the_house_and_local_area: '🏠',
+            family_and_relationships: '👨‍👩‍👧', travel_and_holidays: '✈️',
+            environment_and_world: '🌍', food_and_lifestyle: '🍎',
+            hobbies_and_interests: '🎸', work_and_jobs: '💼',
+            health_and_body: '🏥', education: '📚', technology: '💻',
+            society_and_politics: '🏛️', arts_and_culture: '🎭',
+            science_and_nature: '🔬', sport: '⚽', money_and_shopping: '🛍️',
+            emotions_and_personality: '😊', clothes_and_appearance: '👗',
+            default: '📖'
+        };
+
+        let _themeNavStack = []; // for back navigation: [{label, fn}]
+
+        function showThemeLevels(cat) {
+            _themeNavStack = [{ label: '← Retour aux options', fn: backToModeSelect }];
+            _renderThemeBackBtn();
+            const container = document.getElementById('home-categories-container');
+            container.innerHTML = '';
+            const grid = document.createElement('div');
+            grid.style.cssText = 'display:flex; flex-direction:column; gap:10px; width:100%;';
+
+            cat.files.forEach(file => {
+                const card = document.createElement('div');
+                card.className = 'theme-topic-card';
+                card.innerHTML = `
+                    <div class="theme-topic-icon">📂</div>
+                    <div class="theme-topic-info">
+                        <div class="theme-topic-title">${file.title}</div>
+                        <div class="theme-topic-meta">Niveau ${file.level} · ~${file.approximate_word_count || '?'} mots</div>
+                    </div>
+                    <div class="theme-topic-arrow">›</div>
+                `;
+                card.onclick = () => showThemeTopics(file);
+                grid.appendChild(card);
+            });
+            container.appendChild(grid);
+        }
+
+        async function showThemeTopics(file) {
+            _themeNavStack.push({ label: `← ${file.title}`, fn: () => {
+                _themeNavStack.pop();
+                const cat = homeCategoriesData.find(c => c.type === 'themed');
+                showThemeLevels(cat);
+            }});
+            _renderThemeBackBtn();
+
+            const container = document.getElementById('home-categories-container');
+            container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--ink-light);">Chargement des thèmes...</div>`;
+
+            let data;
+            try {
+                const res = await fetch('word-lists/' + file.filename);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                data = await res.json();
+            } catch (e) {
+                container.innerHTML = `<div style="color:var(--wrong); text-align:center; padding:16px;">Impossible de charger ce fichier.</div>`;
+                return;
+            }
+
+            // Extract themes/topics/categories from the JSON
+            const topicContainer = data.themes || data.topics || data.categories || data.word_groups || data.axes || null;
+            container.innerHTML = '';
+
+            if (!topicContainer) {
+                // Flat file — no sub-topics, just start the course directly
+                selectCourse(file.filename, file.title);
+                return;
+            }
+
+            document.getElementById('home-subtitle-text').textContent = file.title;
+
+            const grid = document.createElement('div');
+            grid.style.cssText = 'display:flex; flex-direction:column; gap:10px; width:100%;';
+
+            // "Study all" card at the top
+            const allCard = document.createElement('div');
+            const totalWords = Object.values(topicContainer).reduce((n, t) => n + (t.words?.length || 0), 0);
+            allCard.className = 'theme-topic-card';
+            allCard.style.borderColor = 'var(--accent)';
+            allCard.innerHTML = `
+                <div class="theme-topic-icon">📚</div>
+                <div class="theme-topic-info">
+                    <div class="theme-topic-title" style="color:var(--accent);">Tout étudier</div>
+                    <div class="theme-topic-meta">${totalWords} mots · tous les thèmes</div>
+                </div>
+                <div class="theme-topic-arrow">›</div>
+            `;
+            allCard.onclick = () => selectCourse(file.filename, file.title);
+            grid.appendChild(allCard);
+
+            // Individual topic cards
+            Object.entries(topicContainer).forEach(([key, topic]) => {
+                const label = topic.label || key.replace(/_/g, ' ');
+                const wordCount = topic.words?.length || 0;
+                const icon = THEME_ICONS[key] || THEME_ICONS.default;
+
+                const card = document.createElement('div');
+                card.className = 'theme-topic-card';
+                card.innerHTML = `
+                    <div class="theme-topic-icon">${icon}</div>
+                    <div class="theme-topic-info">
+                        <div class="theme-topic-title">${label}</div>
+                        <div class="theme-topic-meta">${wordCount} mot${wordCount !== 1 ? 's' : ''}</div>
+                    </div>
+                    <div class="theme-topic-arrow">›</div>
+                `;
+                card.onclick = () => selectThemeTopic(file.filename, file.title, key, label, topic.words || []);
+                grid.appendChild(card);
+            });
+
+            container.appendChild(grid);
+        }
+
+        function selectThemeTopic(filename, fileTitle, topicKey, topicLabel, rawWords) {
+            // Set up the word list directly from the topic's words
+            WORD_LIST_FILE = 'word-lists/' + filename;
+            currentCourseName = `${fileTitle} — ${topicLabel}`;
+            window._themeTopicWords = rawWords.map(w => ({
+                english: w.word || w.english || '',
+                french: w.french || '',
+                id: w.id || (w.word || w.english || '').toLowerCase().replace(/[^a-z0-9]/g, '-'),
+                sentences: w.sentences || [],
+                type: w.type || ''
+            })).filter(w => w.english);
+            loadWordList();
+        }
+
+        function _renderThemeBackBtn() {
+            const catView = document.getElementById('home-category-view');
+            let backBtn = catView.querySelector('.back-home-btn');
+            if (!backBtn) return;
+            const top = _themeNavStack[_themeNavStack.length - 1];
+            if (top) {
+                backBtn.textContent = top.label;
+                backBtn.onclick = top.fn;
+            }
+        }
+
         function showCategory(index) {
             document.getElementById('home-mode-select').style.display = 'none';
             const catView = document.getElementById('home-category-view');
@@ -3031,6 +3216,11 @@
 
             const cat = homeCategoriesData[index];
             document.getElementById('home-subtitle-text').textContent = cat.title;
+
+            if (cat.type === 'themed') {
+                showThemeLevels(cat);
+                return;
+            }
 
             const container = document.getElementById('home-categories-container');
             container.innerHTML = '';
@@ -4175,6 +4365,12 @@
                 const data = await response.json();
 
                 let parsedWords = parseWordList(data);
+
+                // If coming from a specific theme topic, use only those words
+                if (window._themeTopicWords && window._themeTopicWords.length > 0) {
+                    parsedWords = window._themeTopicWords;
+                    window._themeTopicWords = null;
+                }
 
                 if (!parsedWords || parsedWords.length === 0) {
                     throw new Error("No words found in JSON.");
