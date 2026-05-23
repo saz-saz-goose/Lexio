@@ -3081,7 +3081,7 @@
             society_and_politics: '🏛️', arts_and_culture: '🎭',
             science_and_nature: '🔬', sport: '⚽', money_and_shopping: '🛍️',
             emotions_and_personality: '😊', clothes_and_appearance: '👗',
-            default: '📖'
+            default: ' '
         };
 
         let _themeNavStack = []; // for back navigation: [{label, fn}]
@@ -3098,7 +3098,6 @@
                 const card = document.createElement('div');
                 card.className = 'theme-topic-card';
                 card.innerHTML = `
-                    <div class="theme-topic-icon">📂</div>
                     <div class="theme-topic-info">
                         <div class="theme-topic-title">${file.title}</div>
                         <div class="theme-topic-meta">Niveau ${file.level} · ~${file.approximate_word_count || '?'} mots</div>
