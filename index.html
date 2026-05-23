@@ -1809,22 +1809,7 @@
         </div>
 
         <!-- Leaderboard -->
-        <div id="home-leaderboard" style="width: 100%; margin-top: 32px; display: none;">
-            <div id="leaderboard-title" class="section-title" style="font-size: 1.2rem; text-align: left; margin-bottom: 12px;">Classement
-            </div>
-            <table class="leaderboard-table" id="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th>Rang</th>
-                        <th>Joueur</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-body">
-                    <!-- Rendered by JS -->
-                </tbody>
-            </table>
-        </div>
+
 
         <!-- Category View (Lists within a mode) -->
         <div id="home-category-view" style="width: 100%; display: none; flex-direction: column; gap: 16px;">
@@ -2896,7 +2881,6 @@
 
         function showCategory(index) {
             document.getElementById('home-mode-select').style.display = 'none';
-            document.getElementById('home-leaderboard').style.display = 'none';
             const catView = document.getElementById('home-category-view');
             catView.style.display = 'flex';
 
@@ -2984,9 +2968,6 @@
             document.getElementById('home-category-view').style.display = 'none';
             document.getElementById('home-mode-select').style.display = 'flex';
             document.getElementById('home-subtitle-text').textContent = "Comment voulez-vous apprendre aujourd'hui ?";
-            if (document.getElementById('home-leaderboard').innerHTML.includes('leaderboard-body')) {
-                document.getElementById('home-leaderboard').style.display = 'block';
-            }
         }
 
     function selectCourse(filename, title) {
@@ -4018,11 +3999,6 @@
                 indexDataCached = data;
                 renderHomeDashboard(data);
 
-                // Fetch leaderboard after rendering dashboard
-                if (currentProfile) {
-                    await fetchLeaderboard(WORD_LIST_FILE || null);
-                }
-
                 showScreen('screen-home');
             } catch (err) {
                 console.error("Failed to load index:", err);
@@ -4032,77 +4008,6 @@
             }
         }
 
-async function fetchLeaderboard(courseKey) {
-    document.getElementById('home-leaderboard').style.display = 'block';
-    const tbody = document.getElementById('leaderboard-body');
-    tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Chargement...</td></tr>';
-
-    // Update leaderboard title to show which course it's for
-    const leaderboardTitle = document.getElementById('leaderboard-title');
-    if (leaderboardTitle) {
-        leaderboardTitle.textContent = courseKey
-            ? `Classement — ${currentCourseName || 'Ce cours'}`
-            : 'Classement général';
-    }
-
-    const { data, error } = await sbClient
-        .from('profiles')
-        .select('username, avatar_id, courses_progress, total_score, id');
-
-    if (error || !data) {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--wrong);">Erreur de chargement.</td></tr>';
-        return;
-    }
-
-    let ranked;
-
-    if (courseKey) {
-        // Per-course leaderboard: only show users who played this course
-        ranked = data
-            .filter(p => p.courses_progress?.[courseKey]?.score > 0)
-            .map(p => ({
-                ...p,
-                displayScore: p.courses_progress[courseKey].score
-            }))
-            .sort((a, b) => b.displayScore - a.displayScore)
-            .slice(0, 10);
-    } else {
-        // Fallback: global leaderboard
-        ranked = data
-            .map(p => ({ ...p, displayScore: p.total_score || 0 }))
-            .sort((a, b) => b.displayScore - a.displayScore)
-            .slice(0, 10);
-    }
-
-    if (ranked.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Aucun joueur pour ce cours.</td></tr>';
-        return;
-    }
-
-    let html = '';
-    ranked.forEach((p, index) => {
-        const isMe = p.id === currentUser?.id;
-        const rank = index + 1;
-        let rankDisplay = rank;
-        if (rank === 1) rankDisplay = '🥇 1';
-        if (rank === 2) rankDisplay = '🥈 2';
-        if (rank === 3) rankDisplay = '🥉 3';
-
-        html += `
-            <tr class="${isMe ? 'highlight' : ''}">
-                <td>${rankDisplay}</td>
-                <td>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span style="font-size: 1.2rem;">${getAvatarEmoji(p.avatar_id)}</span>
-                        <span>${p.username || 'Joueur anonyme'} ${isMe ? '(Toi)' : ''}</span>
-                    </div>
-                </td>
-                <td style="font-weight: 600; color: var(--accent);">${p.displayScore}</td>
-            </tr>
-        `;
-    });
-    tbody.innerHTML = html;
-}
         async function loadWordList() {
             showScreen('screen-loading');
             document.getElementById('loading-status').textContent = 'Chargement de la liste...';
