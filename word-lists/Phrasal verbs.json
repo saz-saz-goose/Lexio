@@ -9,43 +9,43 @@
     "theme": "Phrasal verbs",
     "native_language": "fr",
     "target_language": "en",
-    "word_count": 10
+    "word_count": 7
   },
   "words": [
     {
       "id": "Get up",
       "french": "Se lever",
-      "english": "Get up",
+      "english": "Get up"
     },
     {
       "id": "Get down",
       "french": "Descendre",
-      "english": "Get down",
+      "english": "Get down"
     },
     {
       "id": "Get angry",
-      "french": "Devenir fâché ",
-      "english": "Get angry",
+      "french": "Devenir fâché",
+      "english": "Get angry"
     },
     {
       "id": "Get along with",
-      "french": "S’entendre bien avec",
-      "english": "Get along with",
+      "french": "S'entendre bien avec",
+      "english": "Get along with"
     },
     {
       "id": "Get over (something)",
       "french": "Surmonter (quelque chose)",
-      "english": "Get over (something)",
+      "english": "Get over (something)"
     },
     {
       "id": "Get rid of (something)",
-      "french": "Se debarasser (de quelque chose)",
-      "english": "Get rid of (something)",
+      "french": "Se débarrasser (de quelque chose)",
+      "english": "Get rid of (something)"
     },
     {
       "id": "Get away with",
-      "french": "S’en sortir en toute impunité",
-      "english": "Get away with",
+      "french": "S'en sortir en toute impunité",
+      "english": "Get away with"
     }
   ]
 }
