@@ -2978,7 +2978,7 @@
                 id: "curriculum",
                 type: "themed",
                 title: "Learn by curriculum",
-                icon: "📚",
+                icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2C3E6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
                 description: "Listes de vocabulaire alignées sur les examens de Cambridge et le programme national.",
                 files: [
                     { filename: "CAMBRIDGE STARTERS ANIMALS.json", title: "Les Animaux (Starters)", level: "A1", approximate_word_count: 30 },
@@ -2993,7 +2993,7 @@
                 id: "theme",
                 type: "themed",
                 title: "Learn by theme",
-                icon: "🌍",
+                icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2C3E6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
                 description: "Listes thématiques couvrant la vie quotidienne et les sujets d'intérêt.",
                 files: [
                     { filename: "THEMES A1-A2.json", title: "Thèmes A1-A2", level: "A1-A2", approximate_word_count: 200 },
@@ -3008,7 +3008,7 @@
                 id: "level",
                 type: "themed",
                 title: "Learn by level",
-                icon: "📈",
+                icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2C3E6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
                 description: "Vocabulaire classé par nature grammaticale et par niveau CEFR.",
                 files: [
                     { filename: "WORD GROUPS A1-A2.json", title: "Groupes de Mots A1-A2", level: "A1-A2", approximate_word_count: 230 },
@@ -3038,12 +3038,12 @@
                 card.onclick = () => showCategory(index);
 
                 card.innerHTML = `
-      <div class="mode-icon">${cat.icon}</div>
-      <div class="mode-info">
-        <div class="mode-title">${cat.title}</div>
-        <div class="mode-desc">${cat.description}</div>
-      </div>
-    `;
+                    <div class="mode-icon" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;background:var(--accent-light);border-radius:12px;flex-shrink:0;">${cat.icon}</div>
+                    <div class="mode-info">
+                        <div class="mode-title">${cat.title}</div>
+                        <div class="mode-desc">${cat.description}</div>
+                    </div>
+                `;
                 modeContainer.appendChild(card);
             });
 
@@ -3056,7 +3056,7 @@
                     revCard.className = 'mode-card revise-card';
                     revCard.onclick = () => openReviseScreen();
                     revCard.innerHTML = `
-                        <div class="mode-icon">🔁</div>
+                        <div class="mode-icon" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;background:var(--accent-light);border-radius:12px;flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2C3E6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div>
                         <div class="mode-info">
                             <div class="mode-title">Réviser</div>
                             <div class="mode-desc">${totalLearnt} mot${totalLearnt > 1 ? 's' : ''} acquis disponibles à réviser.</div>
