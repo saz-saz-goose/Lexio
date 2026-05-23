@@ -4017,7 +4017,7 @@ async function fetchLeaderboard(courseKey) {
             currentCourseName = testOutCourseName;
 
             showScreen('screen-loading');
-            document.getElementById('loading-status').textContent = 'Chargement du test...';
+            document.getElementById('loading-status').textContent = 'Chargement et traduction du test...';
             document.getElementById('header-home-btn').classList.add('hidden');
             document.getElementById('header-logo').style.display = 'none';
             document.getElementById('header-progress-wrap').style.display = 'none';
@@ -4026,7 +4026,9 @@ async function fetchLeaderboard(courseKey) {
                 const response = await fetch(testOutCourseKey);
                 if (!response.ok) throw new Error('HTTP ' + response.status);
                 const data = await response.json();
-                testOutAllWords = shuffle(parseWordList(data));
+                // Translate missing French entries just like the normal study flow
+                const rawWords = parseWordList(data);
+                testOutAllWords = shuffle(await translateAndGenerateSentencesForSession(rawWords));
 
                 // Load saved progress if any
                 const saved = currentProfile?.courses_progress?.[testOutCourseKey]?.test_out;
