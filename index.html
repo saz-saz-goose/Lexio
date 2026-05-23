@@ -789,6 +789,93 @@
         }
 
         
+        /* ── REVISE CARD (home screen) ── */
+        .revise-card {
+            border: 1.5px solid var(--accent) !important;
+        }
+        .revise-card .mode-title { color: var(--accent); }
+
+        /* ── REVISE SCREEN ── */
+        .revise-course-block {
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .revise-course-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .revise-course-header:hover { background: var(--hover, #f5f5f0); }
+        .revise-course-checkbox {
+            width: 18px; height: 18px;
+            accent-color: var(--accent);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .revise-course-title {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.92rem;
+            flex: 1;
+        }
+        .revise-course-count {
+            font-size: 0.78rem;
+            color: var(--ink-light);
+            background: var(--bg);
+            padding: 2px 8px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+        .revise-word-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 14px 16px;
+            border-top: 1px solid var(--border);
+        }
+        .revise-word-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 5px 10px 5px 8px;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: var(--bg);
+            font-size: 0.82rem;
+        }
+        .revise-word-chip:hover { border-color: var(--accent); }
+        .revise-word-chip.selected {
+            border-color: var(--correct);
+            background: var(--correct-bg, #f0faf0);
+        }
+        .revise-word-chip input[type=checkbox] {
+            width: 14px; height: 14px;
+            accent-color: var(--accent);
+            pointer-events: none;
+        }
+        .revise-word-en { font-weight: 500; color: var(--ink); }
+        .revise-word-fr { color: var(--ink-light); font-size: 0.76rem; }
+        .revise-footer {
+            width: 100%;
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            padding: 12px 0 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .revise-count-label { font-size: 0.85rem; color: var(--ink-light); font-weight: 500; }
+        .revise-cooldown-note { font-size: 0.72rem; color: var(--ink-light); text-align: center; opacity: 0.75; }
+
         .spinner {
             border: 4px solid var(--accent-light);
             border-top: 4px solid var(--accent);
@@ -2100,6 +2187,39 @@
     </div>
 
     <!-- ══════════════════════════════════════════
+     SCREEN: REVISE
+    ══════════════════════════════════════════ -->
+    <div class="screen" id="screen-revise">
+        <div style="width:100%; display:flex; align-items:center; gap:12px; margin-bottom:4px;">
+            <button class="back-home-btn" onclick="goToHome()">← Retour</button>
+            <div style="flex:1;">
+                <div class="section-title" style="margin:0; font-size:1.2rem;">🔁 Réviser</div>
+            </div>
+            <button onclick="toggleReviseViewAll()" id="revise-view-toggle"
+                style="font-size:0.78rem; background:none; border:1px solid var(--border);
+                       color:var(--accent); padding:4px 10px; border-radius:8px; cursor:pointer;">
+                Tout voir
+            </button>
+        </div>
+        <div class="section-sub" style="margin-bottom:8px;">
+            Sélectionnez les mots que vous souhaitez réviser.
+        </div>
+
+        <div id="revise-content" style="width:100%; display:flex; flex-direction:column; gap:12px;">
+            <!-- Populated by JS -->
+        </div>
+
+        <div class="revise-footer">
+            <div class="revise-count-label" id="revise-selected-count">0 mot sélectionné</div>
+            <div class="revise-cooldown-note">Les mots réussis seront retirés de la révision jusqu'au lendemain.</div>
+            <button class="btn-primary" id="revise-start-btn" onclick="startRevisionSession()" disabled
+                style="opacity:0.4; margin-top:4px;">
+                Réviser les mots sélectionnés →
+            </button>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
      SCREEN: TEST OUT — typing test
     ══════════════════════════════════════════ -->
     <div class="screen" id="screen-test-out">
@@ -2227,7 +2347,7 @@
                 sbClient.auth.onAuthStateChange(async (event, session) => {
                     if (event === 'SIGNED_IN') {
                         // Don't interrupt an active game session (e.g. on token refresh)
-                        const activeGameScreens = ['screen-encounter','screen-ex1','screen-ex2-game','screen-match','screen-ex3','screen-ex1-retest','screen-ex3-retest','screen-transition','screen-test-out'];
+                        const activeGameScreens = ['screen-encounter','screen-ex1','screen-ex2-game','screen-match','screen-ex3','screen-ex1-retest','screen-ex3-retest','screen-transition','screen-test-out','screen-revise'];
                         const inGame = activeGameScreens.some(id => document.getElementById(id)?.classList.contains('active'));
                         if (inGame) return;
                         currentUser = session.user;
@@ -2661,6 +2781,11 @@
         // ── LEARNT WORD TRACKING ──
         let sessionLearntWords = new Set(); // words correctly answered first-try this session
 
+        // ── REVISION STATE ──
+        let isRevisionSession = false;
+        let revisionSelectedWords = [];
+        let revisionCorrectThisSession = new Set(); // english words correct in this revision
+
         // ══════════════════════════════════════════
         // UTILS
         // ══════════════════════════════════════════
@@ -2816,9 +2941,9 @@
                 description: "Listes de vocabulaire alignées sur les examens de Cambridge et le programme national.",
                 files: [
                     { filename: "CAMBRIDGE STARTERS ANIMALS.json", title: "Les Animaux (Starters)", level: "A1", approximate_word_count: 30 },
-                    { filename: "CAMBRIDGE STARTERS.json", title: "Cambridge Starters", level: "Pre-A1", approximate_word_count: 200 },
-                    { filename: "CAMBRIDGE MOVERS.json", title: "Cambridge  Movers", level: "A1", approximate_word_count: 220 },
-                    { filename: "CAMBRIDGE FLYERS.json", title: "Cambridge  Flyers", level: "A2", approximate_word_count: 200 },
+                    { filename: "CAMBRIDGE STARTERS.json", title: "Cambridge YLE Starters", level: "Pre-A1", approximate_word_count: 200 },
+                    { filename: "CAMBRIDGE MOVERS.json", title: "Cambridge YLE Movers", level: "A1", approximate_word_count: 220 },
+                    { filename: "CAMBRIDGE FLYERS.json", title: "Cambridge YLE Flyers", level: "A2", approximate_word_count: 200 },
                     { filename: "BREVET.json", title: "Brevet - Vocabulaire", level: "B1", approximate_word_count: 160 },
                     { filename: "BAC - axes thematiques.json", title: "Bac - Axes Thématiques", level: "B2", approximate_word_count: 125 }
                 ]
@@ -2827,14 +2952,14 @@
                 id: "theme",
                 title: "Learn by theme",
                 icon: "🌍",
-                description: "Listes thématiques couvrant la vie quotidienne et les sujets d'intérêt, classé par niveau CEFR.",
+                description: "Listes thématiques couvrant la vie quotidienne et les sujets d'intérêt.",
                 files: [
-                    { filename: "THEMES A1-A2.json", title: "Thematic vocabulary A1-A2", level: "A1-A2", approximate_word_count: 200 },
-                    { filename: "THEMES B1-B2.json", title: "Thematic vocabulary B1-B2", level: "B1-B2", approximate_word_count: 210 },
-                    { filename: "THEMES C1-C2.json", title: "Thematic vocabulary C1-C2", level: "C1-C2", approximate_word_count: 210 },
+                    { filename: "THEMES A1-A2.json", title: "Thèmes A1-A2", level: "A1-A2", approximate_word_count: 200 },
+                    { filename: "THEMES B1-B2.json", title: "Thèmes B1-B2", level: "B1-B2", approximate_word_count: 210 },
+                    { filename: "THEMES C1-C2.json", title: "Thèmes C1-C2", level: "C1-C2", approximate_word_count: 210 },
                     { filename: "BUSINESS AND FINANCE.json", title: "Business and Finance", level: "C1-C2", approximate_word_count: 140 },
-                    { filename: "MEDICAL AND PSYCHOLOGICAL.json", title: "Medical and Psychological ", level: "C1-C2", approximate_word_count: 165 },
-                    { filename: "PRACTICAL ENGLISH.json", title: "Practical English: phrases and vocabulary", level: "B1-B2", approximate_word_count: 140 }
+                    { filename: "MEDICAL AND PSYCHOLOGICAL.json", title: "Medical and Psychological", level: "C1-C2", approximate_word_count: 165 },
+                    { filename: "PRACTICAL ENGLISH.json", title: "Practical English", level: "B1-B2", approximate_word_count: 140 }
                 ]
             },
             {
@@ -2843,15 +2968,15 @@
                 icon: "📈",
                 description: "Vocabulaire classé par nature grammaticale et par niveau CEFR.",
                 files: [
-                    { filename: "WORD GROUPS A1-A2.json", title: "Word groups A1-A2", level: "A1-A2", approximate_word_count: 230 },
-                    { filename: "WORD GROUPS B1-B2.json", title: "Word groups B1-B2", level: "B1-B2", approximate_word_count: 330 },
-                    { filename: "WORD GROUPS C1-C2.json", title: "Word groups C1-C2", level: "C1-C2", approximate_word_count: 330 },
-					{ filename: "Phrasal verbs.json", title: "Phrasal Verbs", level: "B1", approximate_word_count: 8 },
+                    { filename: "WORD GROUPS A1-A2.json", title: "Groupes de Mots A1-A2", level: "A1-A2", approximate_word_count: 230 },
+                    { filename: "WORD GROUPS B1-B2.json", title: "Groupes de Mots B1-B2", level: "B1-B2", approximate_word_count: 330 },
+                    { filename: "WORD GROUPS C1-C2.json", title: "Groupes de Mots C1-C2", level: "C1-C2", approximate_word_count: 330 }
                 ]
             }
         ];
 
         function goToHome() {
+            isRevisionSession = false;
             document.getElementById('header-home-btn').classList.add('hidden');
             document.getElementById('header-logo').style.display = 'block';
             document.getElementById('header-progress-wrap').style.display = 'none';
@@ -2878,6 +3003,25 @@
     `;
                 modeContainer.appendChild(card);
             });
+
+            // Revise card — only show if logged in and has learnt words
+            if (currentProfile) {
+                const allLearnt = _getAllLearntWords();
+                const totalLearnt = Object.values(allLearnt).reduce((n, arr) => n + arr.length, 0);
+                if (totalLearnt > 0) {
+                    const revCard = document.createElement('div');
+                    revCard.className = 'mode-card revise-card';
+                    revCard.onclick = () => openReviseScreen();
+                    revCard.innerHTML = `
+                        <div class="mode-icon">🔁</div>
+                        <div class="mode-info">
+                            <div class="mode-title">Réviser</div>
+                            <div class="mode-desc">${totalLearnt} mot${totalLearnt > 1 ? 's' : ''} acquis disponibles à réviser.</div>
+                        </div>
+                    `;
+                    modeContainer.appendChild(revCard);
+                }
+            }
         }
 
         function showCategory(index) {
@@ -3316,6 +3460,7 @@
                 if (!ex1Incorrect.find(w => w.english === wordObj.english)) {
                     firstTryCorrect++;
                     sessionLearntWords.add(wordObj.english);
+                    if (isRevisionSession) revisionCorrectThisSession.add(wordObj.english);
                 } else {
                     // Word was wrong before — this is a second-attempt correct
                     secondTryCorrect++;
@@ -3769,6 +3914,7 @@
                 if (!tried) {
                     firstTryCorrect++;
                     sessionLearntWords.add(answer);
+                    if (isRevisionSession) revisionCorrectThisSession.add(answer);
                 }
                 input.dataset.ex3Tried = "true";
             } else {
@@ -3949,6 +4095,11 @@
             bonusDiv.style.display = bonuses.length > 0 ? 'block' : 'none';
 
             syncProgressToServer(scoreGained);
+
+            if (isRevisionSession) {
+                _saveRevisionCooldowns();
+                isRevisionSession = false;
+            }
 
             showScreen('screen-complete');
         }
@@ -4268,6 +4419,248 @@
             // Pass known words to loadWordList via a temporary global set
             window._testOutKnownSet = new Set(testOutKnown.map(w => normalizeString(w)));
             loadWordList();
+        }
+
+        // ══════════════════════════════════════════
+        // REVISION
+        // ══════════════════════════════════════════
+
+        // Returns { courseKey: [{english, french}, ...] } — filters out cooldown words
+        function _getAllLearntWords() {
+            if (!currentProfile?.courses_progress) return {};
+            const todayStr = new Date().toISOString().slice(0, 10);
+            const result = {};
+            for (const [courseKey, prog] of Object.entries(currentProfile.courses_progress)) {
+                const learnt = prog.learnt_words || [];
+                const testOutKnown = prog.test_out?.known_words || [];
+                const allForCourse = [...new Set([...learnt, ...testOutKnown])];
+                const cooldowns = prog.revision_cooldown || {};
+                const available = allForCourse.filter(w => {
+                    const cd = cooldowns[w];
+                    return !cd || cd < todayStr;
+                });
+                if (available.length > 0) result[courseKey] = available;
+            }
+            return result;
+        }
+
+        function _getCourseDisplayName(courseKey) {
+            const filename = courseKey.replace('word-lists/', '');
+            for (const cat of homeCategoriesData) {
+                const match = cat.files.find(f => f.filename === filename);
+                if (match) return match.title;
+            }
+            return filename.replace('.json', '');
+        }
+
+        let reviseViewAll = false;
+        let reviseWordData = {}; // courseKey -> [{english, french}] with translated french
+
+        function toggleReviseViewAll() {
+            reviseViewAll = !reviseViewAll;
+            document.getElementById('revise-view-toggle').textContent = reviseViewAll ? 'Par cours' : 'Tout voir';
+            _renderReviseContent();
+        }
+
+        function _renderReviseContent() {
+            const container = document.getElementById('revise-content');
+            container.innerHTML = '';
+
+            if (reviseViewAll) {
+                // Flat list — one block with all words
+                const allWords = [];
+                for (const [ck, words] of Object.entries(reviseWordData)) {
+                    words.forEach(w => allWords.push({ ...w, sourceKey: ck }));
+                }
+                const block = _buildReviseBlock('Tous les mots acquis', allWords.map(w => w.english), allWords);
+                container.appendChild(block);
+            } else {
+                // Per course
+                for (const [courseKey, wordObjs] of Object.entries(reviseWordData)) {
+                    const name = _getCourseDisplayName(courseKey);
+                    const block = _buildReviseBlock(name, wordObjs.map(w => w.english), wordObjs);
+                    container.appendChild(block);
+                }
+            }
+        }
+
+        function _buildReviseBlock(title, wordKeys, wordObjs) {
+            const block = document.createElement('div');
+            block.className = 'revise-course-block';
+
+            // Check how many from this block are already selected
+            const allSelected = wordKeys.every(w => _isRevisionSelected(w));
+            const someSelected = wordKeys.some(w => _isRevisionSelected(w));
+
+            const header = document.createElement('div');
+            header.className = 'revise-course-header';
+            header.innerHTML = `
+                <input type="checkbox" class="revise-course-checkbox"
+                    ${allSelected ? 'checked' : ''}
+                    ${someSelected && !allSelected ? 'indeterminate' : ''}>
+                <span class="revise-course-title">${title}</span>
+                <span class="revise-course-count">${wordKeys.length} mot${wordKeys.length > 1 ? 's' : ''}</span>
+            `;
+            const cb = header.querySelector('input');
+            if (someSelected && !allSelected) cb.indeterminate = true;
+
+            cb.addEventListener('change', (e) => {
+                e.stopPropagation();
+                wordObjs.forEach(w => {
+                    if (cb.checked) _addRevisionWord(w);
+                    else _removeRevisionWord(w.english);
+                });
+                _renderReviseContent();
+                _updateReviseFooter();
+            });
+            header.addEventListener('click', (e) => {
+                if (e.target === cb) return;
+                // Toggle collapse
+                const grid = block.querySelector('.revise-word-grid');
+                if (grid) grid.style.display = grid.style.display === 'none' ? 'flex' : 'none';
+            });
+
+            block.appendChild(header);
+
+            const grid = document.createElement('div');
+            grid.className = 'revise-word-grid';
+
+            wordObjs.forEach(w => {
+                const chip = document.createElement('div');
+                const sel = _isRevisionSelected(w.english);
+                chip.className = 'revise-word-chip' + (sel ? ' selected' : '');
+                chip.innerHTML = `
+                    <input type="checkbox" ${sel ? 'checked' : ''}>
+                    <span class="revise-word-en">${w.english}</span>
+                    <span class="revise-word-fr">${w.french || '—'}</span>
+                `;
+                chip.addEventListener('click', () => {
+                    if (_isRevisionSelected(w.english)) {
+                        _removeRevisionWord(w.english);
+                        chip.classList.remove('selected');
+                        chip.querySelector('input').checked = false;
+                    } else {
+                        _addRevisionWord(w);
+                        chip.classList.add('selected');
+                        chip.querySelector('input').checked = true;
+                    }
+                    _updateReviseFooter();
+                    // Update course checkbox state
+                    const allSel = wordKeys.every(k => _isRevisionSelected(k));
+                    const someSel = wordKeys.some(k => _isRevisionSelected(k));
+                    cb.checked = allSel;
+                    cb.indeterminate = someSel && !allSel;
+                });
+                grid.appendChild(chip);
+            });
+
+            block.appendChild(grid);
+            return block;
+        }
+
+        function _isRevisionSelected(english) {
+            return revisionSelectedWords.some(w => w.english === english);
+        }
+        function _addRevisionWord(wordObj) {
+            if (!_isRevisionSelected(wordObj.english)) revisionSelectedWords.push(wordObj);
+        }
+        function _removeRevisionWord(english) {
+            revisionSelectedWords = revisionSelectedWords.filter(w => w.english !== english);
+        }
+
+        function _updateReviseFooter() {
+            const n = revisionSelectedWords.length;
+            const label = n === 0 ? '0 mot sélectionné'
+                : n < 5 ? `${n} mot${n > 1 ? 's' : ''} sélectionné${n > 1 ? 's' : ''} — minimum 5 requis`
+                : `${n} mot${n > 1 ? 's' : ''} sélectionné${n > 1 ? 's' : ''}`;
+            document.getElementById('revise-selected-count').textContent = label;
+            const btn = document.getElementById('revise-start-btn');
+            btn.disabled = n < 5;
+            btn.style.opacity = n >= 5 ? '1' : '0.4';
+            btn.textContent = n >= 5 ? `Réviser ${n} mot${n > 1 ? 's' : ''} →` : 'Réviser les mots sélectionnés →';
+        }
+
+        async function openReviseScreen() {
+            document.getElementById('header-home-btn').classList.add('hidden');
+            document.getElementById('header-logo').style.display = 'none';
+            document.getElementById('header-progress-wrap').style.display = 'none';
+            showScreen('screen-loading');
+            document.getElementById('loading-status').textContent = 'Chargement des mots acquis...';
+
+            revisionSelectedWords = [];
+            reviseViewAll = false;
+            reviseWordData = {};
+
+            const learntByCourse = _getAllLearntWords();
+
+            // Fetch French translations for all words
+            for (const [courseKey, englishWords] of Object.entries(learntByCourse)) {
+                // Try to get French from the course progress or translate
+                const prog = currentProfile.courses_progress[courseKey];
+                const translated = await translateAndGenerateSentencesForSession(
+                    englishWords.map(e => ({ english: e, french: '' }))
+                );
+                reviseWordData[courseKey] = translated.map(w => ({ ...w, sourceKey: courseKey }));
+            }
+
+            document.getElementById('revise-view-toggle').textContent = 'Tout voir';
+            _renderReviseContent();
+            _updateReviseFooter();
+            showScreen('screen-revise');
+        }
+
+        async function startRevisionSession() {
+            if (revisionSelectedWords.length < 5) return;
+
+            isRevisionSession = true;
+            revisionCorrectThisSession = new Set();
+
+            // Set up the word list directly — no loadWordList needed
+            words = revisionSelectedWords.map(w => ({ english: w.english, french: w.french, sourceKey: w.sourceKey }));
+            allEnglish = words.map(w => w.english);
+            allFrench = words.map(w => w.french);
+            fullWordList = [...words];
+            currentChunkIndex = 0;
+            WORD_LIST_FILE = 'revision_session';
+            currentCourseName = 'Révision';
+
+            totalSteps = words.length * 4;
+            stepsCompleted = 0;
+            sessionStartTime = Date.now();
+            firstTryCorrect = 0;
+            secondTryCorrect = 0;
+            retestAllCorrect = true;
+            wordErrors = {};
+            sessionLearntWords = new Set();
+            initLives();
+            updateProgress();
+
+            document.getElementById('header-home-btn').classList.remove('hidden');
+            document.getElementById('header-logo').style.display = 'none';
+            document.getElementById('header-progress-wrap').style.display = 'block';
+
+            // Skip encounter screen — go straight to Ex1
+            showScreen('screen-ex1');
+            startEx1();
+        }
+
+        async function _saveRevisionCooldowns() {
+            if (!currentProfile || revisionCorrectThisSession.size === 0) return;
+            const tomorrowStr = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+
+            // Group correct words by their source course
+            for (const w of revisionSelectedWords) {
+                if (!revisionCorrectThisSession.has(w.english)) continue;
+                const ck = w.sourceKey || WORD_LIST_FILE;
+                if (!currentProfile.courses_progress[ck]) continue;
+                if (!currentProfile.courses_progress[ck].revision_cooldown)
+                    currentProfile.courses_progress[ck].revision_cooldown = {};
+                currentProfile.courses_progress[ck].revision_cooldown[w.english] = tomorrowStr;
+            }
+
+            await sbClient.from('profiles').update({
+                courses_progress: currentProfile.courses_progress
+            }).eq('id', currentUser.id);
         }
 
       async function syncProgressToServer(scoreGained) {
