@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "id": "Phrasal verbs",
+    "title": "Phrasal verbs",
+    "source": "Phrasal verbs",
+    "level": "B1",
+    "category": "level",
+    "subcategory": "Phrasal verbs",
+    "theme": "Phrasal verbs",
+    "native_language": "fr",
+    "target_language": "en",
+    "word_count": 10
+  },
+  "words": [
+    {
+      "id": "Get up",
+      "french": "Se lever",
+      "english": "Get up",
+      "sentences": [
+        { "fr": "Le <b class='highlight'>dog</b> court après le ballon dans le jardin.", "en": "The dog runs after the ball in the garden." },
+        { "fr": "J'ai un petit <b class='highlight'>dog</b> marron très affectueux.", "en": "I have a small, very affectionate brown dog." }
+      ]
+    },
+    {
+      "id": "Get down",
+      "french": "Descendre",
+      "english": "Get down",
+      "sentences": [
+        { "fr": "Notre <b class='highlight'>cat</b> adore dormir sur le canapé chaud.", "en": "Our cat loves sleeping on the warm sofa." },
+        { "fr": "Regarde ce petit <b class='highlight'>cat</b> noir sur le toit.", "en": "Look at that little black cat on the roof." }
+      ]
+    },
+    {
+      "id": "Get angry",
+      "french": "Devenir fâché ",
+      "english": "Get angry",
+      "sentences": [
+        { "fr": "Un joli <b class='highlight'>bird</b> bleu chante sur la branche.", "en": "A pretty blue bird sings on the branch." },
+        { "fr": "Le chat regarde le <b class='highlight'>bird</b> par la fenêtre.", "en": "The cat watches the bird through the window." }
+      ]
+    },
+    {
+      "id": "Get along with",
+      "french": "S’entendre bien avec",
+      "english": "Get along with",
+      "sentences": [
+        { "fr": "Elle monte à <b class='highlight'>horse</b> tous les samedis matins.", "en": "She rides a horse every Saturday morning." },
+        { "fr": "Le grand <b class='highlight'>horse</b> blanc galope dans le champ.", "en": "The big white horse gallops in the field." }
+      ]
+    },
+    {
+      "id": "Get over (something)",
+      "french": "Surmonter (quelque chose)",
+      "english": "Get over (something)",
+      "sentences": [
+        { "fr": "La petite <b class='highlight'>mouse</b> grise court très vite sous la table.", "en": "The little grey mouse runs very fast under the table." },
+        { "fr": "Notre chat a chassé une <b class='highlight'>mouse</b> dans le jardin.", "en": "Our cat chased a mouse in the garden." }
+      ]
+    },
+    {
+      "id": "Get rid of (something)",
+      "french": "Se debarasser (de quelque chose)",
+      "english": "Get rid of (something)",
+      "sentences": [
+        { "fr": "Le <b class='highlight'>duck</b> nage tranquillement sur le lac du parc.", "en": "The duck swims quietly on the park lake." },
+        { "fr": "Les enfants jettent du pain aux <b class='highlight'>duck</b> sauvages.", "en": "The children throw bread to the wild ducks." }
+      ]
+    },
+    {
+      "id": "Get away with",
+      "french": "S’en sortir en toute impunité",
+      "english": "Get away with",
+      "sentences": [
+        { "fr": "La <b class='highlight'>frog</b> verte saute dans l'eau de la mare.", "en": "The green frog jumps into the pond water." },
+        { "fr": "On entend le chant de la <b class='highlight'>frog</b> pendant les nuits d'été.", "en": "We hear the song of the frog during summer nights." }
+      ]
+    }
+  ]
+}
