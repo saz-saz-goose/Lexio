@@ -1274,6 +1274,43 @@
             color: white;
         }
 
+        .word-chip-learnt {
+            border-color: var(--correct) !important;
+            background: var(--correct-bg) !important;
+            opacity: 0.75;
+        }
+        .word-chip-learnt .word-chip-en {
+            color: var(--correct);
+        }
+        .word-chip-learnt .word-chip-fr {
+            color: var(--correct);
+            opacity: 0.8;
+        }
+        .word-chip-learnt-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--correct);
+            color: white;
+            border: none;
+            font-size: 0.65rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            transition: background 0.15s, opacity 0.15s;
+            padding: 0;
+            title: "Déjà acquis — cliquer pour réétudier";
+        }
+        .word-chip-learnt-badge:hover {
+            background: var(--ink-light);
+        }
+
 	/* ── MATCH TABLE ── */
 	.match-table-wrap {
     width: 100%;
@@ -2636,6 +2673,9 @@
         // ── PREVIEW EXCLUSIONS ──
         let previewExcludedWords = new Set(); // english words excluded by user on preview screen
 
+        // ── LEARNT WORD TRACKING ──
+        let sessionLearntWords = new Set(); // words correctly answered first-try this session
+
         // ══════════════════════════════════════════
         // UTILS
         // ══════════════════════════════════════════
@@ -2988,6 +3028,13 @@
         // Translate missing French entries (same as study session)
         const parsed = await translateAndGenerateSentencesForSession(rawParsed);
         previewExcludedWords = new Set();
+
+        // Build the set of learnt words from both sources
+        const courseProgress = currentProfile?.courses_progress?.[courseKey];
+        const learntFromStudy = courseProgress?.learnt_words || [];
+        const learntFromTestOut = courseProgress?.test_out?.known_words || [];
+        const learntSet = new Set([...learntFromStudy, ...learntFromTestOut]);
+
         document.getElementById('preview-word-count').textContent = `${parsed.length} mots`;
         const grid = document.getElementById('preview-word-grid');
         if (parsed.length === 0) {
@@ -2995,38 +3042,63 @@
         } else {
             grid.innerHTML = '';
             parsed.forEach(w => {
+                const isLearnt = learntSet.has(w.english);
                 const chip = document.createElement('div');
-                chip.className = 'word-chip-removable';
+                chip.className = 'word-chip-removable' + (isLearnt ? ' word-chip-learnt' : '');
                 chip.dataset.word = w.english;
-                chip.innerHTML = `
-                    <span class="word-chip-en">${w.english}</span>
-                    <span class="word-chip-fr">${w.french || '—'}</span>
-                    <button class="word-chip-remove-btn" title="Ne pas apprendre ce mot">✕</button>
-                `;
-                chip.querySelector('.word-chip-remove-btn').addEventListener('click', () => {
-                    const word = w.english;
-                    if (previewExcludedWords.has(word)) {
-                        previewExcludedWords.delete(word);
-                        chip.style.opacity = '1';
-                        chip.style.borderColor = '';
-                        chip.querySelector('.word-chip-remove-btn').style.background = '';
-                        chip.querySelector('.word-chip-remove-btn').style.color = '';
-                    } else {
-                        previewExcludedWords.add(word);
-                        chip.style.opacity = '0.45';
-                        chip.style.borderColor = 'var(--wrong)';
-                        chip.querySelector('.word-chip-remove-btn').style.background = 'var(--wrong)';
-                        chip.querySelector('.word-chip-remove-btn').style.color = 'white';
-                    }
-                    // Update the word count label
-                    const remaining = parsed.length - previewExcludedWords.size;
-                    document.getElementById('preview-word-count').textContent = 
-                        previewExcludedWords.size > 0
-                            ? `${remaining} / ${parsed.length} mots`
-                            : `${parsed.length} mots`;
-                });
+
+                if (isLearnt) {
+                    // Auto-exclude learnt words
+                    previewExcludedWords.add(w.english);
+                    chip.innerHTML = `
+                        <span class="word-chip-en">${w.english}</span>
+                        <span class="word-chip-fr">${w.french || '—'}</span>
+                        <button class="word-chip-learnt-badge" title="Déjà acquis — cliquer pour réétudier">✓</button>
+                    `;
+                    chip.querySelector('.word-chip-learnt-badge').addEventListener('click', () => {
+                        if (previewExcludedWords.has(w.english)) {
+                            // Toggle back in: re-study this word
+                            previewExcludedWords.delete(w.english);
+                            chip.classList.remove('word-chip-learnt');
+                            chip.style.opacity = '1';
+                            const btn = chip.querySelector('.word-chip-learnt-badge');
+                            btn.textContent = '✕';
+                            btn.className = 'word-chip-remove-btn';
+                        } else {
+                            previewExcludedWords.add(w.english);
+                            chip.classList.add('word-chip-learnt');
+                            const btn = chip.querySelector('.word-chip-remove-btn');
+                            btn.textContent = '✓';
+                            btn.className = 'word-chip-learnt-badge';
+                        }
+                        _updatePreviewWordCount(parsed.length);
+                    });
+                } else {
+                    chip.innerHTML = `
+                        <span class="word-chip-en">${w.english}</span>
+                        <span class="word-chip-fr">${w.french || '—'}</span>
+                        <button class="word-chip-remove-btn" title="Ne pas apprendre ce mot">✕</button>
+                    `;
+                    chip.querySelector('.word-chip-remove-btn').addEventListener('click', () => {
+                        if (previewExcludedWords.has(w.english)) {
+                            previewExcludedWords.delete(w.english);
+                            chip.style.opacity = '1';
+                            chip.style.borderColor = '';
+                            chip.querySelector('.word-chip-remove-btn').style.background = '';
+                            chip.querySelector('.word-chip-remove-btn').style.color = '';
+                        } else {
+                            previewExcludedWords.add(w.english);
+                            chip.style.opacity = '0.45';
+                            chip.style.borderColor = 'var(--wrong)';
+                            chip.querySelector('.word-chip-remove-btn').style.background = 'var(--wrong)';
+                            chip.querySelector('.word-chip-remove-btn').style.color = 'white';
+                        }
+                        _updatePreviewWordCount(parsed.length);
+                    });
+                }
                 grid.appendChild(chip);
             });
+            _updatePreviewWordCount(parsed.length);
         }
     } else {
         document.getElementById('preview-word-grid').innerHTML =
@@ -3094,6 +3166,19 @@
     function startCourseFromPreview() {
         window._previewExcludedWords = previewExcludedWords.size > 0 ? new Set(previewExcludedWords) : null;
         loadWordList();
+    }
+
+    function _updatePreviewWordCount(total) {
+        const remaining = total - previewExcludedWords.size;
+        const learntCount = [...previewExcludedWords].filter(w => {
+            const chip = document.querySelector(`.word-chip-removable[data-word="${CSS.escape(w)}"]`);
+            return chip && chip.classList.contains('word-chip-learnt');
+        }).length;
+        const manuallyExcluded = previewExcludedWords.size - learntCount;
+        let label = `${remaining} / ${total} mots`;
+        if (learntCount > 0) label += ` · ${learntCount} acquis ✓`;
+        if (manuallyExcluded > 0) label += ` · ${manuallyExcluded} ignoré${manuallyExcluded > 1 ? 's' : ''}`;
+        document.getElementById('preview-word-count').textContent = label;
     }
 
         // ══════════════════════════════════════════
@@ -3248,6 +3333,7 @@
                 updateProgress();
                 if (!ex1Incorrect.find(w => w.english === wordObj.english)) {
                     firstTryCorrect++;
+                    sessionLearntWords.add(wordObj.english);
                 } else {
                     // Word was wrong before — this is a second-attempt correct
                     secondTryCorrect++;
@@ -3700,6 +3786,7 @@
                 playAudio(false, answer);
                 if (!tried) {
                     firstTryCorrect++;
+                    sessionLearntWords.add(answer);
                 }
                 input.dataset.ex3Tried = "true";
             } else {
@@ -3892,6 +3979,7 @@
             secondTryCorrect = 0;
             retestAllCorrect = true;
             wordErrors = {};
+            sessionLearntWords = new Set();
             initLives();
             updateProgress();
             document.getElementById('header-home-btn').classList.remove('hidden');
@@ -4075,6 +4163,7 @@ async function fetchLeaderboard(courseKey) {
             secondTryCorrect = 0;
             retestAllCorrect = true;
             wordErrors = {};
+            sessionLearntWords = new Set();
             initLives();
             updateProgress();
 
@@ -4291,9 +4380,15 @@ async function fetchLeaderboard(courseKey) {
     const wordsLearning = wordsInSession - wordsLearnt;
 
     progress.seen += wordsInSession;
-    progress.learnt += wordsLearnt;
     progress.learning += wordsLearning;
-    progress.score = (progress.score || 0) + scoreGained; // ← new
+    progress.score = (progress.score || 0) + scoreGained;
+
+    // Merge newly learnt words into the stored list (by English string)
+    if (!progress.learnt_words) progress.learnt_words = [];
+    const learntSet = new Set(progress.learnt_words);
+    sessionLearntWords.forEach(w => learntSet.add(w));
+    progress.learnt_words = [...learntSet];
+    progress.learnt = progress.learnt_words.length; // keep count in sync
 
     await sbClient.from('profiles').update({
         total_score: currentProfile.total_score,
