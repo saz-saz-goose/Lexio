@@ -1950,8 +1950,11 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════
-     SCREEN: COURSE WORD PREVIEW
+    <div id="home-footer" style="width:100%; text-align:center; padding: 20px 0 8px; margin-top: 32px; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--ink-light); display: none;">
+        <a href="/privacy.html" style="color: var(--ink-light); text-decoration: none; margin: 0 10px;">Politique de confidentialité</a>
+        ·
+        <a href="/terms.html" style="color: var(--ink-light); text-decoration: none; margin: 0 10px;">Conditions d'utilisation</a>
+    </div>
 	══════════════════════════════════════════ -->
     <div class="screen" id="screen-word-preview">
         <div class="card" style="padding: 24px; width: 100%;">
@@ -2836,8 +2839,10 @@
             if (el) {
                 el.classList.add('active');
                 el.style.animation = 'none';
-                el.offsetHeight; // reflow
+                el.offsetHeight;
                 el.style.animation = '';
+                const footer = document.getElementById('home-footer');
+                if (footer) footer.style.display = (id === 'screen-home') ? 'block' : 'none';
 
                 if (id === 'screen-profile-own' && typeof renderProfileOwn === 'function') {
                     renderProfileOwn();
@@ -2982,9 +2987,9 @@
                 description: "Listes de vocabulaire alignées sur les examens de Cambridge et le programme national.",
                 files: [
                     { filename: "CAMBRIDGE STARTERS ANIMALS.json", title: "Les Animaux (Starters)", level: "A1", approximate_word_count: 30 },
-                    { filename: "CAMBRIDGE STARTERS.json", title: "Cambridge Starters", level: "Pre-A1", approximate_word_count: 200 },
-                    { filename: "CAMBRIDGE MOVERS.json", title: "Cambridge Movers", level: "A1", approximate_word_count: 220 },
-                    { filename: "CAMBRIDGE FLYERS.json", title: "Cambridge Flyers", level: "A2", approximate_word_count: 200 },
+                    { filename: "CAMBRIDGE STARTERS.json", title: "Cambridge YLE Starters", level: "Pre-A1", approximate_word_count: 200 },
+                    { filename: "CAMBRIDGE MOVERS.json", title: "Cambridge YLE Movers", level: "A1", approximate_word_count: 220 },
+                    { filename: "CAMBRIDGE FLYERS.json", title: "Cambridge YLE Flyers", level: "A2", approximate_word_count: 200 },
                     { filename: "BREVET.json", title: "Brevet - Vocabulaire", level: "B1", approximate_word_count: 160 },
                     { filename: "BAC - axes thematiques.json", title: "Bac - Axes Thématiques", level: "B2", approximate_word_count: 125 }
                 ]
@@ -2996,13 +3001,12 @@
                 icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2C3E6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
                 description: "Listes thématiques couvrant la vie quotidienne et les sujets d'intérêt.",
                 files: [
-                    { filename: "THEMES A1-A2.json", title: "Thematic vocabulary A1-A2", level: "A1-A2", approximate_word_count: 200 },
-                    { filename: "THEMES B1-B2.json", title: "Thematic vocabulary B1-B2", level: "B1-B2", approximate_word_count: 210 },
-                    { filename: "THEMES C1-C2.json", title: "Thematic vocabulary C1-C2", level: "C1-C2", approximate_word_count: 210 },
+                    { filename: "THEMES A1-A2.json", title: "Thèmes A1-A2", level: "A1-A2", approximate_word_count: 200 },
+                    { filename: "THEMES B1-B2.json", title: "Thèmes B1-B2", level: "B1-B2", approximate_word_count: 210 },
+                    { filename: "THEMES C1-C2.json", title: "Thèmes C1-C2", level: "C1-C2", approximate_word_count: 210 },
                     { filename: "BUSINESS AND FINANCE.json", title: "Business and Finance", level: "C1-C2", approximate_word_count: 140 },
                     { filename: "MEDICAL AND PSYCHOLOGICAL.json", title: "Medical and Psychological", level: "C1-C2", approximate_word_count: 165 },
-                    { filename: "PRACTICAL ENGLISH.json", title: "Practical English", level: "B1-B2", approximate_word_count: 140 },
-					{ filename: "Phrasal verbs.json", title: "Phrasal Verbs", level: "B1", approximate_word_count: 10 }
+                    { filename: "PRACTICAL ENGLISH.json", title: "Practical English", level: "B1-B2", approximate_word_count: 140 }
                 ]
             },
             {
@@ -3012,9 +3016,9 @@
                 icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2C3E6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
                 description: "Vocabulaire classé par nature grammaticale et par niveau CEFR.",
                 files: [
-                    { filename: "WORD GROUPS A1-A2.json", title: "Word groups A1-A2", level: "A1-A2", approximate_word_count: 230 },
-                    { filename: "WORD GROUPS B1-B2.json", title: "Word groups B1-B2", level: "B1-B2", approximate_word_count: 330 },
-                    { filename: "WORD GROUPS C1-C2.json", title: "Word groups C1-C2", level: "C1-C2", approximate_word_count: 330 }
+                    { filename: "WORD GROUPS A1-A2.json", title: "Groupes de Mots A1-A2", level: "A1-A2", approximate_word_count: 230 },
+                    { filename: "WORD GROUPS B1-B2.json", title: "Groupes de Mots B1-B2", level: "B1-B2", approximate_word_count: 330 },
+                    { filename: "WORD GROUPS C1-C2.json", title: "Groupes de Mots C1-C2", level: "C1-C2", approximate_word_count: 330 }
                 ]
             }
         ];
