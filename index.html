@@ -3187,9 +3187,9 @@
         }
 
         function selectThemeTopic(filename, fileTitle, topicKey, topicLabel, rawWords) {
-            // Set up the word list directly from the topic's words
             WORD_LIST_FILE = 'word-lists/' + filename;
             currentCourseName = `${fileTitle} — ${topicLabel}`;
+            // Stash the pre-filtered words so showCoursePreview uses them
             window._themeTopicWords = rawWords.map(w => ({
                 english: w.word || w.english || '',
                 french: w.french || '',
@@ -3197,7 +3197,7 @@
                 sentences: w.sentences || [],
                 type: w.type || ''
             })).filter(w => w.english);
-            loadWordList();
+            showCoursePreview(filename, `${fileTitle} — ${topicLabel}`);
         }
 
         function _renderThemeBackBtn() {
@@ -3334,18 +3334,40 @@
     }
     if (levelText) document.getElementById('preview-level-badge').textContent = `Niveau ${levelText}`;
 
-    // Load word list and course leaderboard in parallel
+    // Load word list — use pre-filtered topic words if coming from a theme topic
     const courseKey = 'word-lists/' + filename;
 
-    const [wordResult] = await Promise.allSettled([
-        fetch('word-lists/' + filename).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }),
-    ]);
-
-    if (wordResult.status === 'fulfilled') {
-        const rawParsed = parseWordList(wordResult.value);
-        // Translate missing French entries (same as study session)
+    let rawParsed;
+    if (window._themeTopicWords && window._themeTopicWords.length > 0) {
+        rawParsed = window._themeTopicWords;
+        window._themeTopicWords = null;
+        // Wrap as a fulfilled-style result
         const parsed = await translateAndGenerateSentencesForSession(rawParsed);
         previewExcludedWords = new Set();
+        _renderPreviewWordChips(parsed, courseKey);
+    } else {
+        const [wordResult] = await Promise.allSettled([
+            fetch('word-lists/' + filename).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }),
+        ]);
+
+        if (wordResult.status === 'fulfilled') {
+            const rawParsed = parseWordList(wordResult.value);
+            const parsed = await translateAndGenerateSentencesForSession(rawParsed);
+            previewExcludedWords = new Set();
+            _renderPreviewWordChips(parsed, courseKey);
+        } else {
+            document.getElementById('preview-word-grid').innerHTML =
+                `<div style="grid-column: span 2; text-align: center; color: var(--wrong);">Impossible de charger la liste.</div>`;
+        }
+    }
+
+    // Load the per-course leaderboard (only if logged in)
+    if (currentProfile && sbClient) {
+        await fetchCourseLeaderboard(courseKey, title || filename);
+    }
+}
+
+    function _renderPreviewWordChips(parsed, courseKey) {
 
         // Build the set of learnt words from both sources
         const courseProgress = currentProfile?.courses_progress?.[courseKey];
@@ -3366,7 +3388,6 @@
                 chip.dataset.word = w.english;
 
                 if (isLearnt) {
-                    // Auto-exclude learnt words
                     previewExcludedWords.add(w.english);
                     chip.innerHTML = `
                         <span class="word-chip-en">${w.english}</span>
@@ -3375,7 +3396,6 @@
                     `;
                     chip.querySelector('.word-chip-learnt-badge').addEventListener('click', () => {
                         if (previewExcludedWords.has(w.english)) {
-                            // Toggle back in: re-study this word
                             previewExcludedWords.delete(w.english);
                             chip.classList.remove('word-chip-learnt');
                             chip.style.opacity = '1';
@@ -3418,16 +3438,77 @@
             });
             _updatePreviewWordCount(parsed.length);
         }
-    } else {
-        document.getElementById('preview-word-grid').innerHTML =
-            `<div style="grid-column: span 2; text-align: center; color: var(--wrong);">Impossible de charger la liste.</div>`;
     }
 
-    // Load the per-course leaderboard (only if logged in)
-    if (currentProfile && sbClient) {
-        await fetchCourseLeaderboard(courseKey, title || filename);
-    }
-}
+    function _renderPreviewWordChips(parsed, courseKey) {
+        const courseProgress = currentProfile?.courses_progress?.[courseKey];
+        const learntFromStudy = courseProgress?.learnt_words || [];
+        const learntFromTestOut = courseProgress?.test_out?.known_words || [];
+        const learntSet = new Set([...learntFromStudy, ...learntFromTestOut]);
+
+        document.getElementById('preview-word-count').textContent = `${parsed.length} mots`;
+        const grid = document.getElementById('preview-word-grid');
+        if (parsed.length === 0) {
+            grid.innerHTML = `<div style="grid-column: span 2; text-align: center; color: var(--ink-light);">Aucun mot trouvé.</div>`;
+            return;
+        }
+        grid.innerHTML = '';
+        parsed.forEach(w => {
+            const isLearnt = learntSet.has(w.english);
+            const chip = document.createElement('div');
+            chip.className = 'word-chip-removable' + (isLearnt ? ' word-chip-learnt' : '');
+            chip.dataset.word = w.english;
+
+            if (isLearnt) {
+                previewExcludedWords.add(w.english);
+                chip.innerHTML = `
+                    <span class="word-chip-en">${w.english}</span>
+                    <span class="word-chip-fr">${w.french || '—'}</span>
+                    <button class="word-chip-learnt-badge" title="Déjà acquis — cliquer pour réétudier">✓</button>
+                `;
+                chip.querySelector('.word-chip-learnt-badge').addEventListener('click', () => {
+                    if (previewExcludedWords.has(w.english)) {
+                        previewExcludedWords.delete(w.english);
+                        chip.classList.remove('word-chip-learnt');
+                        chip.style.opacity = '1';
+                        const btn = chip.querySelector('.word-chip-learnt-badge');
+                        btn.textContent = '✕';
+                        btn.className = 'word-chip-remove-btn';
+                    } else {
+                        previewExcludedWords.add(w.english);
+                        chip.classList.add('word-chip-learnt');
+                        const btn = chip.querySelector('.word-chip-remove-btn');
+                        btn.textContent = '✓';
+                        btn.className = 'word-chip-learnt-badge';
+                    }
+                    _updatePreviewWordCount(parsed.length);
+                });
+            } else {
+                chip.innerHTML = `
+                    <span class="word-chip-en">${w.english}</span>
+                    <span class="word-chip-fr">${w.french || '—'}</span>
+                    <button class="word-chip-remove-btn" title="Je ne veux pas apprendre ce mot">✕</button>
+                `;
+                chip.querySelector('.word-chip-remove-btn').addEventListener('click', () => {
+                    if (previewExcludedWords.has(w.english)) {
+                        previewExcludedWords.delete(w.english);
+                        chip.style.opacity = '1';
+                        chip.style.borderColor = '';
+                        chip.querySelector('.word-chip-remove-btn').style.background = '';
+                        chip.querySelector('.word-chip-remove-btn').style.color = '';
+                    } else {
+                        previewExcludedWords.add(w.english);
+                        chip.style.opacity = '0.45';
+                        chip.style.borderColor = 'var(--wrong)';
+                        chip.querySelector('.word-chip-remove-btn').style.background = 'var(--wrong)';
+                        chip.querySelector('.word-chip-remove-btn').style.color = 'white';
+                    }
+                    _updatePreviewWordCount(parsed.length);
+                });
+            }
+            grid.appendChild(chip);
+        });
+        _updatePreviewWordCount(parsed.length);
 
     async function fetchCourseLeaderboard(courseKey, courseName) {
     const leaderboardDiv = document.getElementById('preview-leaderboard');
