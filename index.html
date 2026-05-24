@@ -32,6 +32,10 @@
             padding: 0;
         }
 
+        html {
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'DM Sans', sans-serif;
             background: var(--bg);
@@ -133,6 +137,7 @@
             align-items: center;
             gap: 20px;
             animation: fadeUp 0.4s ease both;
+            overflow-x: hidden;
         }
 
         .screen.active {
@@ -1951,7 +1956,7 @@
         </div>
     </div>
 
-    <div id="home-footer" style="width:100%; text-align:center; padding: 20px 0 8px; margin-top: 32px; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--ink-light); display: none;">
+    <div id="home-footer" style="width:100%; max-width:640px; text-align:center; padding: 20px 0 8px; margin-top: 32px; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--ink-light); display: none;">
         <a href="/privacy.html" style="color: var(--ink-light); text-decoration: none; margin: 0 10px;">Politique de confidentialité</a>
         ·
         <a href="/terms.html" style="color: var(--ink-light); text-decoration: none; margin: 0 10px;">Conditions d'utilisation</a>
