@@ -41,6 +41,13 @@
             max-width: 100vw;
         }
 
+        /* Hide horizontal scrollbar across all browsers */
+        html::-webkit-scrollbar:horizontal,
+        body::-webkit-scrollbar:horizontal {
+            display: none;
+            height: 0;
+        }
+
         body {
             font-family: 'DM Sans', sans-serif;
             background: var(--bg);
