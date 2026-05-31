@@ -3363,7 +3363,6 @@
     let rawParsed;
     if (window._themeTopicWords && window._themeTopicWords.length > 0) {
         rawParsed = window._themeTopicWords;
-        window._themeTopicWords = null;
         // Wrap as a fulfilled-style result
         const parsed = await translateAndGenerateSentencesForSession(rawParsed);
         previewExcludedWords = new Set();
