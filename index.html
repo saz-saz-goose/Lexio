@@ -1313,6 +1313,116 @@
             }
         }
 
+        /* ── WHACK-A-MOLE (Ex4) ── */
+        .mole-prompt {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-align: center;
+            background: rgba(255,255,255,0.92);
+            padding: 8px 28px;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            margin-bottom: 4px;
+            display: inline-block;
+        }
+        .mole-prompt-label {
+            font-size: 0.72rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .mole-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+            padding: 4px 0;
+        }
+        .mole-hole {
+            position: relative;
+            height: 80px;
+            background: var(--bg);
+            border-radius: 50% 50% 14px 14px / 30px 30px 14px 14px;
+            border: 2px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            cursor: pointer;
+            transition: border-color 0.15s;
+        }
+        .mole-hole:active { transform: scale(0.96); }
+        .mole {
+            position: absolute;
+            bottom: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 8px);
+            padding: 8px 4px;
+            border-radius: 10px 10px 6px 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: bottom 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+            line-height: 1.2;
+            word-break: break-word;
+            z-index: 2;
+        }
+        .mole.up { bottom: 4px; }
+        .mole.target {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 -3px 10px rgba(61,90,128,0.25);
+        }
+        .mole.distractor {
+            background: white;
+            color: var(--ink);
+            border: 1.5px solid var(--border);
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.07);
+        }
+        .mole.hit-correct {
+            background: var(--correct) !important;
+            color: white !important;
+            bottom: 4px;
+        }
+        .mole.hit-wrong {
+            background: var(--wrong) !important;
+            color: white !important;
+            bottom: 4px;
+        }
+        .mole-score-fly {
+            position: absolute;
+            color: var(--correct);
+            font-weight: 800;
+            font-size: 1.4rem;
+            pointer-events: none;
+            animation: flyUp 0.9s forwards;
+            z-index: 30;
+            left: 50%;
+            top: 10px;
+        }
+        .mole-score-fly.wrong { color: var(--wrong); }
+        .mole-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 2px;
+        }
+        .mole-progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
         /* ── LIVES ── */
         .lives-container {
             display: flex;
@@ -2137,6 +2247,29 @@
     <div class="feedback-banner" id="match-feedback"></div>
     <div class="word-counter" id="match-counter"></div>
 	</div>
+
+    <!-- ══════════════════════════════════════════
+     SCREEN: EX4 — Whack-a-Mole
+    ══════════════════════════════════════════ -->
+    <div class="screen" id="screen-ex4">
+        <div style="width:100%; text-align:center;">
+            <div class="mole-prompt-label">Tapez le bon mot !</div>
+            <div class="mole-prompt" id="ex4-french"></div>
+        </div>
+
+        <div style="width:100%; display:flex; justify-content:space-between; align-items:center; padding:0 2px;">
+            <div class="game-timer" id="ex4-timer" style="margin-bottom:0;">—</div>
+            <div class="word-counter" id="ex4-counter"></div>
+        </div>
+
+        <div class="mole-progress-bar">
+            <div class="mole-progress-fill" id="ex4-progress-fill" style="width:0%"></div>
+        </div>
+
+        <div class="mole-grid" id="ex4-grid"></div>
+
+        <div class="feedback-banner" id="ex4-feedback"></div>
+    </div>
 
     <!-- ══════════════════════════════════════════
      SCREEN: EX3 — Partial word typing
@@ -3662,7 +3795,7 @@
                     startEx1Retest();
                 } else {
                     const msgs = ["Almost there!", "Keep it up!", "Great work!"];
-                    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx2Part2);
+                    showTransition(msgs[Math.floor(Math.random() * msgs.length)], isRevisionSession ? startEx3 : startMatch);
                 }
                 return;
             }
@@ -3738,7 +3871,7 @@
         function loadEx1Retest() {
             if (ex1RetestIndex >= ex1RetestQueue.length) {
                 const msgs = ["Almost there!", "Keep it up!", "Great work!"];
-                showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx2Part2);
+                showTransition(msgs[Math.floor(Math.random() * msgs.length)], isRevisionSession ? startEx3 : startMatch);
                 return;
             }
             const w = ex1RetestQueue[ex1RetestIndex];
@@ -3793,7 +3926,7 @@
 
         function startEx2Part1() {
             ex2FullQueue = shuffle([...words]);
-            ex2GameQueue = ex2FullQueue.slice(0, 5);
+            ex2GameQueue = [...ex2FullQueue]; // all words in one pass
             ex2GameIndex = 0;
             ex2CurrentPart = 1;
             showScreen('screen-ex2-intro');
@@ -3801,20 +3934,6 @@
         }
 
         function startEx2Part1Game() {
-            ex2GameActive = true;
-            showScreen('screen-ex2-game');
-            loadEx2GameWord();
-        }
-
-        function startEx2Part2() {
-            ex2GameQueue = ex2FullQueue.slice(5);
-            ex2GameIndex = 0;
-            ex2CurrentPart = 2;
-            showScreen('screen-ex2-intro');
-            document.querySelector('#screen-ex2-intro .btn-primary').setAttribute('onclick', 'startEx2Part2Game()');
-        }
-
-        function startEx2Part2Game() {
             ex2GameActive = true;
             showScreen('screen-ex2-game');
             loadEx2GameWord();
@@ -3830,20 +3949,11 @@
             if (ex2GameIndex >= ex2GameQueue.length) {
                 stepsCompleted++;
                 updateProgress();
-                // Determine which part just finished
-               if (ex2CurrentPart === 1) {
-                    // Part 1 done: go to EX1
-                    const msgs = ["Now let's test your memory!", "Exercise time!", "Keep going!"];
-                    showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx1);
-                } else {
-                    // Part 2 done: go to Match (skip during revision)
-                    const msgs = ["You're doing so well!", "Almost there!", "Fantastic!"];
-                    showTransition(msgs[Math.floor(Math.random() * msgs.length)], isRevisionSession ? startEx3 : startMatch);
-                }
-
-               return;
-
-           	}
+                // Ex2 done — go straight to Ex1
+                const msgs = ["Now let's test your memory!", "Exercise time!", "Keep going!"];
+                showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx1);
+                return;
+            }
 
 
             const w = ex2GameQueue[ex2GameIndex];
@@ -4062,7 +4172,7 @@
         if (matchPairs.length === 0) {
             setTimeout(() => {
                 const msgs = ["All matched!", "Parfait !", "Excellent !"];
-                showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx3);
+                showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx4);
             }, 600);
         }
     } else {
@@ -4084,6 +4194,214 @@
     document.getElementById('match-counter').textContent = `${matched} / ${words.length} paires trouvées`;
 	}
     	// ══════════════════════════════════════════
+        // EX 4 — WHACK-A-MOLE
+        // ══════════════════════════════════════════
+        let ex4Queue       = [];
+        let ex4Index       = 0;
+        let ex4TimeLeft    = 0;
+        let ex4TimerInterval = null;
+        let ex4MoleTimers  = []; // setTimeout handles for pending mole hides/spawns
+        let ex4Active      = false;
+        const EX4_HOLES    = 6;   // 2 rows × 3 cols
+        const EX4_WORD_TIME = 5;  // seconds per word
+
+        function startEx4() {
+            ex4Queue = shuffle([...words]);
+            ex4Index = 0;
+            ex4Active = true;
+            showScreen('screen-ex4');
+            _ex4LoadWord();
+        }
+
+        function _ex4LoadWord() {
+            // Clear any pending timers from previous word
+            ex4MoleTimers.forEach(t => clearTimeout(t));
+            ex4MoleTimers = [];
+            if (ex4TimerInterval) clearInterval(ex4TimerInterval);
+
+            if (ex4Index >= ex4Queue.length) {
+                ex4Active = false;
+                stepsCompleted++;
+                updateProgress();
+                const msgs = ["Almost there!", "Presque fini !", "Super boulot !"];
+                showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx3);
+                return;
+            }
+
+            const w = ex4Queue[ex4Index];
+            document.getElementById('ex4-french').textContent = w.french;
+            document.getElementById('ex4-counter').textContent = `${ex4Index + 1} / ${ex4Queue.length}`;
+            document.getElementById('ex4-progress-fill').style.width =
+                `${Math.round((ex4Index / ex4Queue.length) * 100)}%`;
+            document.getElementById('ex4-feedback').className = 'feedback-banner';
+
+            // Build the 6 holes fresh
+            const grid = document.getElementById('ex4-grid');
+            grid.innerHTML = '';
+            for (let i = 0; i < EX4_HOLES; i++) {
+                const hole = document.createElement('div');
+                hole.className = 'mole-hole';
+                hole.id = `mole-hole-${i}`;
+                grid.appendChild(hole);
+            }
+
+            // Pick distractor words (other session words + typo variants)
+            const distractors = _ex4GetDistractors(w.english, EX4_HOLES - 1);
+
+            // Assign each word a hole slot (target randomly placed)
+            const slots = shuffle([w.english, ...distractors]);
+
+            // Schedule staggered pop-ups
+            slots.forEach((word, i) => {
+                const isTarget = word === w.english;
+                // Stagger appearance: first mole pops at 150ms, then every 200ms
+                const delay = 150 + i * 180;
+                const t = setTimeout(() => {
+                    if (!ex4Active) return;
+                    _ex4SpawnMole(i, word, isTarget, w);
+                }, delay);
+                ex4MoleTimers.push(t);
+            });
+
+            // Countdown timer
+            ex4TimeLeft = EX4_WORD_TIME;
+            _ex4UpdateTimer();
+            ex4TimerInterval = setInterval(() => {
+                ex4TimeLeft--;
+                _ex4UpdateTimer();
+                if (ex4TimeLeft <= 0) {
+                    clearInterval(ex4TimerInterval);
+                    if (!ex4Active) return;
+                    // Time's up — count as wrong, flash feedback, advance
+                    loseLife();
+                    showFeedback('ex4-feedback', 'wrong', `✗ Temps écoulé — c'était : "${w.english}"`);
+                    triggerGlow('wrong');
+                    ex4Active = false;
+                    const t = setTimeout(() => {
+                        ex4Active = true;
+                        ex4Index++;
+                        _ex4LoadWord();
+                    }, 1200);
+                    ex4MoleTimers.push(t);
+                }
+            }, 1000);
+        }
+
+        function _ex4SpawnMole(slotIndex, word, isTarget, wordObj) {
+            const hole = document.getElementById(`mole-hole-${slotIndex}`);
+            if (!hole) return;
+
+            // Remove any existing mole in this hole
+            const existing = hole.querySelector('.mole');
+            if (existing) existing.remove();
+
+            const mole = document.createElement('div');
+            mole.className = `mole ${isTarget ? 'target' : 'distractor'}`;
+            mole.textContent = word;
+            hole.appendChild(mole);
+
+            // Pop up after tiny delay so transition fires
+            const t1 = setTimeout(() => mole.classList.add('up'), 20);
+            ex4MoleTimers.push(t1);
+
+            // Auto-hide after random dwell time
+            const dwell = isTarget
+                ? 1800 + Math.random() * 1200   // target stays 1.8–3s
+                : 1200 + Math.random() * 1000;  // distractors stay 1.2–2.2s
+
+            const t2 = setTimeout(() => {
+                if (mole.parentNode) {
+                    mole.classList.remove('up');
+                    const t3 = setTimeout(() => {
+                        if (mole.parentNode) mole.remove();
+                        // Respawn this slot after a pause (keep things moving)
+                        if (ex4Active) {
+                            const t4 = setTimeout(() => {
+                                if (!ex4Active) return;
+                                const newDistractors = _ex4GetDistractors(wordObj.english, 1);
+                                const newWord = isTarget ? wordObj.english : (newDistractors[0] || word);
+                                _ex4SpawnMole(slotIndex, newWord, isTarget, wordObj);
+                            }, 300 + Math.random() * 600);
+                            ex4MoleTimers.push(t4);
+                        }
+                    }, 250);
+                    ex4MoleTimers.push(t3);
+                }
+            }, dwell);
+            ex4MoleTimers.push(t2);
+
+            mole.addEventListener('click', () => {
+                if (!ex4Active) return;
+                if (isTarget) {
+                    // ✅ Correct hit
+                    ex4Active = false;
+                    clearInterval(ex4TimerInterval);
+                    ex4MoleTimers.forEach(t => clearTimeout(t));
+                    ex4MoleTimers = [];
+
+                    mole.classList.add('hit-correct');
+                    playAudio(false, wordObj.english);
+                    triggerGlow('correct');
+                    stepsCompleted++;
+                    updateProgress();
+
+                    // Score fly
+                    const fly = document.createElement('div');
+                    fly.className = 'mole-score-fly';
+                    fly.textContent = '+1';
+                    hole.appendChild(fly);
+                    setTimeout(() => fly.remove(), 900);
+
+                    showFeedback('ex4-feedback', 'correct', '✓ Correct !');
+                    const t = setTimeout(() => {
+                        ex4Active = true;
+                        ex4Index++;
+                        _ex4LoadWord();
+                    }, 900);
+                    ex4MoleTimers.push(t);
+                } else {
+                    // ✗ Wrong hit — flash red, don't advance
+                    mole.classList.add('hit-wrong');
+                    loseLife();
+                    triggerGlow('wrong');
+                    showFeedback('ex4-feedback', 'wrong', `✗ Non ! Cherche "${wordObj.english}"`);
+                    setTimeout(() => {
+                        mole.classList.remove('hit-wrong');
+                        mole.classList.add('distractor');
+                        document.getElementById('ex4-feedback').className = 'feedback-banner';
+                    }, 700);
+                }
+            });
+        }
+
+        function _ex4UpdateTimer() {
+            const el = document.getElementById('ex4-timer');
+            if (!el) return;
+            el.textContent = `${ex4TimeLeft}s`;
+            el.style.color = ex4TimeLeft <= 2 ? 'var(--wrong)' : 'var(--accent)';
+        }
+
+        function _ex4GetDistractors(correctWord, count) {
+            // Priority: other session words, then typo variants, then randoms
+            const pool = [];
+            const others = allEnglish.filter(e => e !== correctWord);
+            pool.push(...shuffle(others));
+
+            // Pad with typo variants if needed
+            while (pool.length < count) {
+                if (correctWord.length > 3) {
+                    const chars = correctWord.split('');
+                    const idx = 1 + Math.floor(Math.random() * (chars.length - 2));
+                    [chars[idx], chars[idx + 1]] = [chars[idx + 1], chars[idx]];
+                    pool.push(chars.join(''));
+                } else {
+                    pool.push(correctWord + 's');
+                }
+            }
+            return pool.slice(0, count);
+        }
+
+        // ══════════════════════════════════════════
         // EX 3 — Partial word typing
         // ══════════════════════════════════════════
         function startEx3() {
