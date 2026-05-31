@@ -3513,6 +3513,10 @@
 }
 
     function startCourseFromPreview() {
+        const previewGrid = document.getElementById('preview-word-grid');
+        const total = previewGrid ? previewGrid.querySelectorAll('.word-chip-removable').length : 0;
+        const remaining = total - previewExcludedWords.size;
+        if (remaining < 4) return;
         window._previewExcludedWords = previewExcludedWords.size > 0 ? new Set(previewExcludedWords) : null;
         loadWordList();
     }
@@ -3527,7 +3531,18 @@
         let label = `${remaining} / ${total} mots`;
         if (learntCount > 0) label += ` · ${learntCount} acquis ✓`;
         if (manuallyExcluded > 0) label += ` · ${manuallyExcluded} ignoré${manuallyExcluded > 1 ? 's' : ''}`;
+        if (remaining < 4) label += ` · minimum 4 requis`;
         document.getElementById('preview-word-count').textContent = label;
+
+        const startBtn = document.getElementById('preview-start-btn');
+        if (startBtn) {
+            startBtn.disabled = remaining < 4;
+            startBtn.style.opacity = remaining < 4 ? '0.4' : '1';
+            startBtn.style.cursor = remaining < 4 ? 'not-allowed' : 'pointer';
+            startBtn.textContent = remaining < 4
+                ? `Sélectionne au moins 4 mots pour commencer`
+                : `Commencer l'apprentissage →`;
+        }
     }
 
         // ══════════════════════════════════════════
