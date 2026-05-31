@@ -1353,7 +1353,6 @@
             align-items: flex-end;
             justify-content: center;
             cursor: pointer;
-            transition: border-color 0.15s;
         }
         .mole-hole:active { transform: scale(0.96); }
         .mole {
@@ -1373,27 +1372,23 @@
             line-height: 1.2;
             word-break: break-word;
             z-index: 2;
-        }
-        .mole.up { bottom: 4px; }
-        .mole.target {
-            background: var(--accent);
-            color: white;
-            box-shadow: 0 -3px 10px rgba(61,90,128,0.25);
-        }
-        .mole.distractor {
+            /* All moles look the same — white with border */
             background: white;
             color: var(--ink);
             border: 1.5px solid var(--border);
             box-shadow: 0 -2px 6px rgba(0,0,0,0.07);
         }
+        .mole.up { bottom: 4px; }
         .mole.hit-correct {
             background: var(--correct) !important;
             color: white !important;
+            border-color: var(--correct) !important;
             bottom: 4px;
         }
         .mole.hit-wrong {
             background: var(--wrong) !important;
             color: white !important;
+            border-color: var(--wrong) !important;
             bottom: 4px;
         }
         .mole-score-fly {
@@ -2249,11 +2244,26 @@
 	</div>
 
     <!-- ══════════════════════════════════════════
-     SCREEN: EX4 — Whack-a-Mole
+     SCREEN: EX4 INTRO — Whack-a-Mole
+    ══════════════════════════════════════════ -->
+    <div class="screen" id="screen-ex4-intro">
+        <div class="card" style="text-align:center;">
+            <div class="section-title mt-4">🔨 Whack-a-Mole !</div>
+            <div class="section-sub mt-8">
+                Un mot en français apparaît en haut. Des moles surgissent des trous avec des traductions anglaises — tapez la <strong>bonne</strong> avant qu'elle redisparaisse !<br><br>
+                Attention aux faux mots qui essaient de vous piéger. Vous avez <strong>5 secondes</strong> par mot.
+            </div>
+            <div class="divider" style="margin: 20px 0;"></div>
+            <button class="btn-primary" onclick="startEx4Game()">C'est parti !</button>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+     SCREEN: EX4 GAME — Whack-a-Mole
     ══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex4">
         <div style="width:100%; text-align:center;">
-            <div class="mole-prompt-label">Tapez le bon mot !</div>
+            <div class="mole-prompt-label">Tapez le bon mot en anglais !</div>
             <div class="mole-prompt" id="ex4-french"></div>
         </div>
 
@@ -3939,7 +3949,7 @@
             loadEx2GameWord();
         }
 
-        // Called from intro screen - handles which part we're in
+        // Called from intro screen
         function startEx2Game() {
             showScreen('screen-ex2-game');
             loadEx2GameWord();
@@ -3949,7 +3959,6 @@
             if (ex2GameIndex >= ex2GameQueue.length) {
                 stepsCompleted++;
                 updateProgress();
-                // Ex2 done — go straight to Ex1
                 const msgs = ["Now let's test your memory!", "Exercise time!", "Keep going!"];
                 showTransition(msgs[Math.floor(Math.random() * msgs.length)], startEx1);
                 return;
@@ -4193,28 +4202,33 @@
     const matched = words.length - matchPairs.length;
     document.getElementById('match-counter').textContent = `${matched} / ${words.length} paires trouvées`;
 	}
-    	// ══════════════════════════════════════════
+        // ══════════════════════════════════════════
         // EX 4 — WHACK-A-MOLE
         // ══════════════════════════════════════════
-        let ex4Queue       = [];
-        let ex4Index       = 0;
-        let ex4TimeLeft    = 0;
+        let ex4Queue        = [];
+        let ex4Index        = 0;
+        let ex4TimeLeft     = 0;
         let ex4TimerInterval = null;
-        let ex4MoleTimers  = []; // setTimeout handles for pending mole hides/spawns
-        let ex4Active      = false;
-        const EX4_HOLES    = 6;   // 2 rows × 3 cols
-        const EX4_WORD_TIME = 5;  // seconds per word
+        let ex4MoleTimers   = [];
+        let ex4Active       = false;
+        const EX4_HOLES     = 6;
+        const EX4_WORD_TIME = 5;
 
+        // Show the intro screen first
         function startEx4() {
-            ex4Queue = shuffle([...words]);
-            ex4Index = 0;
+            showScreen('screen-ex4-intro');
+        }
+
+        // Called by the intro screen's button
+        function startEx4Game() {
+            ex4Queue  = shuffle([...words]);
+            ex4Index  = 0;
             ex4Active = true;
             showScreen('screen-ex4');
             _ex4LoadWord();
         }
 
         function _ex4LoadWord() {
-            // Clear any pending timers from previous word
             ex4MoleTimers.forEach(t => clearTimeout(t));
             ex4MoleTimers = [];
             if (ex4TimerInterval) clearInterval(ex4TimerInterval);
@@ -4235,7 +4249,7 @@
                 `${Math.round((ex4Index / ex4Queue.length) * 100)}%`;
             document.getElementById('ex4-feedback').className = 'feedback-banner';
 
-            // Build the 6 holes fresh
+            // Build 6 fresh holes
             const grid = document.getElementById('ex4-grid');
             grid.innerHTML = '';
             for (let i = 0; i < EX4_HOLES; i++) {
@@ -4245,25 +4259,21 @@
                 grid.appendChild(hole);
             }
 
-            // Pick distractor words (other session words + typo variants)
+            // One target + (EX4_HOLES-1) distractors, shuffled into slots
             const distractors = _ex4GetDistractors(w.english, EX4_HOLES - 1);
-
-            // Assign each word a hole slot (target randomly placed)
             const slots = shuffle([w.english, ...distractors]);
 
-            // Schedule staggered pop-ups
+            // Staggered pop-up
             slots.forEach((word, i) => {
                 const isTarget = word === w.english;
-                // Stagger appearance: first mole pops at 150ms, then every 200ms
-                const delay = 150 + i * 180;
                 const t = setTimeout(() => {
                     if (!ex4Active) return;
                     _ex4SpawnMole(i, word, isTarget, w);
-                }, delay);
+                }, 150 + i * 180);
                 ex4MoleTimers.push(t);
             });
 
-            // Countdown timer
+            // Countdown
             ex4TimeLeft = EX4_WORD_TIME;
             _ex4UpdateTimer();
             ex4TimerInterval = setInterval(() => {
@@ -4272,16 +4282,15 @@
                 if (ex4TimeLeft <= 0) {
                     clearInterval(ex4TimerInterval);
                     if (!ex4Active) return;
-                    // Time's up — count as wrong, flash feedback, advance
-                    loseLife();
-                    showFeedback('ex4-feedback', 'wrong', `✗ Temps écoulé — c'était : "${w.english}"`);
-                    triggerGlow('wrong');
+                    // Time's up — no life lost, just show answer and advance
                     ex4Active = false;
+                    showFeedback('ex4-feedback', 'wrong', `⏱ Temps écoulé — c'était : "${w.english}"`);
+                    triggerGlow('wrong');
                     const t = setTimeout(() => {
                         ex4Active = true;
                         ex4Index++;
                         _ex4LoadWord();
-                    }, 1200);
+                    }, 1400);
                     ex4MoleTimers.push(t);
                 }
             }, 1000);
@@ -4291,49 +4300,44 @@
             const hole = document.getElementById(`mole-hole-${slotIndex}`);
             if (!hole) return;
 
-            // Remove any existing mole in this hole
             const existing = hole.querySelector('.mole');
             if (existing) existing.remove();
 
             const mole = document.createElement('div');
-            mole.className = `mole ${isTarget ? 'target' : 'distractor'}`;
+            mole.className = 'mole'; // all moles look identical
             mole.textContent = word;
             hole.appendChild(mole);
 
-            // Pop up after tiny delay so transition fires
             const t1 = setTimeout(() => mole.classList.add('up'), 20);
             ex4MoleTimers.push(t1);
 
-            // Auto-hide after random dwell time
-            const dwell = isTarget
-                ? 1800 + Math.random() * 1200   // target stays 1.8–3s
-                : 1200 + Math.random() * 1000;  // distractors stay 1.2–2.2s
-
+            // Auto-hide after dwell time (same for target and distractors — no visual hint)
+            const dwell = 1500 + Math.random() * 1000;
             const t2 = setTimeout(() => {
-                if (mole.parentNode) {
-                    mole.classList.remove('up');
-                    const t3 = setTimeout(() => {
-                        if (mole.parentNode) mole.remove();
-                        // Respawn this slot after a pause (keep things moving)
-                        if (ex4Active) {
-                            const t4 = setTimeout(() => {
-                                if (!ex4Active) return;
-                                const newDistractors = _ex4GetDistractors(wordObj.english, 1);
-                                const newWord = isTarget ? wordObj.english : (newDistractors[0] || word);
-                                _ex4SpawnMole(slotIndex, newWord, isTarget, wordObj);
-                            }, 300 + Math.random() * 600);
-                            ex4MoleTimers.push(t4);
-                        }
-                    }, 250);
-                    ex4MoleTimers.push(t3);
-                }
+                if (!mole.parentNode) return;
+                mole.classList.remove('up');
+                const t3 = setTimeout(() => {
+                    if (mole.parentNode) mole.remove();
+                    if (ex4Active) {
+                        // Respawn this slot
+                        const t4 = setTimeout(() => {
+                            if (!ex4Active) return;
+                            const newWord = isTarget
+                                ? wordObj.english
+                                : (_ex4GetDistractors(wordObj.english, 1)[0] || word);
+                            _ex4SpawnMole(slotIndex, newWord, isTarget, wordObj);
+                        }, 300 + Math.random() * 500);
+                        ex4MoleTimers.push(t4);
+                    }
+                }, 250);
+                ex4MoleTimers.push(t3);
             }, dwell);
             ex4MoleTimers.push(t2);
 
             mole.addEventListener('click', () => {
                 if (!ex4Active) return;
                 if (isTarget) {
-                    // ✅ Correct hit
+                    // ✅ Correct
                     ex4Active = false;
                     clearInterval(ex4TimerInterval);
                     ex4MoleTimers.forEach(t => clearTimeout(t));
@@ -4345,7 +4349,6 @@
                     stepsCompleted++;
                     updateProgress();
 
-                    // Score fly
                     const fly = document.createElement('div');
                     fly.className = 'mole-score-fly';
                     fly.textContent = '+1';
@@ -4360,14 +4363,14 @@
                     }, 900);
                     ex4MoleTimers.push(t);
                 } else {
-                    // ✗ Wrong hit — flash red, don't advance
+                    // ✗ Wrong — flash red, no life lost, keep going
                     mole.classList.add('hit-wrong');
-                    loseLife();
                     triggerGlow('wrong');
                     showFeedback('ex4-feedback', 'wrong', `✗ Non ! Cherche "${wordObj.english}"`);
                     setTimeout(() => {
-                        mole.classList.remove('hit-wrong');
-                        mole.classList.add('distractor');
+                        if (mole.parentNode) {
+                            mole.classList.remove('hit-wrong');
+                        }
                         document.getElementById('ex4-feedback').className = 'feedback-banner';
                     }, 700);
                 }
@@ -4382,12 +4385,8 @@
         }
 
         function _ex4GetDistractors(correctWord, count) {
-            // Priority: other session words, then typo variants, then randoms
-            const pool = [];
-            const others = allEnglish.filter(e => e !== correctWord);
-            pool.push(...shuffle(others));
-
-            // Pad with typo variants if needed
+            const others = shuffle(allEnglish.filter(e => e !== correctWord));
+            const pool = [...others];
             while (pool.length < count) {
                 if (correctWord.length > 3) {
                     const chars = correctWord.split('');
@@ -4401,7 +4400,7 @@
             return pool.slice(0, count);
         }
 
-        // ══════════════════════════════════════════
+    	// ══════════════════════════════════════════
         // EX 3 — Partial word typing
         // ══════════════════════════════════════════
         function startEx3() {
