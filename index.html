@@ -5979,10 +5979,13 @@
                         if (cand !== answer && !distractors.includes(cand)) distractors.push(cand);
                     }
                 }
-                // Last resort fallbacks
+                // Last resort: use conjugated forms from a broad set of tenses, always respecting irregulars
                 if (distractors.length < 3) {
-                    for (const f of [verb, verb + 's', verb + 'ed', 'was ' + verb.replace(/e$/,'') + 'ing']) {
-                        if (f !== answer && !distractors.includes(f)) { distractors.push(f); if (distractors.length === 3) break; }
+                    const fallbackTenses = ['present_simple','past_simple','present_perfect','future_will','present_continuous'];
+                    for (const ft of fallbackTenses) {
+                        if (distractors.length >= 3) break;
+                        const cand = conjugateVerb(verb, ft, isIrr)[pIdx];
+                        if (cand && cand !== answer && !distractors.includes(cand)) distractors.push(cand);
                     }
                 }
 
