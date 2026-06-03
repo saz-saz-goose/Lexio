@@ -5847,130 +5847,159 @@
             }
         };
 
-        // Rich sentence bank: each entry has a template (with __BLANK__ for the verb),
-        // the base verb, which tense to use, which pronoun index, and context clue words.
-        // __SUBJ__ is replaced with the pronoun at render time.
+        // Rich sentence bank.
+        // Each entry: template (with __BLANK__ for conjugated verb), subjKey (I/you/he/she/it/we/they)
+        // The template already shows the sentence subject as a real word/name.
+        // subjKey drives conjugation — must exactly match the grammatical subject in the template.
+        // No __SUBJ__ placeholder: the subject is hardcoded in the template so it always fits.
         const TENSE_SENTENCE_BANK = {
             present_simple: [
-                { template: 'Every morning, __SUBJ__ __BLANK__ to work instead of taking the bus.', subj: 2, clue: 'every morning (habitual routine)' },
-                { template: 'Scientists say the Sun __BLANK__ in the east and sets in the west.', subj: 2, clue: 'general fact / permanent truth' },
-                { template: 'She __BLANK__ three languages fluently, including Mandarin.', subj: 2, clue: 'permanent ability / general truth' },
-                { template: 'The museum __BLANK__ at nine o\'clock and closes at six.', subj: 2, clue: 'timetable / scheduled event' },
-                { template: 'He __BLANK__ coffee every single day, without exception.', subj: 2, clue: 'habitual action' },
-                { template: 'Water __BLANK__ at one hundred degrees Celsius.', subj: 2, clue: 'scientific fact' },
+                { template: 'Every morning, Maria __BLANK__ to work instead of taking the bus.', subjKey: 'he', clue: 'every morning (habitual routine)' },
+                { template: 'Scientists say the Sun __BLANK__ in the east and sets in the west.', subjKey: 'he', clue: 'general fact / permanent truth' },
+                { template: 'Sofia __BLANK__ three languages fluently, including Mandarin.', subjKey: 'he', clue: 'permanent ability / general truth' },
+                { template: 'The museum __BLANK__ at nine o\'clock and closes at six.', subjKey: 'he', clue: 'timetable / scheduled event' },
+                { template: 'James __BLANK__ coffee every single day, without exception.', subjKey: 'he', clue: 'habitual action' },
+                { template: 'Water __BLANK__ at one hundred degrees Celsius.', subjKey: 'he', clue: 'scientific fact' },
+                { template: 'I __BLANK__ to the gym every Monday before work.', subjKey: 'I', clue: 'every Monday (habitual routine)' },
+                { template: 'They __BLANK__ dinner together as a family every Sunday.', subjKey: 'they', clue: 'every Sunday (habitual routine)' },
             ],
             present_continuous: [
-                { template: 'Look out the window — it __BLANK__ heavily out there!', subj: 2, clue: 'look / right now (action in progress)' },
-                { template: 'She can\'t come to the phone because she __BLANK__ a shower at the moment.', subj: 2, clue: 'at the moment (in progress now)' },
-                { template: 'The number of people using electric cars __BLANK__ rapidly this year.', subj: 2, clue: 'this year / gradual change around now' },
-                { template: 'They __BLANK__ a new shopping centre just outside the town.', subj: 5, clue: 'temporary ongoing project' },
-                { template: 'I __BLANK__ harder these days because the exams are getting closer.', subj: 0, clue: 'these days / temporary situation' },
+                { template: 'Look out the window — it __BLANK__ heavily out there!', subjKey: 'he', clue: 'look / right now (action in progress)' },
+                { template: 'She can\'t come to the phone because she __BLANK__ a shower at the moment.', subjKey: 'he', clue: 'at the moment (in progress now)' },
+                { template: 'The number of electric car users __BLANK__ rapidly this year.', subjKey: 'he', clue: 'this year / gradual change around now' },
+                { template: 'The workers __BLANK__ a new shopping centre just outside the town.', subjKey: 'they', clue: 'temporary ongoing project' },
+                { template: 'I __BLANK__ harder these days because the exams are getting closer.', subjKey: 'I', clue: 'these days / temporary situation' },
+                { template: 'Lena __BLANK__ her sister\'s apartment while she\'s on holiday.', subjKey: 'he', clue: 'temporary arrangement' },
             ],
             past_simple: [
-                { template: 'Last summer, they __BLANK__ across three countries on their motorbikes.', subj: 5, clue: 'last summer (completed past action)' },
-                { template: 'She __BLANK__ the report before the deadline on Friday.', subj: 2, clue: 'on Friday / completed action with time reference' },
-                { template: 'When he was a child, he __BLANK__ to become an astronaut.', subj: 2, clue: 'when he was a child / past habit or state' },
-                { template: 'The earthquake __BLANK__ at exactly 3:17 am and lasted thirty seconds.', subj: 2, clue: 'exact time in the past / single completed event' },
-                { template: 'I __BLANK__ my keys this morning and was late for everything.', subj: 0, clue: 'this morning / completed past action' },
+                { template: 'Last summer, the friends __BLANK__ across three countries on their motorbikes.', subjKey: 'they', clue: 'last summer (completed past action)' },
+                { template: 'Elena __BLANK__ the report before the deadline on Friday.', subjKey: 'he', clue: 'on Friday / completed action with time reference' },
+                { template: 'When he was a child, Tom __BLANK__ to become an astronaut.', subjKey: 'he', clue: 'when he was a child / past state or habit' },
+                { template: 'The earthquake __BLANK__ at exactly 3:17 am and lasted thirty seconds.', subjKey: 'he', clue: 'exact time in the past / single completed event' },
+                { template: 'I __BLANK__ my keys this morning and was late for everything.', subjKey: 'I', clue: 'this morning / completed past action' },
             ],
             past_continuous: [
-                { template: 'She __BLANK__ to music when she suddenly heard a strange noise outside.', subj: 2, clue: 'when + sudden interruption (background action)' },
-                { template: 'At midnight last night, the whole team __BLANK__ on the presentation.', subj: 5, clue: 'at midnight (action in progress at that past moment)' },
-                { template: 'While he __BLANK__ the dishes, he accidentally dropped a plate.', subj: 2, clue: 'while + simultaneous past event' },
-                { template: 'The children __BLANK__ so loudly that nobody could hear the announcement.', subj: 5, clue: 'scene-setting — describing background noise' },
+                { template: 'Clara __BLANK__ to music when she suddenly heard a strange noise outside.', subjKey: 'he', clue: 'when + sudden interruption (background action)' },
+                { template: 'At midnight last night, the whole team __BLANK__ on the presentation.', subjKey: 'they', clue: 'at midnight (action in progress at that past moment)' },
+                { template: 'While David __BLANK__ the dishes, he accidentally dropped a plate.', subjKey: 'he', clue: 'while + simultaneous past event' },
+                { template: 'The children __BLANK__ so loudly that nobody could hear the announcement.', subjKey: 'they', clue: 'scene-setting — describing background noise' },
+                { template: 'I __BLANK__ when the power suddenly went out.', subjKey: 'I', clue: 'when + interruption — background action' },
             ],
             present_perfect: [
-                { template: 'She __BLANK__ to Japan three times already, and she\'s planning another trip.', subj: 2, clue: 'already / life experience up to now' },
-                { template: 'I can\'t find my wallet — I think I __BLANK__ it somewhere.', subj: 0, clue: 'result visible now / indefinite past' },
-                { template: 'The government __BLANK__ a new law that affects millions of workers.', subj: 2, clue: 'recently / result relevant now' },
-                { template: 'He __BLANK__ in this city for over twenty years and knows every street.', subj: 2, clue: 'for + duration continuing until now' },
-                { template: 'Have you __BLANK__ the new exhibition at the art gallery yet?', subj: 1, clue: 'yet / experience up to now' },
+                { template: 'Anna __BLANK__ to Japan three times already, and she\'s planning another trip.', subjKey: 'he', clue: 'already / life experience up to now' },
+                { template: 'I can\'t find my wallet — I think I __BLANK__ it somewhere.', subjKey: 'I', clue: 'result visible now / indefinite past' },
+                { template: 'The government __BLANK__ a new law that affects millions of workers.', subjKey: 'they', clue: 'recent action with present relevance' },
+                { template: 'Mr Harris __BLANK__ in this city for over twenty years and knows every street.', subjKey: 'he', clue: 'for + duration continuing until now' },
+                { template: 'Have you __BLANK__ the new exhibition at the art gallery yet?', subjKey: 'you', clue: 'yet / experience up to now' },
             ],
             present_perfect_continuous: [
-                { template: 'She __BLANK__ for the marathon for six months, and it really shows.', subj: 2, clue: 'for six months / activity still in progress' },
-                { template: 'I __BLANK__ all morning and I still haven\'t finished the chapter.', subj: 0, clue: 'all morning / ongoing activity with visible results' },
-                { template: 'They __BLANK__ about buying a house for years, but nothing has happened.', subj: 5, clue: 'for years / repeated or continuous action up to now' },
-                { template: 'He looks exhausted — he __BLANK__ non-stop since six in the morning.', subj: 2, clue: 'since + visible result now' },
+                { template: 'Sophie __BLANK__ for the marathon for six months, and it really shows.', subjKey: 'he', clue: 'for six months / activity still in progress' },
+                { template: 'I __BLANK__ all morning and I still haven\'t finished the chapter.', subjKey: 'I', clue: 'all morning / ongoing activity with visible results' },
+                { template: 'The engineers __BLANK__ on this bridge design for years.', subjKey: 'they', clue: 'for years / repeated or continuous action up to now' },
+                { template: 'He looks exhausted — he __BLANK__ non-stop since six in the morning.', subjKey: 'he', clue: 'since + visible result now' },
             ],
             past_perfect: [
-                { template: 'By the time the ambulance arrived, the patient __BLANK__ consciousness.', subj: 2, clue: 'by the time + earlier past event' },
-                { template: 'She realised she __BLANK__ her passport at home after reaching the airport.', subj: 2, clue: 'realised + earlier mistake before main past event' },
-                { template: 'The thief __BLANK__ before the police even reached the scene.', subj: 2, clue: 'sequence — first event before another past event' },
-                { template: 'He was furious because nobody __BLANK__ him about the change of plan.', subj: 0, clue: 'because + earlier cause before the main past reaction' },
+                { template: 'By the time the ambulance arrived, the patient __BLANK__ consciousness.', subjKey: 'he', clue: 'by the time + earlier past event' },
+                { template: 'Maya realised she __BLANK__ her passport at home after reaching the airport.', subjKey: 'he', clue: 'realised + earlier mistake before main past event' },
+                { template: 'The thief __BLANK__ before the police even reached the scene.', subjKey: 'he', clue: 'sequence — first event before another past event' },
+                { template: 'He was furious because nobody __BLANK__ him about the change of plan.', subjKey: 'they', clue: 'because + earlier cause before the main past reaction' },
             ],
             past_perfect_continuous: [
-                { template: 'She was out of breath because she __BLANK__ for over an hour.', subj: 2, clue: 'because + sustained activity before a past result' },
-                { template: 'By the time he retired, he __BLANK__ for the same company for forty years.', subj: 2, clue: 'by the time + long duration before a past point' },
-                { template: 'They were exhausted — they __BLANK__ all night to fix the server.', subj: 5, clue: 'all night / sustained effort before a past result' },
+                { template: 'She was out of breath because she __BLANK__ for over an hour.', subjKey: 'he', clue: 'because + sustained activity before a past result' },
+                { template: 'By the time he retired, Mr Chen __BLANK__ for the same company for forty years.', subjKey: 'he', clue: 'by the time + long duration before a past point' },
+                { template: 'The team were exhausted — they __BLANK__ all night to fix the server.', subjKey: 'they', clue: 'all night / sustained effort before a past result' },
+                { template: 'I __BLANK__ for two hours before the race was cancelled.', subjKey: 'I', clue: 'for + duration before a past event cancelled it' },
             ],
             future_will: [
-                { template: 'I\'m sure she __BLANK__ the job — she was easily the strongest candidate.', subj: 2, clue: 'I\'m sure / prediction based on opinion' },
-                { template: 'Don\'t worry, I __BLANK__ the project by Thursday, I promise.', subj: 0, clue: 'promise / spontaneous decision at moment of speaking' },
-                { template: 'Scientists predict that the global temperature __BLANK__ by two degrees by 2050.', subj: 2, clue: 'scientists predict / future prediction' },
-                { template: 'If you press that button, the machine __BLANK__ immediately.', subj: 2, clue: 'if + conditional result (future)' },
+                { template: 'I\'m sure Emma __BLANK__ the job — she was easily the strongest candidate.', subjKey: 'he', clue: 'I\'m sure / prediction based on opinion' },
+                { template: 'Don\'t worry — I __BLANK__ the project finished by Thursday, I promise.', subjKey: 'I', clue: 'promise / spontaneous decision at moment of speaking' },
+                { template: 'Scientists predict the global temperature __BLANK__ by two degrees by 2050.', subjKey: 'he', clue: 'scientists predict / future prediction' },
+                { template: 'If you press that button, the machine __BLANK__ immediately.', subjKey: 'he', clue: 'if + conditional result (future)' },
+                { template: 'They say it __BLANK__ tomorrow — bring an umbrella.', subjKey: 'he', clue: 'prediction about tomorrow' },
             ],
             future_going_to: [
-                { template: 'Look at those dark clouds — it __BLANK__ rain any minute now.', subj: 2, clue: 'look at (evidence-based prediction)' },
-                { template: 'They\'ve already bought the tickets — they __BLANK__ move to Canada next spring.', subj: 5, clue: 'already bought / prior plan or intention' },
-                { template: 'She told me she __BLANK__ quit her job and start her own business.', subj: 2, clue: 'told me / stated intention' },
-                { template: 'I\'ve decided — I __BLANK__ study medicine at university.', subj: 0, clue: 'I\'ve decided / firm plan made before now' },
+                { template: 'Look at those clouds — it is going to __BLANK__ any minute now.', subjKey: 'he', clue: 'look at (evidence visible now → certain near-future event)', goingTo: true },
+                { template: 'They\'ve already bought the tickets — they are going to __BLANK__ to Canada next spring.', subjKey: 'they', clue: 'already decided / prior plan or intention', goingTo: true },
+                { template: 'She told me she is going to __BLANK__ her job and start her own business.', subjKey: 'he', clue: 'told me / stated intention', goingTo: true },
+                { template: 'I have decided — I am going to __BLANK__ medicine at university.', subjKey: 'I', clue: 'I have decided / firm plan made before now', goingTo: true },
+                { template: 'The coach says the team is going to __BLANK__ their tactics next season.', subjKey: 'he', clue: 'announced plan / stated intention', goingTo: true },
             ],
             future_perfect: [
-                { template: 'By the time you wake up tomorrow, I __BLANK__ the whole novel.', subj: 0, clue: 'by the time + action complete before a future point' },
-                { template: 'She __BLANK__ all the exams before the end of June.', subj: 2, clue: 'before the end of + completed before future deadline' },
-                { template: 'By 2030, scientists predict they __BLANK__ a cure for that disease.', subj: 5, clue: 'by 2030 / completed action before future point' },
+                { template: 'By the time you wake up tomorrow, I __BLANK__ the whole novel.', subjKey: 'I', clue: 'by the time + action complete before a future point' },
+                { template: 'Emma __BLANK__ all the exams before the end of June.', subjKey: 'he', clue: 'before the end of + completed before future deadline' },
+                { template: 'By 2030, scientists predict they __BLANK__ a cure for that disease.', subjKey: 'they', clue: 'by 2030 / completed action before future point' },
             ],
             future_continuous: [
-                { template: 'This time tomorrow, she __BLANK__ on a beach in the Maldives.', subj: 2, clue: 'this time tomorrow / action in progress at a future moment' },
-                { template: 'Don\'t call at noon — the board __BLANK__ its annual meeting then.', subj: 2, clue: 'at noon / activity in progress at that future time' },
-                { template: 'I __BLANK__ from the office next week, so you can reach me there.', subj: 0, clue: 'next week / ongoing arrangement at a future time' },
+                { template: 'This time tomorrow, Laura __BLANK__ on a beach in the Maldives.', subjKey: 'he', clue: 'this time tomorrow / action in progress at a future moment' },
+                { template: 'Don\'t call at noon — the board __BLANK__ its annual meeting then.', subjKey: 'he', clue: 'at noon / activity in progress at that future time' },
+                { template: 'I __BLANK__ from the office next week, so you can reach me there.', subjKey: 'I', clue: 'next week / ongoing arrangement at a future time' },
             ]
         };
+
+        // Map subjKey strings to PRONOUN_SHORT indices
+        const SUBJ_KEY_TO_IDX = { 'I': 0, 'you': 1, 'he': 2, 'we': 3, 'they': 5 };
 
         function generateTenseChoiceSentences(level) {
             const tenses = VERB_TENSES_BY_LEVEL[level];
             const regularVerbs = VERB_LISTS.regular[level] || VERB_LISTS.regular.B1;
             const irregularVerbs = VERB_LISTS.irregular[level] || VERB_LISTS.irregular.B1;
-            const allVerbPool = [...regularVerbs, ...irregularVerbs];
+            // Use only verbs that work well in sentence context (exclude be/have for simplicity)
+            const safeVerbs = [...regularVerbs, ...irregularVerbs.filter(v => !['be','have'].includes(v))];
 
             const questions = [];
-            const usedTenses = new Set();
-
-            // Pick up to 8 questions, at least one per available tense
             const tensePool = shuffle([...tenses]);
+
             for (const tenseKey of tensePool) {
                 if (questions.length >= 8) break;
                 const bank = TENSE_SENTENCE_BANK[tenseKey];
                 if (!bank || bank.length === 0) continue;
 
                 const template = bank[Math.floor(Math.random() * bank.length)];
-                // Pick a verb appropriate for this tense
-                const verb = allVerbPool[Math.floor(Math.random() * allVerbPool.length)];
+                const verb = safeVerbs[Math.floor(Math.random() * safeVerbs.length)];
                 const isIrr = irregularVerbs.includes(verb);
-                const forms = conjugateVerb(verb, tenseKey, isIrr);
-                const pIdx = template.subj;
-                const answer = forms[pIdx];
+                const pIdx = SUBJ_KEY_TO_IDX[template.subjKey] ?? 2;
 
-                // Build the sentence: replace __SUBJ__ with pronoun, __BLANK__ stays
-                const pronounDisplay = ['I', 'you', 'he/she', 'we', 'you', 'they'][pIdx];
-                const sentence = template.template.replace('__SUBJ__', pronounDisplay);
+                // For going_to sentences, the answer is just the bare infinitive (verb),
+                // because the template already has "is/are/am going to __BLANK__"
+                let answer;
+                if (template.goingTo) {
+                    answer = verb; // bare infinitive after "going to"
+                } else {
+                    const forms = conjugateVerb(verb, tenseKey, isIrr);
+                    answer = forms[pIdx];
+                }
 
-                // Generate 3 distractors from other tenses of the same verb
-                const distractorTenses = tenses.filter(t => t !== tenseKey);
+                // Generate 3 distractors: conjugate the same verb in other tenses
                 const distractors = [];
-                for (const dt of shuffle(distractorTenses)) {
+                for (const dt of shuffle(tenses.filter(t => t !== tenseKey))) {
+                    let cand;
+                    if (TENSE_SENTENCE_BANK[dt]?.[0]?.goingTo) {
+                        // skip going_to as distractor since template already has "going to"
+                        continue;
+                    }
                     const df = conjugateVerb(verb, dt, isIrr);
-                    const cand = df[pIdx];
-                    if (cand !== answer && !distractors.includes(cand)) {
+                    cand = df[pIdx];
+                    if (cand && cand !== answer && !distractors.includes(cand)) {
                         distractors.push(cand);
                         if (distractors.length === 3) break;
                     }
                 }
-                // Pad with forms from neighboring pronoun if needed
-                if (distractors.length < 3) {
+                // Pad if needed from other pronoun forms of the same tense
+                if (!template.goingTo && distractors.length < 3) {
+                    const forms = conjugateVerb(verb, tenseKey, isIrr);
                     for (let pi = 0; pi < 6 && distractors.length < 3; pi++) {
                         const cand = forms[pi];
                         if (cand !== answer && !distractors.includes(cand)) distractors.push(cand);
+                    }
+                }
+                // Last resort: add simple present/past variants
+                if (distractors.length < 3) {
+                    const fallbacks = [verb, verb + 's', verb + 'ed', 'was ' + verb.replace(/e$/,'') + 'ing'];
+                    for (const f of fallbacks) {
+                        if (f !== answer && !distractors.includes(f)) {
+                            distractors.push(f);
+                            if (distractors.length === 3) break;
+                        }
                     }
                 }
 
@@ -5978,13 +6007,13 @@
                 const tenseName = TENSE_META[tenseKey]?.name || tenseKey;
 
                 questions.push({
-                    sentence,
+                    sentence: template.template,
                     verb,
                     tenseKey,
                     answer,
                     options,
-                    hint: `Verb: "${verb}" — think about the context clue: ${template.clue}`,
-                    explanation: `Use the ${tenseName} here because: ${template.clue}.`
+                    hint: `Verb: "${verb}" — context clue: ${template.clue}`,
+                    explanation: `${tenseName} — ${template.clue}.`
                 });
             }
 
@@ -6026,14 +6055,19 @@
             document.getElementById('verb-mode-title').textContent = `Practice options for ${level}`;
         }
 
+        // Tenses where regular vs irregular produces different forms (past stem / past participle)
+        const IRREGULAR_SENSITIVE_TENSES = new Set([
+            'past_simple', 'past_continuous',
+            'present_perfect', 'present_perfect_continuous',
+            'past_perfect', 'past_perfect_continuous'
+        ]);
+
         function openVerbConjugation() {
             verbState.sessionMode = 'conjugation';
             verbState.verbType = 'regular';
-            // Update level tag
             const tag = document.getElementById('verb-conj-level-tag');
             tag.textContent = verbState.level;
             tag.className = 'level-badge level-' + verbState.level.toLowerCase().replace('/','');
-            // Update type buttons
             document.getElementById('vtype-regular').classList.add('active');
             document.getElementById('vtype-irregular').classList.remove('active');
             renderTenseGrid();
@@ -6051,19 +6085,37 @@
             const grid = document.getElementById('verb-tense-grid');
             grid.innerHTML = '';
             const tenses = VERB_TENSES_BY_LEVEL[verbState.level] || VERB_TENSES_BY_LEVEL.A1;
+            const typeToggle = document.getElementById('verb-type-toggle-wrap');
             tenses.forEach(tenseKey => {
                 const meta = TENSE_META[tenseKey];
+                const irrelevant = !IRREGULAR_SENSITIVE_TENSES.has(tenseKey);
                 const btn = document.createElement('button');
                 btn.className = 'verb-tense-btn';
-                btn.innerHTML = `<span class="tense-name">${meta.name}</span><span class="tense-example">${meta.example}</span>`;
+                // Grey out tenses where the regular/irregular distinction doesn't apply
+                // when irregular is selected, and add a note when it doesn't matter
+                const note = (irrelevant && verbState.verbType === 'irregular')
+                    ? '<span class="tense-example" style="color:var(--ink-light); font-style:normal;">same as regular</span>'
+                    : `<span class="tense-example">${meta.example}</span>`;
+                btn.innerHTML = `<span class="tense-name">${meta.name}</span>${note}`;
                 btn.onclick = () => startConjugationDrill(tenseKey);
                 grid.appendChild(btn);
             });
         }
 
+        function getVerbListForTense(tenseKey) {
+            const level = verbState.level;
+            const reg = VERB_LISTS.regular[level] || VERB_LISTS.regular.A1;
+            const irr = VERB_LISTS.irregular[level] || VERB_LISTS.irregular.A1;
+            if (!IRREGULAR_SENSITIVE_TENSES.has(tenseKey)) {
+                // Distinction doesn't apply — always use both lists combined
+                return [...reg, ...irr];
+            }
+            return verbState.verbType === 'irregular' ? irr : reg;
+        }
+
         function startConjugationDrill(tenseKey) {
             verbState.tense = tenseKey;
-            verbState.verbList = shuffle([...(VERB_LISTS[verbState.verbType][verbState.level] || VERB_LISTS[verbState.verbType].A1)]);
+            verbState.verbList = shuffle(getVerbListForTense(tenseKey));
             verbState.verbIndex = 0;
             verbState.pronounIndex = 0;   // which of the 6 pronouns we're on
             verbState.correct = 0;
@@ -6082,11 +6134,14 @@
             const verb = verbState.verbList[verbState.verbIndex];
             const isIrr = verbState.verbType === 'irregular';
             verbState.currentForms = conjugateVerb(verb, verbState.tense, isIrr);
-            verbState.pronounIndex = 0;
+            verbState.pronounOrder = shuffle([0, 1, 2, 3, 4, 5]); // shuffled pronoun indices
+            verbState.pronounIndex = 0;  // position within pronounOrder
             verbState.dotStates = Array(6).fill('pending');
 
             const tenseName = TENSE_META[verbState.tense]?.name || verbState.tense;
-            document.getElementById('drill-tense-label').textContent = tenseName + (isIrr ? ' · Irregular' : ' · Regular');
+            const isSensitive = IRREGULAR_SENSITIVE_TENSES.has(verbState.tense);
+            const typeLabel = isSensitive ? (isIrr ? ' · Irregular' : ' · Regular') : '';
+            document.getElementById('drill-tense-label').textContent = tenseName + typeLabel;
             document.getElementById('drill-verb-infinitive').textContent = 'to ' + verb;
             document.getElementById('drill-verb-number').textContent = `${verbState.verbIndex + 1} / ${verbState.verbList.length}`;
 
@@ -6098,18 +6153,18 @@
             const container = document.getElementById('drill-pronoun-dots');
             container.innerHTML = '';
             const colorMap = { pending: 'var(--border)', correct: 'var(--correct)', wrong: 'var(--wrong)', skipped: 'var(--ink-light)', active: 'var(--accent)' };
-            PRONOUNS.forEach((pron, i) => {
+            verbState.pronounOrder.forEach((realIdx, pos) => {
                 const dot = document.createElement('div');
-                const state = i === verbState.pronounIndex ? 'active' : verbState.dotStates[i];
-                dot.style.cssText = `width:28px; height:6px; border-radius:3px; background:${colorMap[state]}; transition:background 0.2s; title="${pron}"`;
-                dot.title = pron;
+                const state = pos === verbState.pronounIndex ? 'active' : verbState.dotStates[pos];
+                dot.style.cssText = `width:28px; height:6px; border-radius:3px; background:${colorMap[state]}; transition:background 0.2s;`;
+                dot.title = PRONOUNS[realIdx];
                 container.appendChild(dot);
             });
         }
 
         function loadSinglePronoun() {
-            const i = verbState.pronounIndex;
-            const pron = PRONOUNS[i];
+            const realIdx = verbState.pronounOrder[verbState.pronounIndex];
+            const pron = PRONOUNS[realIdx];
 
             // Reset input area
             const input = document.getElementById('drill-single-input');
@@ -6135,8 +6190,8 @@
         }
 
         function checkSingleConjugation() {
-            const i = verbState.pronounIndex;
-            const expected = verbState.currentForms[i].toLowerCase().trim();
+            const realIdx = verbState.pronounOrder[verbState.pronounIndex];
+            const expected = verbState.currentForms[realIdx].toLowerCase().trim();
             const input = document.getElementById('drill-single-input');
             const given = input.value.toLowerCase().trim();
             const ok = given === expected;
@@ -6147,15 +6202,15 @@
             verbState.total++;
             if (ok) {
                 verbState.correct++;
-                verbState.dotStates[i] = 'correct';
+                verbState.dotStates[verbState.pronounIndex] = 'correct';
                 document.getElementById('drill-feedback').className = 'feedback-banner correct show';
                 document.getElementById('drill-feedback').textContent = '✓ Correct!';
                 document.body.classList.add('glow-correct');
                 setTimeout(() => document.body.classList.remove('glow-correct'), 800);
             } else {
-                verbState.dotStates[i] = 'wrong';
+                verbState.dotStates[verbState.pronounIndex] = 'wrong';
                 const answerDiv = document.getElementById('drill-single-answer');
-                answerDiv.textContent = `✓ Correct form: ${verbState.currentForms[i]}`;
+                answerDiv.textContent = `✓ Correct form: ${verbState.currentForms[realIdx]}`;
                 answerDiv.style.display = 'block';
                 document.getElementById('drill-feedback').className = 'feedback-banner wrong show';
                 document.getElementById('drill-feedback').textContent = '✗ Not quite — see the correct form above.';
@@ -6169,8 +6224,7 @@
             document.getElementById('drill-skip-btn').classList.add('hidden');
             document.getElementById('drill-next-btn').classList.remove('hidden');
 
-            // Update next button label
-            const isLastPronoun = (i === 5);
+            const isLastPronoun = (verbState.pronounIndex === 5);
             const isLastVerb = (verbState.verbIndex === verbState.verbList.length - 1);
             if (isLastPronoun && isLastVerb) {
                 document.getElementById('drill-next-btn').textContent = 'See Results →';
