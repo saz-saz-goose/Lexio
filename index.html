@@ -2790,6 +2790,16 @@
                 <button class="verb-type-btn" id="vtype-irregular" onclick="setVerbType('irregular')">Irregular</button>
             </div>
         </div>
+        <!-- Form toggle -->
+        <div style="width:100%;">
+            <div class="category-title" style="margin-bottom:8px;">Form</div>
+            <div class="verb-type-toggle" style="flex-wrap:wrap; gap:8px;">
+                <button class="verb-type-btn active" id="vform-affirmative" onclick="setVerbForm('affirmative')" style="flex:1; min-width:120px;">✓ Affirmative</button>
+                <button class="verb-type-btn" id="vform-negative" onclick="setVerbForm('negative')" style="flex:1; min-width:120px;">✗ Negative</button>
+                <button class="verb-type-btn" id="vform-interrogative" onclick="setVerbForm('interrogative')" style="flex:1; min-width:120px;">? Interrogative</button>
+                <button class="verb-type-btn" id="vform-mixed" onclick="setVerbForm('mixed')" style="flex:1; min-width:120px;">⇄ Mixed</button>
+            </div>
+        </div>
         <!-- Tense grid -->
         <div style="width:100%;">
             <div class="category-title" style="margin-bottom:8px;">Choose a Tense</div>
@@ -2819,6 +2829,9 @@
         </div>
         <!-- Single pronoun question card -->
         <div class="card" style="padding:24px 24px 20px; width:100%; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:-4px;">
+                <span id="drill-form-label" style="font-size:0.65rem; letter-spacing:1.4px; text-transform:uppercase; color:var(--accent); font-weight:600;"></span>
+            </div>
             <div style="display:flex; align-items:center; gap:12px;">
                 <div style="font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:600; color:var(--accent); min-width:90px;" id="drill-pronoun-display"></div>
                 <div style="flex:1;">
@@ -5938,9 +5951,13 @@
 
         const SUBJ_KEY_TO_IDX = { 'I': 0, 'you': 1, 'he': 2, 'we': 3, 'they': 5 };
 
+        // All irregular verbs across all levels — used for correct conjugation regardless of selected level
+        const ALL_IRREGULAR_VERBS = new Set([
+            ...Object.values(VERB_LISTS.irregular).flat()
+        ]);
+
         function generateTenseChoiceSentences(level) {
             const tenses = VERB_TENSES_BY_LEVEL[level];
-            const irregularVerbs = VERB_LISTS.irregular[level] || VERB_LISTS.irregular.B1;
             const questions = [];
             const tensePool = shuffle([...tenses]);
 
@@ -5950,8 +5967,8 @@
                 if (!bank || bank.length === 0) continue;
 
                 const template = bank[Math.floor(Math.random() * bank.length)];
-                const verb = template.verb;                          // fixed verb from template
-                const isIrr = irregularVerbs.includes(verb);
+                const verb = template.verb;
+                const isIrr = ALL_IRREGULAR_VERBS.has(verb); // always check global set, not level list
                 const pIdx = SUBJ_KEY_TO_IDX[template.subjKey] ?? 2;
 
                 let answer;
@@ -6009,6 +6026,7 @@
         let verbState = {
             level: 'A1',
             verbType: 'regular',
+            verbForm: 'affirmative',
             tense: null,
             verbList: [],
             verbIndex: 0,
@@ -6038,23 +6056,109 @@
             document.getElementById('verb-mode-title').textContent = `Practice options for ${level}`;
         }
 
-        // Tenses where regular vs irregular produces different forms (past stem / past participle)
+        // Tenses where irregular verbs produce genuinely different forms (past stem or past participle).
+        // past_continuous and present_perfect_continuous use -ing which is identical for all verbs.
         const IRREGULAR_SENSITIVE_TENSES = new Set([
-            'past_simple', 'past_continuous',
-            'present_perfect', 'present_perfect_continuous',
-            'past_perfect', 'past_perfect_continuous'
+            'past_simple',
+            'present_perfect',
+            'past_perfect',
+            'past_perfect_continuous'  // uses past participle: "had been running" — pp identical, but included for consistency
         ]);
+
+        // ── NEGATIVE CONJUGATION ──
+        function conjugateNegative(infinitive, tense, isIrregular) {
+            const v = infinitive.toLowerCase().trim();
+            const pos = conjugateVerb(v, tense, isIrregular);
+
+            // Helper: insert "not" after the first auxiliary word in a positive form
+            function negateForm(form, pi) {
+                // present_simple: use do/does + not + base
+                if (tense === 'present_simple') {
+                    const aux = pi === 2 ? "doesn't" : "don't";
+                    return `${aux} ${v}`;
+                }
+                // past_simple: use did + not + base
+                if (tense === 'past_simple') return `didn't ${v}`;
+                // All other tenses: the positive form already has an auxiliary — insert "not" after it
+                // e.g. "is running" → "isn't running", "will go" → "won't go", "have seen" → "haven't seen"
+                const contractions = {
+                    'will ': "won't ", 'am ': "am not ", 'is ': "isn't ", 'are ': "aren't ",
+                    'was ': "wasn't ", 'were ': "weren't ", 'have ': "haven't ", 'has ': "hasn't ",
+                    'had ': "hadn't ",
+                };
+                for (const [aux, neg] of Object.entries(contractions)) {
+                    if (form.startsWith(aux)) return neg + form.slice(aux.length);
+                }
+                // Contracted forms like "I'm going to" → "I'm not going to"
+                if (form.includes("'m going to")) return form.replace("'m going to", "'m not going to");
+                if (form.includes("'re going to")) return form.replace("'re going to", "'re not going to");
+                if (form.includes("'s going to")) return form.replace("'s going to", "'s not going to");
+                return 'not ' + form; // fallback
+            }
+            return pos.map((f, i) => negateForm(f, i));
+        }
+
+        // ── INTERROGATIVE CONJUGATION ──
+        function conjugateInterrogative(infinitive, tense, isIrregular) {
+            const v = infinitive.toLowerCase().trim();
+            const pos = conjugateVerb(v, tense, isIrregular);
+            const subjs = ['I', 'you', 'he/she/it', 'we', 'you', 'they'];
+
+            function interrogateForm(form, pi) {
+                const subj = subjs[pi];
+                if (tense === 'present_simple') {
+                    const aux = pi === 2 ? 'Does' : 'Do';
+                    return `${aux} ${subj.toLowerCase()} ${v}?`;
+                }
+                if (tense === 'past_simple') return `Did ${subj.toLowerCase()} ${v}?`;
+                // Invert auxiliary and subject
+                const auxMap = {
+                    'am ': 'Am ', 'is ': 'Is ', 'are ': 'Are ',
+                    'was ': 'Was ', 'were ': 'Were ',
+                    'have ': 'Have ', 'has ': 'Has ', 'had ': 'Had ',
+                    'will ': 'Will ',
+                };
+                for (const [aux, Aux] of Object.entries(auxMap)) {
+                    if (form.startsWith(aux)) {
+                        return `${Aux}${subj.toLowerCase()} ${form.slice(aux.length)}?`;
+                    }
+                }
+                // Contracted going_to: "I'm going to go" → "Am I going to go?"
+                if (form.includes("'m going to")) return `Am I going to ${v}?`;
+                if (form.includes("'re going to")) return `Are ${subj.toLowerCase()} going to ${v}?`;
+                if (form.includes("'s going to")) return `Is ${subj.toLowerCase()} going to ${v}?`;
+                return `${form} ${subj}?`; // fallback
+            }
+            return pos.map((f, i) => interrogateForm(f, i));
+        }
+
+        function getConjugatedForms(verb, tense, isIrr, form) {
+            if (form === 'negative') return conjugateNegative(verb, tense, isIrr);
+            if (form === 'interrogative') return conjugateInterrogative(verb, tense, isIrr);
+            return conjugateVerb(verb, tense, isIrr); // affirmative
+        }
 
         function openVerbConjugation() {
             verbState.sessionMode = 'conjugation';
             verbState.verbType = 'regular';
+            verbState.verbForm = 'affirmative';
             const tag = document.getElementById('verb-conj-level-tag');
             tag.textContent = verbState.level;
             tag.className = 'level-badge level-' + verbState.level.toLowerCase().replace('/','');
             document.getElementById('vtype-regular').classList.add('active');
             document.getElementById('vtype-irregular').classList.remove('active');
+            ['affirmative','negative','interrogative','mixed'].forEach(f => {
+                document.getElementById('vform-' + f).classList.toggle('active', f === 'affirmative');
+            });
             renderTenseGrid();
             showScreen('screen-verb-conj-select');
+        }
+
+        function setVerbForm(form) {
+            verbState.verbForm = form;
+            ['affirmative','negative','interrogative','mixed'].forEach(f => {
+                document.getElementById('vform-' + f).classList.toggle('active', f === form);
+            });
         }
 
         function setVerbType(type) {
@@ -6077,7 +6181,7 @@
                 // Grey out tenses where the regular/irregular distinction doesn't apply
                 // when irregular is selected, and add a note when it doesn't matter
                 const note = (irrelevant && verbState.verbType === 'irregular')
-                    ? '<span class="tense-example" style="color:var(--ink-light); font-style:normal;">same as regular</span>'
+                    ? '<span class="tense-example" style="color:var(--ink-light); font-style:normal;">not applicable for irregular</span>'
                     : `<span class="tense-example">${meta.example}</span>`;
                 btn.innerHTML = `<span class="tense-name">${meta.name}</span>${note}`;
                 btn.onclick = () => startConjugationDrill(tenseKey);
@@ -6101,12 +6205,17 @@
             verbState.correct = 0;
             verbState.total = 0;
 
-            // Build a flat queue: every verb × every pronoun, shuffled
             const verbPool = getVerbListForTense(tenseKey);
+            const forms = ['affirmative', 'negative', 'interrogative'];
+            const selectedForm = verbState.verbForm || 'affirmative';
+
             const pairs = [];
             for (const verb of verbPool) {
                 for (let pi = 0; pi < 6; pi++) {
-                    pairs.push({ verb, pronounIdx: pi });
+                    const form = selectedForm === 'mixed'
+                        ? forms[Math.floor(Math.random() * 3)]
+                        : selectedForm;
+                    pairs.push({ verb, pronounIdx: pi, form });
                 }
             }
             verbState.drillQueue = shuffle(pairs);
@@ -6121,10 +6230,11 @@
                 showVerbResults('conjugation');
                 return;
             }
-            const { verb, pronounIdx } = verbState.drillQueue[verbState.drillPos];
-            const isIrr = (VERB_LISTS.irregular[verbState.level] || VERB_LISTS.irregular.A1).includes(verb);
-            verbState.currentForms = conjugateVerb(verb, verbState.tense, isIrr);
+            const { verb, pronounIdx, form } = verbState.drillQueue[verbState.drillPos];
+            const isIrr = ALL_IRREGULAR_VERBS.has(verb);
+            verbState.currentForms = getConjugatedForms(verb, verbState.tense, isIrr, form);
             verbState.currentPronounIdx = pronounIdx;
+            verbState.currentForm = form;
 
             const tenseName = TENSE_META[verbState.tense]?.name || verbState.tense;
             const isSensitive = IRREGULAR_SENSITIVE_TENSES.has(verbState.tense);
@@ -6136,7 +6246,19 @@
             document.getElementById('drill-score-badge').textContent =
                 `${verbState.correct} / ${verbState.total}`;
 
-            // Progress dots: show position in queue as a simple bar
+            // Form label
+            const formLabels = { affirmative: '✓ Affirmative', negative: '✗ Negative', interrogative: '? Interrogative' };
+            document.getElementById('drill-form-label').textContent = formLabels[form] || '';
+
+            // Update input placeholder based on form
+            const placeholders = {
+                affirmative: 'e.g. walked / has gone…',
+                negative: "e.g. didn't walk / hasn't gone…",
+                interrogative: 'e.g. Did she walk? / Has he gone?'
+            };
+            document.getElementById('drill-single-input').placeholder = placeholders[form] || 'conjugated form…';
+
+            // Progress bar
             const container = document.getElementById('drill-pronoun-dots');
             container.innerHTML = '';
             const total = verbState.drillQueue.length;
