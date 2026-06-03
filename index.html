@@ -1563,6 +1563,238 @@
             background: var(--ink-light);
         }
 
+        /* ── VERB PRACTICE ── */
+        .verb-level-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+        }
+        @media(min-width: 480px) {
+            .verb-level-grid { grid-template-columns: repeat(5, 1fr); }
+        }
+        .verb-level-btn {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--ink);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .verb-level-btn:hover, .verb-level-btn.selected {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+        .verb-practice-mode-card {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        .verb-practice-mode-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+            background: var(--accent-light);
+        }
+        .verb-practice-mode-icon {
+            font-size: 2rem;
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+        }
+        .verb-tense-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+        }
+        .verb-tense-btn {
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--ink);
+            cursor: pointer;
+            transition: all 0.15s;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .verb-tense-btn:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+        .verb-tense-btn .tense-name { font-weight: 600; font-size: 0.9rem; }
+        .verb-tense-btn .tense-example { font-size: 0.73rem; color: var(--ink-light); font-style: italic; }
+        .verb-type-toggle {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+        .verb-type-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            background: var(--card);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: var(--ink);
+        }
+        .verb-type-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+        /* Conjugation table in practice */
+        .conj-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+        }
+        .conj-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+        .conj-table tr:last-child td { border-bottom: none; }
+        .conj-table .pronoun {
+            color: var(--ink-light);
+            font-size: 0.82rem;
+            width: 90px;
+            font-weight: 500;
+        }
+        .conj-table .conj-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            color: var(--ink);
+            border-bottom: 2px solid var(--border);
+            width: 100%;
+            padding: 2px 0;
+            transition: border-color 0.15s;
+        }
+        .conj-table .conj-input:focus { border-color: var(--accent); }
+        .conj-table .conj-input.correct { border-color: var(--correct); color: var(--correct); background: var(--correct-bg); padding: 2px 6px; border-radius: 4px; }
+        .conj-table .conj-input.wrong { border-color: var(--wrong); color: var(--wrong); background: var(--wrong-bg); padding: 2px 6px; border-radius: 4px; }
+        .conj-table .conj-answer { font-size: 0.85rem; color: var(--ink-light); font-style: italic; margin-top: 2px; display: none; }
+        .conj-table .conj-answer.show { display: block; }
+        .verb-info-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .verb-display-big {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--ink);
+        }
+        .verb-score-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        /* Tense choice (sentence fill) */
+        .tense-sentence-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+        }
+        .tense-sentence-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--ink);
+            margin-bottom: 16px;
+        }
+        .tense-blank {
+            display: inline-block;
+            min-width: 100px;
+            border-bottom: 2px solid var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+            text-align: center;
+            padding: 0 4px;
+        }
+        .tense-input-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .tense-input {
+            flex: 1;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            color: var(--ink);
+            background: var(--bg);
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .tense-input:focus { border-color: var(--accent); }
+        .tense-hint {
+            font-size: 0.78rem;
+            color: var(--ink-light);
+            margin-top: 6px;
+            font-style: italic;
+        }
+        .verb-score-summary {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin: 16px 0;
+        }
+        .verb-score-item {
+            text-align: center;
+        }
+        .verb-score-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        .verb-score-label {
+            font-size: 0.75rem;
+            color: var(--ink-light);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
 	/* ── MATCH TABLE ── */
 	.match-table-wrap {
     width: 100%;
@@ -2497,6 +2729,155 @@
         </div>
     </div>
 
+    <!-- ══════════════════════════════════════════
+     SCREEN: VERB PRACTICE — Level Select
+    ══════════════════════════════════════════ -->
+    <div class="screen" id="screen-verb-home">
+        <div style="width:100%; display:flex; align-items:center; gap:12px; margin-bottom:4px;">
+            <button class="back-home-btn" onclick="goToHome()">← Accueil</button>
+        </div>
+        <div class="home-hero" style="text-align:left; margin-bottom:0;">
+            <div class="home-title" style="font-size:1.7rem;">Verb Practice</div>
+            <div class="home-subtitle">Choose your level, then pick a practice type.</div>
+        </div>
+        <!-- Level selector -->
+        <div style="width:100%;">
+            <div class="category-title">Select Level</div>
+            <div class="verb-level-grid" id="verb-level-grid">
+                <button class="verb-level-btn" onclick="selectVerbLevel('A1')">A1</button>
+                <button class="verb-level-btn" onclick="selectVerbLevel('A2')">A2</button>
+                <button class="verb-level-btn" onclick="selectVerbLevel('B1')">B1</button>
+                <button class="verb-level-btn" onclick="selectVerbLevel('B2')">B2</button>
+                <button class="verb-level-btn" onclick="selectVerbLevel('C1')">C1</button>
+            </div>
+        </div>
+        <!-- Mode select (shown after level pick) -->
+        <div id="verb-mode-select" style="width:100%; display:none; flex-direction:column; gap:14px; margin-top:8px;">
+            <div class="category-title" id="verb-mode-title">Choose Practice Type</div>
+            <div class="verb-practice-mode-card" onclick="openVerbConjugation()">
+                <div class="verb-practice-mode-icon">🔤</div>
+                <div class="mode-info">
+                    <div class="mode-title">Conjugation Practice</div>
+                    <div class="mode-desc" style="font-size:0.85rem;">Practice verb conjugations by tense — separate drills for regular &amp; irregular verbs, modelled on Conjuguemos.</div>
+                </div>
+            </div>
+            <div class="verb-practice-mode-card" onclick="openTenseChoice()">
+                <div class="verb-practice-mode-icon">🧩</div>
+                <div class="mode-info">
+                    <div class="mode-title">Tense Choice</div>
+                    <div class="mode-desc" style="font-size:0.85rem;">Read a sentence and type the correct conjugated form in the blank — tests tense recognition in context.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+     SCREEN: VERB PRACTICE — Conjugation (Tense/Type Select)
+    ══════════════════════════════════════════ -->
+    <div class="screen" id="screen-verb-conj-select">
+        <div style="width:100%; display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+            <button class="back-home-btn" onclick="showScreen('screen-verb-home')">← Back</button>
+            <span id="verb-conj-level-tag" class="level-badge level-a1" style="font-size:0.75rem; padding:3px 10px;"></span>
+        </div>
+        <div class="home-hero" style="text-align:left; margin-bottom:4px;">
+            <div class="home-title" style="font-size:1.5rem;">Conjugation Practice</div>
+        </div>
+        <!-- Regular / Irregular toggle -->
+        <div style="width:100%;">
+            <div class="category-title" style="margin-bottom:8px;">Verb Type</div>
+            <div class="verb-type-toggle">
+                <button class="verb-type-btn active" id="vtype-regular" onclick="setVerbType('regular')">Regular</button>
+                <button class="verb-type-btn" id="vtype-irregular" onclick="setVerbType('irregular')">Irregular</button>
+            </div>
+        </div>
+        <!-- Tense grid -->
+        <div style="width:100%;">
+            <div class="category-title" style="margin-bottom:8px;">Choose a Tense</div>
+            <div class="verb-tense-grid" id="verb-tense-grid">
+                <!-- Populated by JS based on level -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+     SCREEN: VERB PRACTICE — Active Conjugation Drill
+    ══════════════════════════════════════════ -->
+    <div class="screen" id="screen-verb-drill">
+        <div style="width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+            <button class="back-home-btn" onclick="showScreen('screen-verb-conj-select')">← Back</button>
+            <span class="verb-score-badge" id="drill-score-badge">0 / 0</span>
+        </div>
+        <!-- Verb card -->
+        <div class="card" style="padding:20px 24px;">
+            <div class="verb-info-row">
+                <div>
+                    <div style="font-size:0.7rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--ink-light); margin-bottom:4px;" id="drill-tense-label"></div>
+                    <div class="verb-display-big" id="drill-verb-infinitive"></div>
+                    <div style="font-size:0.85rem; color:var(--ink-light); margin-top:2px;" id="drill-verb-meaning"></div>
+                </div>
+                <div id="drill-verb-number" style="font-size:0.8rem; color:var(--ink-light);"></div>
+            </div>
+            <div class="divider" style="margin: 12px 0;"></div>
+            <table class="conj-table" id="drill-conj-table">
+                <!-- Rows injected by JS -->
+            </table>
+        </div>
+        <div class="feedback-banner" id="drill-feedback"></div>
+        <div style="width:100%; display:flex; gap:10px;">
+            <button class="btn-primary" id="drill-check-btn" onclick="checkConjugation()" style="flex:2;">Check ✓</button>
+            <button class="btn-primary" id="drill-skip-btn" onclick="skipDrillVerb()" style="flex:1; background:#FFF; border:1.5px solid var(--border); color:var(--ink-light);">Skip →</button>
+        </div>
+        <button class="btn-primary hidden" id="drill-next-btn" onclick="nextDrillVerb()" style="margin-top:-4px;">Next Verb →</button>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+     SCREEN: VERB PRACTICE — Tense Choice
+    ══════════════════════════════════════════ -->
+    <div class="screen" id="screen-tense-choice">
+        <div style="width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+            <button class="back-home-btn" onclick="showScreen('screen-verb-home')">← Back</button>
+            <span class="verb-score-badge" id="tc-score-badge">0 / 0</span>
+        </div>
+        <div class="tense-sentence-card">
+            <div style="font-size:0.68rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink-light); margin-bottom:10px;" id="tc-progress-label">Question 1</div>
+            <div class="tense-sentence-text" id="tc-sentence-display"></div>
+            <div class="tense-hint" id="tc-hint"></div>
+            <div class="tense-input-row" style="margin-top:14px;">
+                <input class="tense-input" type="text" id="tc-input" placeholder="Type the correct form…" onkeydown="if(event.key==='Enter') checkTenseChoice()">
+                <button class="btn-primary" onclick="checkTenseChoice()" style="width:auto; padding:12px 18px; flex-shrink:0;">✓</button>
+            </div>
+        </div>
+        <div class="feedback-banner" id="tc-feedback"></div>
+        <button class="btn-primary hidden" id="tc-next-btn" onclick="nextTenseChoice()">Next →</button>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+     SCREEN: VERB PRACTICE — Results
+    ══════════════════════════════════════════ -->
+    <div class="screen" id="screen-verb-results">
+        <div class="complete-icon" id="verb-results-icon">🎉</div>
+        <div class="complete-title" id="verb-results-title">Session Complete!</div>
+        <div class="section-sub" id="verb-results-sub" style="text-align:center; margin-top:4px; line-height:1.6;"></div>
+        <div class="verb-score-summary">
+            <div class="verb-score-item">
+                <div class="verb-score-num" style="color:var(--correct);" id="vr-correct">0</div>
+                <div class="verb-score-label">Correct</div>
+            </div>
+            <div class="verb-score-item">
+                <div class="verb-score-num" style="color:var(--wrong);" id="vr-wrong">0</div>
+                <div class="verb-score-label">Wrong</div>
+            </div>
+            <div class="verb-score-item">
+                <div class="verb-score-num" id="vr-pct">0%</div>
+                <div class="verb-score-label">Score</div>
+            </div>
+        </div>
+        <div style="width:100%; display:flex; flex-direction:column; gap:10px; margin-top:8px;">
+            <button class="btn-primary" id="vr-retry-btn" onclick="retryVerbSession()">Practice Again →</button>
+            <button class="btn-primary" onclick="goToHome()" style="background:#FFF; border:1.5px solid var(--border); color:var(--accent);">← Accueil</button>
+        </div>
+    </div>
+
     <script>
         console.log('Script tag started parsing');
         // ══════════════════════════════════════════
@@ -3214,6 +3595,21 @@
                 `;
                 modeContainer.appendChild(card);
             });
+
+            // Verb Practice card — always visible
+            const verbCard = document.createElement('div');
+            verbCard.className = 'mode-card';
+            verbCard.onclick = () => openVerbPractice();
+            verbCard.innerHTML = `
+                <div class="mode-icon" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;background:var(--accent-light);border-radius:12px;flex-shrink:0;">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2C3E6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </div>
+                <div class="mode-info">
+                    <div class="mode-title">Verb Practice</div>
+                    <div class="mode-desc">Conjugations by tense &amp; level, plus tense-choice fill-in sentences.</div>
+                </div>
+            `;
+            modeContainer.appendChild(verbCard);
 
             // Revise card — only show if logged in and has learnt words
             if (currentProfile) {
@@ -5255,6 +5651,521 @@
         courses_progress: currentProfile.courses_progress
     }).eq('id', currentUser.id);
 	}
+        // ══════════════════════════════════════════
+        // VERB PRACTICE — DATA
+        // ══════════════════════════════════════════
+
+        // Verb database: tenses available per level
+        const VERB_TENSES_BY_LEVEL = {
+            A1: ['present_simple', 'present_continuous', 'past_simple'],
+            A2: ['present_simple', 'present_continuous', 'past_simple', 'past_continuous', 'future_will', 'future_going_to'],
+            B1: ['present_simple', 'present_continuous', 'past_simple', 'past_continuous', 'present_perfect', 'future_will', 'future_going_to'],
+            B2: ['present_simple', 'present_continuous', 'past_simple', 'past_continuous', 'present_perfect', 'present_perfect_continuous', 'past_perfect', 'future_will', 'future_going_to', 'future_perfect'],
+            C1: ['present_simple', 'present_continuous', 'past_simple', 'past_continuous', 'present_perfect', 'present_perfect_continuous', 'past_perfect', 'past_perfect_continuous', 'future_will', 'future_going_to', 'future_perfect', 'future_continuous']
+        };
+
+        const TENSE_META = {
+            present_simple:              { name: 'Present Simple',              example: 'He walks.' },
+            present_continuous:          { name: 'Present Continuous',          example: 'She is running.' },
+            past_simple:                 { name: 'Past Simple',                 example: 'They worked.' },
+            past_continuous:             { name: 'Past Continuous',             example: 'I was reading.' },
+            present_perfect:             { name: 'Present Perfect',             example: 'We have seen.' },
+            present_perfect_continuous:  { name: 'Present Perf. Continuous',    example: 'She has been working.' },
+            past_perfect:                { name: 'Past Perfect',                example: 'He had left.' },
+            past_perfect_continuous:     { name: 'Past Perfect Continuous',     example: 'They had been waiting.' },
+            future_will:                 { name: 'Future (will)',                example: 'I will go.' },
+            future_going_to:             { name: 'Future (going to)',            example: "She's going to call." },
+            future_perfect:              { name: 'Future Perfect',              example: 'He will have finished.' },
+            future_continuous:           { name: 'Future Continuous',           example: 'They will be working.' }
+        };
+
+        const PRONOUNS = ['I', 'you', 'he/she/it', 'we', 'you (pl.)', 'they'];
+        const PRONOUN_SHORT = ['I', 'you', 'he', 'we', 'you', 'they'];
+
+        // Conjugation engine: returns array of 6 forms for given verb + tense
+        function conjugateVerb(infinitive, tense, isIrregular) {
+            const v = infinitive.toLowerCase().trim();
+            // Build conjugations
+            const conj = {
+                present_simple: () => {
+                    const base = v;
+                    let third = base;
+                    if (/[sxz]$/.test(base) || /[cs]h$/.test(base)) third += 'es';
+                    else if (/[^aeiou]y$/.test(base)) third = base.slice(0,-1) + 'ies';
+                    else third += 's';
+                    return [base, base, third, base, base, base];
+                },
+                present_continuous: () => {
+                    let stem = v;
+                    if (stem.endsWith('ie')) stem = stem.slice(0,-2) + 'y';
+                    else if (stem.endsWith('e') && stem.length > 2) stem = stem.slice(0,-1);
+                    const ing = stem + 'ing';
+                    return PRONOUN_SHORT.map(p => {
+                        const be = {I:'am',you:'are',he:'is',we:'are',they:'are'}[p] || 'are';
+                        return `${be} ${ing}`;
+                    });
+                },
+                past_simple: () => {
+                    if (isIrregular) {
+                        const irreg = IRREGULAR_PAST[v];
+                        if (irreg) return Array(6).fill(irreg);
+                    }
+                    let past = v;
+                    if (/[^aeiou]e$/.test(v)) past = v + 'd';
+                    else if (/[^aeiou]y$/.test(v)) past = v.slice(0,-1) + 'ied';
+                    else if (/[^aeiou][aeiou][^aeiou]$/.test(v) && v.length <= 5) past = v + v.slice(-1) + 'ed';
+                    else past = v + 'ed';
+                    return Array(6).fill(past);
+                },
+                past_continuous: () => {
+                    let stem = v;
+                    if (stem.endsWith('ie')) stem = stem.slice(0,-2) + 'y';
+                    else if (stem.endsWith('e') && stem.length > 2) stem = stem.slice(0,-1);
+                    const ing = stem + 'ing';
+                    return PRONOUN_SHORT.map(p => {
+                        const be = {I:'was',you:'were',he:'was',we:'were',they:'were'}[p] || 'were';
+                        return `${be} ${ing}`;
+                    });
+                },
+                present_perfect: () => {
+                    let pp;
+                    if (isIrregular && IRREGULAR_PP[v]) pp = IRREGULAR_PP[v];
+                    else if (/[^aeiou]e$/.test(v)) pp = v + 'd';
+                    else if (/[^aeiou]y$/.test(v)) pp = v.slice(0,-1) + 'ied';
+                    else pp = v + 'ed';
+                    return PRONOUN_SHORT.map(p => {
+                        const have = {I:'have',you:'have',he:'has',we:'have',they:'have'}[p] || 'have';
+                        return `${have} ${pp}`;
+                    });
+                },
+                present_perfect_continuous: () => {
+                    let stem = v;
+                    if (stem.endsWith('e') && stem.length > 2) stem = stem.slice(0,-1);
+                    const ing = stem + 'ing';
+                    return PRONOUN_SHORT.map(p => {
+                        const have = {I:'have',you:'have',he:'has',we:'have',they:'have'}[p] || 'have';
+                        return `${have} been ${ing}`;
+                    });
+                },
+                past_perfect: () => {
+                    let pp;
+                    if (isIrregular && IRREGULAR_PP[v]) pp = IRREGULAR_PP[v];
+                    else if (/[^aeiou]e$/.test(v)) pp = v + 'd';
+                    else if (/[^aeiou]y$/.test(v)) pp = v.slice(0,-1) + 'ied';
+                    else pp = v + 'ed';
+                    return Array(6).fill(`had ${pp}`);
+                },
+                past_perfect_continuous: () => {
+                    let stem = v;
+                    if (stem.endsWith('e') && stem.length > 2) stem = stem.slice(0,-1);
+                    const ing = stem + 'ing';
+                    return Array(6).fill(`had been ${ing}`);
+                },
+                future_will: () => Array(6).fill(`will ${v}`),
+                future_going_to: () => {
+                    return PRONOUN_SHORT.map(p => {
+                        const be = {I:"I'm",you:"you're",he:"he's",we:"we're",they:"they're"}[p] || "are";
+                        return `${be} going to ${v}`;
+                    });
+                },
+                future_perfect: () => {
+                    let pp;
+                    if (isIrregular && IRREGULAR_PP[v]) pp = IRREGULAR_PP[v];
+                    else if (/[^aeiou]e$/.test(v)) pp = v + 'd';
+                    else if (/[^aeiou]y$/.test(v)) pp = v.slice(0,-1) + 'ied';
+                    else pp = v + 'ed';
+                    return Array(6).fill(`will have ${pp}`);
+                },
+                future_continuous: () => {
+                    let stem = v;
+                    if (stem.endsWith('e') && stem.length > 2) stem = stem.slice(0,-1);
+                    const ing = stem + 'ing';
+                    return Array(6).fill(`will be ${ing}`);
+                }
+            };
+            return (conj[tense] || conj.present_simple)();
+        }
+
+        // Irregular past simple forms
+        const IRREGULAR_PAST = {
+            be:'was/were', have:'had', do:'did', go:'went', make:'made',
+            see:'saw', come:'came', take:'took', get:'got', give:'gave',
+            know:'knew', think:'thought', say:'said', tell:'told', find:'found',
+            bring:'brought', buy:'bought', catch:'caught', teach:'taught',
+            run:'ran', swim:'swam', sing:'sang', ring:'rang', begin:'began',
+            drink:'drank', eat:'ate', fall:'fell', feel:'felt', hear:'heard',
+            hold:'held', keep:'kept', leave:'left', lose:'lost', meet:'met',
+            pay:'paid', put:'put', read:'read', send:'sent', sit:'sat',
+            sleep:'slept', speak:'spoke', spend:'spent', stand:'stood',
+            understand:'understood', win:'won', write:'wrote', break:'broke',
+            choose:'chose', drive:'drove', forget:'forgot', grow:'grew',
+            hide:'hid', hit:'hit', let:'let', ride:'rode', rise:'rose',
+            set:'set', shut:'shut', throw:'threw', wake:'woke', wear:'wore',
+            fly:'flew', draw:'drew', cut:'cut', hurt:'hurt', cost:'cost'
+        };
+        const IRREGULAR_PP = {
+            be:'been', have:'had', do:'done', go:'gone', make:'made',
+            see:'seen', come:'come', take:'taken', get:'gotten', give:'given',
+            know:'known', think:'thought', say:'said', tell:'told', find:'found',
+            bring:'brought', buy:'bought', catch:'caught', teach:'taught',
+            run:'run', swim:'swum', sing:'sung', ring:'rung', begin:'begun',
+            drink:'drunk', eat:'eaten', fall:'fallen', feel:'felt', hear:'heard',
+            hold:'held', keep:'kept', leave:'left', lose:'lost', meet:'met',
+            pay:'paid', put:'put', read:'read', send:'sent', sit:'sat',
+            sleep:'slept', speak:'spoken', spend:'spent', stand:'stood',
+            understand:'understood', win:'won', write:'written', break:'broken',
+            choose:'chosen', drive:'driven', forget:'forgotten', grow:'grown',
+            hide:'hidden', hit:'hit', let:'let', ride:'ridden', rise:'risen',
+            set:'set', shut:'shut', throw:'thrown', wake:'woken', wear:'worn',
+            fly:'flown', draw:'drawn', cut:'cut', hurt:'hurt', cost:'cost'
+        };
+
+        // Verb lists by level and type
+        const VERB_LISTS = {
+            regular: {
+                A1: ['walk', 'talk', 'play', 'open', 'close', 'help', 'work', 'watch', 'listen', 'clean', 'cook', 'start', 'stop', 'finish', 'jump'],
+                A2: ['travel', 'arrive', 'visit', 'like', 'love', 'hate', 'need', 'want', 'study', 'learn', 'practice', 'ask', 'answer', 'explain', 'happen', 'change'],
+                B1: ['describe', 'suggest', 'develop', 'manage', 'organize', 'prepare', 'decide', 'discuss', 'improve', 'provide', 'receive', 'create', 'realize', 'achieve', 'compare'],
+                B2: ['demonstrate', 'evaluate', 'establish', 'generate', 'investigate', 'determine', 'implement', 'maintain', 'negotiate', 'participate', 'recognize', 'represent', 'contribute', 'analyze'],
+                C1: ['accommodate', 'administer', 'anticipate', 'collaborate', 'conceptualize', 'differentiate', 'eliminate', 'formulate', 'hypothesize', 'incorporate', 'justify', 'manipulate', 'optimize']
+            },
+            irregular: {
+                A1: ['be', 'have', 'do', 'go', 'see', 'come', 'get', 'make', 'say', 'know', 'give', 'take'],
+                A2: ['think', 'find', 'run', 'swim', 'eat', 'drink', 'write', 'read', 'buy', 'bring', 'tell', 'put'],
+                B1: ['speak', 'break', 'choose', 'drive', 'feel', 'hear', 'hold', 'keep', 'leave', 'lose', 'meet', 'pay', 'ride', 'send', 'sit'],
+                B2: ['arise', 'bear', 'beat', 'become', 'bind', 'bite', 'blow', 'build', 'burn', 'burst', 'cast', 'dig', 'draw', 'fall', 'fight', 'fly', 'forget', 'freeze', 'grow', 'hide'],
+                C1: ['forbid', 'forsake', 'grind', 'hang', 'kneel', 'lean', 'leap', 'lend', 'let', 'lie', 'light', 'mean', 'mow', 'prove', 'rid', 'rise', 'sew', 'shed', 'shine', 'shrink', 'slay']
+            }
+        };
+
+        // Tense-choice sentences: {sentence (with __BLANK__ marker), verb, tense, pronoun_index, answer}
+        // These are generated dynamically per level
+        function generateTenseChoiceSentences(level) {
+            const tenses = VERB_TENSES_BY_LEVEL[level];
+            const sentences = [];
+            const regularVerbs = VERB_LISTS.regular[level] || VERB_LISTS.regular.B1;
+            const irregularVerbs = VERB_LISTS.irregular[level] || VERB_LISTS.irregular.B1;
+            const allVerbs = [...regularVerbs.slice(0,6), ...irregularVerbs.slice(0,6)];
+
+            const contextPhrases = {
+                present_simple: ['Every morning, she', 'He usually', 'They always', 'On Sundays, I', 'My teacher'],
+                present_continuous: ['Right now, she', 'At the moment, he', 'Look! They', 'Listen! Someone', 'Currently, I'],
+                past_simple: ['Yesterday, she', 'Last week, he', 'In 2020, they', 'Last night, I', 'A moment ago, she'],
+                past_continuous: ['At 8pm last night, she', 'While I was reading, he', 'They __BLANK__ when the phone rang', 'This time yesterday, I', 'When she arrived, he'],
+                present_perfect: ['She has just', 'Have you ever', 'They have already', 'I have never', 'He has recently'],
+                present_perfect_continuous: ['She has been', 'I have been', 'They have been', 'He has been', 'We have been'],
+                past_perfect: ['By the time she arrived, he had already', 'Before the test, I had', 'They had never', 'She had already', 'By noon, they had'],
+                past_perfect_continuous: ['Before she stopped, she had been', 'He had been', 'They had been', 'I had been', 'She had been'],
+                future_will: ['I think she will', 'Maybe he will', 'Tomorrow, they will', 'I promise I will', 'Don\'t worry, she will'],
+                future_going_to: ["She's going to", "Look at the sky — it's going to", "They are going to", "He is going to", "I am going to"],
+                future_perfect: ['By next year, she will have', 'By the time you arrive, I will have', 'In five years, they will have', 'By midnight, he will have', 'By 2030, we will have'],
+                future_continuous: ['This time tomorrow, she will be', 'At noon, they will be', 'Next month, I will be', 'While you sleep, he will be', 'By 6pm, she will be']
+            };
+
+            let idx = 0;
+            for (const tense of tenses.slice(0, 6)) {
+                const phrases = contextPhrases[tense] || contextPhrases.present_simple;
+                const verb = allVerbs[idx % allVerbs.length];
+                idx++;
+                const isIrr = irregularVerbs.includes(verb);
+                const conjForms = conjugateVerb(verb, tense, isIrr);
+                // Pick pronoun index based on phrasing
+                const pIdx = 2; // he/she/it form for most example phrases
+                const answer = conjForms[pIdx];
+                const phrase = phrases[idx % phrases.length];
+                let sentence;
+                if (phrase.includes('__BLANK__')) {
+                    sentence = phrase.replace('__BLANK__', `__BLANK__`);
+                } else {
+                    sentence = phrase + ' __BLANK__';
+                }
+                sentences.push({
+                    sentence,
+                    verb,
+                    tense: TENSE_META[tense]?.name || tense,
+                    hint: `Use the ${TENSE_META[tense]?.name || tense} of "${verb}"`,
+                    answer
+                });
+            }
+            // Shuffle
+            return shuffle(sentences);
+        }
+
+        // ══════════════════════════════════════════
+        // VERB PRACTICE — STATE & NAVIGATION
+        // ══════════════════════════════════════════
+        let verbState = {
+            level: 'A1',
+            verbType: 'regular',
+            tense: null,
+            verbList: [],
+            verbIndex: 0,
+            correct: 0,
+            total: 0,
+            sessionMode: null // 'conjugation' | 'tense_choice'
+        };
+        let tcSentences = [];
+        let tcIndex = 0;
+        let tcCorrect = 0;
+
+        function openVerbPractice() {
+            verbState.level = 'A1';
+            document.querySelectorAll('.verb-level-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector('.verb-level-btn').classList.add('selected');
+            document.getElementById('verb-mode-select').style.display = 'none';
+            showScreen('screen-verb-home');
+        }
+
+        function selectVerbLevel(level) {
+            verbState.level = level;
+            document.querySelectorAll('.verb-level-btn').forEach(b => {
+                b.classList.toggle('selected', b.textContent === level);
+            });
+            const modeDiv = document.getElementById('verb-mode-select');
+            modeDiv.style.display = 'flex';
+            document.getElementById('verb-mode-title').textContent = `Practice options for ${level}`;
+        }
+
+        function openVerbConjugation() {
+            verbState.sessionMode = 'conjugation';
+            verbState.verbType = 'regular';
+            // Update level tag
+            const tag = document.getElementById('verb-conj-level-tag');
+            tag.textContent = verbState.level;
+            tag.className = 'level-badge level-' + verbState.level.toLowerCase().replace('/','');
+            // Update type buttons
+            document.getElementById('vtype-regular').classList.add('active');
+            document.getElementById('vtype-irregular').classList.remove('active');
+            renderTenseGrid();
+            showScreen('screen-verb-conj-select');
+        }
+
+        function setVerbType(type) {
+            verbState.verbType = type;
+            document.getElementById('vtype-regular').classList.toggle('active', type === 'regular');
+            document.getElementById('vtype-irregular').classList.toggle('active', type === 'irregular');
+            renderTenseGrid();
+        }
+
+        function renderTenseGrid() {
+            const grid = document.getElementById('verb-tense-grid');
+            grid.innerHTML = '';
+            const tenses = VERB_TENSES_BY_LEVEL[verbState.level] || VERB_TENSES_BY_LEVEL.A1;
+            tenses.forEach(tenseKey => {
+                const meta = TENSE_META[tenseKey];
+                const btn = document.createElement('button');
+                btn.className = 'verb-tense-btn';
+                btn.innerHTML = `<span class="tense-name">${meta.name}</span><span class="tense-example">${meta.example}</span>`;
+                btn.onclick = () => startConjugationDrill(tenseKey);
+                grid.appendChild(btn);
+            });
+        }
+
+        function startConjugationDrill(tenseKey) {
+            verbState.tense = tenseKey;
+            verbState.verbList = shuffle([...(VERB_LISTS[verbState.verbType][verbState.level] || VERB_LISTS[verbState.verbType].A1)]);
+            verbState.verbIndex = 0;
+            verbState.correct = 0;
+            verbState.total = 0;
+            showScreen('screen-verb-drill');
+            loadDrillVerb();
+        }
+
+        function loadDrillVerb() {
+            if (verbState.verbIndex >= verbState.verbList.length) {
+                showVerbResults('conjugation');
+                return;
+            }
+            const verb = verbState.verbList[verbState.verbIndex];
+            const isIrr = verbState.verbType === 'irregular';
+            const forms = conjugateVerb(verb, verbState.tense, isIrr);
+            const tenseName = TENSE_META[verbState.tense]?.name || verbState.tense;
+
+            document.getElementById('drill-tense-label').textContent = tenseName + (isIrr ? ' — Irregular' : ' — Regular');
+            document.getElementById('drill-verb-infinitive').textContent = 'to ' + verb;
+            document.getElementById('drill-verb-meaning').textContent = '';
+            document.getElementById('drill-verb-number').textContent = `${verbState.verbIndex + 1} / ${verbState.verbList.length}`;
+            document.getElementById('drill-score-badge').textContent = `${verbState.correct} / ${verbState.total}`;
+
+            // Build table
+            const table = document.getElementById('drill-conj-table');
+            table.innerHTML = '';
+            PRONOUNS.forEach((pron, i) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="pronoun">${pron}</td>
+                    <td>
+                        <input class="conj-input" type="text" data-index="${i}" data-answer="${forms[i]}" autocomplete="off" autocorrect="off" spellcheck="false">
+                        <div class="conj-answer" id="conj-answer-${i}">✓ ${forms[i]}</div>
+                    </td>`;
+                table.appendChild(tr);
+            });
+
+            // Focus first input
+            setTimeout(() => {
+                const first = table.querySelector('.conj-input');
+                if (first) first.focus();
+            }, 100);
+
+            // Allow Enter to check
+            table.querySelectorAll('.conj-input').forEach((inp, i) => {
+                inp.addEventListener('keydown', e => {
+                    if (e.key === 'Enter') {
+                        const inputs = table.querySelectorAll('.conj-input');
+                        if (i < inputs.length - 1) inputs[i+1].focus();
+                        else checkConjugation();
+                    }
+                });
+            });
+
+            const feedback = document.getElementById('drill-feedback');
+            feedback.className = 'feedback-banner';
+            feedback.textContent = '';
+            document.getElementById('drill-check-btn').classList.remove('hidden');
+            document.getElementById('drill-skip-btn').classList.remove('hidden');
+            document.getElementById('drill-next-btn').classList.add('hidden');
+        }
+
+        function checkConjugation() {
+            const table = document.getElementById('drill-conj-table');
+            const inputs = table.querySelectorAll('.conj-input');
+            let allCorrect = true;
+            let correctCount = 0;
+            inputs.forEach((inp, i) => {
+                const expected = inp.dataset.answer.toLowerCase().trim();
+                const given = inp.value.toLowerCase().trim();
+                const ok = given === expected;
+                if (ok) { inp.classList.add('correct'); correctCount++; }
+                else { inp.classList.add('wrong'); allCorrect = false; }
+                inp.disabled = true;
+                const answerDiv = document.getElementById(`conj-answer-${i}`);
+                if (answerDiv && !ok) answerDiv.classList.add('show');
+            });
+
+            verbState.total += 6;
+            verbState.correct += correctCount;
+            document.getElementById('drill-score-badge').textContent = `${verbState.correct} / ${verbState.total}`;
+
+            const feedback = document.getElementById('drill-feedback');
+            if (allCorrect) {
+                feedback.className = 'feedback-banner correct show';
+                feedback.textContent = '✓ Perfect! All 6 correct.';
+                document.body.classList.add('glow-correct');
+                setTimeout(() => document.body.classList.remove('glow-correct'), 1000);
+            } else {
+                const wrong = 6 - correctCount;
+                feedback.className = 'feedback-banner wrong show';
+                feedback.textContent = `✗ ${wrong} mistake${wrong>1?'s':''} — check the correct forms above.`;
+            }
+            document.getElementById('drill-check-btn').classList.add('hidden');
+            document.getElementById('drill-skip-btn').classList.add('hidden');
+            document.getElementById('drill-next-btn').classList.remove('hidden');
+        }
+
+        function skipDrillVerb() {
+            verbState.verbIndex++;
+            verbState.total += 6;
+            loadDrillVerb();
+        }
+
+        function nextDrillVerb() {
+            verbState.verbIndex++;
+            loadDrillVerb();
+        }
+
+        function openTenseChoice() {
+            verbState.sessionMode = 'tense_choice';
+            tcSentences = generateTenseChoiceSentences(verbState.level);
+            tcIndex = 0;
+            tcCorrect = 0;
+            showScreen('screen-tense-choice');
+            loadTenseChoiceQuestion();
+        }
+
+        function loadTenseChoiceQuestion() {
+            if (tcIndex >= tcSentences.length) {
+                showVerbResults('tense_choice');
+                return;
+            }
+            const q = tcSentences[tcIndex];
+            const displaySentence = q.sentence.replace('__BLANK__', `<span class="tense-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>`);
+            document.getElementById('tc-sentence-display').innerHTML = displaySentence;
+            document.getElementById('tc-hint').textContent = q.hint;
+            document.getElementById('tc-progress-label').textContent = `Question ${tcIndex + 1} of ${tcSentences.length}`;
+            document.getElementById('tc-score-badge').textContent = `${tcCorrect} / ${tcIndex}`;
+            document.getElementById('tc-input').value = '';
+            document.getElementById('tc-input').disabled = false;
+            document.getElementById('tc-input').className = 'tense-input';
+            const feedback = document.getElementById('tc-feedback');
+            feedback.className = 'feedback-banner';
+            feedback.textContent = '';
+            document.getElementById('tc-next-btn').classList.add('hidden');
+            setTimeout(() => document.getElementById('tc-input').focus(), 100);
+        }
+
+        function checkTenseChoice() {
+            const q = tcSentences[tcIndex];
+            const given = document.getElementById('tc-input').value.toLowerCase().trim();
+            const expected = q.answer.toLowerCase().trim();
+            const ok = given === expected;
+            const input = document.getElementById('tc-input');
+            input.disabled = true;
+            input.className = 'tense-input ' + (ok ? 'correct' : 'wrong');
+
+            const feedback = document.getElementById('tc-feedback');
+            if (ok) {
+                tcCorrect++;
+                feedback.className = 'feedback-banner correct show';
+                feedback.textContent = '✓ Correct!';
+                document.body.classList.add('glow-correct');
+                setTimeout(() => document.body.classList.remove('glow-correct'), 1000);
+            } else {
+                feedback.className = 'feedback-banner wrong show';
+                feedback.innerHTML = `✗ The correct form is: <strong>${q.answer}</strong>`;
+                document.body.classList.add('glow-wrong');
+                setTimeout(() => document.body.classList.remove('glow-wrong'), 1000);
+                // Show answer in blank
+                const displaySentence = q.sentence.replace('__BLANK__', `<span class="tense-blank" style="color:var(--correct);">${q.answer}</span>`);
+                document.getElementById('tc-sentence-display').innerHTML = displaySentence;
+            }
+            document.getElementById('tc-score-badge').textContent = `${tcCorrect} / ${tcIndex + 1}`;
+            document.getElementById('tc-next-btn').classList.remove('hidden');
+        }
+
+        function nextTenseChoice() {
+            tcIndex++;
+            loadTenseChoiceQuestion();
+        }
+
+        function showVerbResults(mode) {
+            let correct, total;
+            if (mode === 'conjugation') {
+                correct = verbState.correct;
+                total = verbState.total;
+            } else {
+                correct = tcCorrect;
+                total = tcSentences.length;
+            }
+            const wrong = total - correct;
+            const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+            document.getElementById('vr-correct').textContent = correct;
+            document.getElementById('vr-wrong').textContent = wrong;
+            document.getElementById('vr-pct').textContent = pct + '%';
+            document.getElementById('verb-results-icon').textContent = pct >= 80 ? '🎉' : pct >= 50 ? '💪' : '📚';
+            document.getElementById('verb-results-title').textContent = pct >= 80 ? 'Excellent work!' : pct >= 50 ? 'Good effort!' : 'Keep practising!';
+            document.getElementById('verb-results-sub').textContent = mode === 'conjugation'
+                ? `You conjugated verbs correctly ${correct} out of ${total} times in the ${TENSE_META[verbState.tense]?.name} tense.`
+                : `You identified ${correct} out of ${total} tense forms correctly.`;
+            // Store retry mode
+            document.getElementById('vr-retry-btn').onclick = () => {
+                if (mode === 'conjugation') startConjugationDrill(verbState.tense);
+                else openTenseChoice();
+            };
+            showScreen('screen-verb-results');
+        }
+
+        function retryVerbSession() { /* handled by vr-retry-btn onclick */ }
+
         console.log('Calling initAuth now');
         initAuth().catch(err => {
             console.error('initAuth uncaught error:', err);
