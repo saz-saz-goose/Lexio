@@ -2800,6 +2800,17 @@
                 <button class="verb-type-btn" id="vform-mixed" onclick="setVerbForm('mixed')" style="flex:1; min-width:120px;">⇄ Mixed</button>
             </div>
         </div>
+        <!-- Duration picker -->
+        <div style="width:100%;">
+            <div class="category-title" style="margin-bottom:8px;">Duration</div>
+            <div class="verb-type-toggle" style="flex-wrap:wrap; gap:8px;">
+                <button class="verb-type-btn" id="vdur-1"  onclick="setDuration(1)"  style="flex:1; min-width:60px;">1 min</button>
+                <button class="verb-type-btn" id="vdur-2"  onclick="setDuration(2)"  style="flex:1; min-width:60px;">2 min</button>
+                <button class="verb-type-btn active" id="vdur-5"  onclick="setDuration(5)"  style="flex:1; min-width:60px;">5 min</button>
+                <button class="verb-type-btn" id="vdur-10" onclick="setDuration(10)" style="flex:1; min-width:60px;">10 min</button>
+                <button class="verb-type-btn" id="vdur-0"  onclick="setDuration(0)"  style="flex:1; min-width:60px;">∞ Free</button>
+            </div>
+        </div>
         <!-- Tense grid -->
         <div style="width:100%;">
             <div class="category-title" style="margin-bottom:8px;">Choose a Tense</div>
@@ -2814,8 +2825,11 @@
     ══════════════════════════════════════════ -->
     <div class="screen" id="screen-verb-drill">
         <div style="width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
-            <button class="back-home-btn" onclick="showScreen('screen-verb-conj-select')">← Back</button>
-            <span class="verb-score-badge" id="drill-score-badge">0 / 0</span>
+            <button class="back-home-btn" onclick="endDrillEarly()">← Back</button>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div id="drill-timer" style="display:none; font-family:'DM Sans',sans-serif; font-size:0.9rem; font-weight:600; color:var(--accent); background:var(--accent-light); padding:4px 12px; border-radius:20px; min-width:54px; text-align:center;"></div>
+                <span class="verb-score-badge" id="drill-score-badge">0 / 0</span>
+            </div>
         </div>
         <!-- Context strip: tense + verb -->
         <div class="card" style="padding:16px 20px; width:100%;">
@@ -2894,6 +2908,7 @@
                 <div class="verb-score-label">Score</div>
             </div>
         </div>
+        <div id="vr-time-row" style="display:none; font-size:0.82rem; color:var(--ink-light); text-align:center; margin-top:-8px;">⏱ <span id="vr-time-label"></span></div>
         <div style="width:100%; display:flex; flex-direction:column; gap:10px; margin-top:8px;">
             <button class="btn-primary" id="vr-retry-btn" onclick="retryVerbSession()">Practice Again →</button>
             <button class="btn-primary" onclick="goToHome()" style="background:#FFF; border:1.5px solid var(--border); color:var(--accent);">← Accueil</button>
@@ -5707,12 +5722,37 @@
         // Conjugation engine: returns array of 6 forms for given verb + tense
         function conjugateVerb(infinitive, tense, isIrregular) {
             const v = infinitive.toLowerCase().trim();
+
+            // ── Special case: TO BE ──
+            if (v === 'be') {
+                const beConj = {
+                    present_simple:             ['am', 'are', 'is', 'are', 'are', 'are'],
+                    present_continuous:         ['am being', 'are being', 'is being', 'are being', 'are being', 'are being'],
+                    past_simple:                ['was', 'were', 'was', 'were', 'were', 'were'],
+                    past_continuous:            ['was being', 'were being', 'was being', 'were being', 'were being', 'were being'],
+                    present_perfect:            ['have been', 'have been', 'has been', 'have been', 'have been', 'have been'],
+                    present_perfect_continuous: ['have been being', 'have been being', 'has been being', 'have been being', 'have been being', 'have been being'],
+                    past_perfect:               Array(6).fill('had been'),
+                    past_perfect_continuous:    Array(6).fill('had been being'),
+                    future_will:                Array(6).fill('will be'),
+                    future_going_to:            ["I'm going to be", "you're going to be", "he's going to be", "we're going to be", "you're going to be", "they're going to be"],
+                    future_perfect:             Array(6).fill('will have been'),
+                    future_continuous:          Array(6).fill('will be being'),
+                };
+                return beConj[tense] || beConj.present_simple;
+            }
+
+            // ── Special case: TO HAVE (present simple) ──
+            if (v === 'have' && tense === 'present_simple') {
+                return ['have', 'have', 'has', 'have', 'have', 'have'];
+            }
+
             // Build conjugations
             const conj = {
                 present_simple: () => {
                     const base = v;
                     let third = base;
-                    if (/[sxz]$/.test(base) || /[cs]h$/.test(base)) third += 'es';
+                    if (/[sxz]$/.test(base) || /[cs]h$/.test(base) || /[^aeiou]o$/.test(base) || base === 'do' || base === 'go') third += 'es';
                     else if (/[^aeiou]y$/.test(base)) third = base.slice(0,-1) + 'ies';
                     else third += 's';
                     return [base, base, third, base, base, base];
@@ -5810,7 +5850,7 @@
 
         // Irregular past simple forms
         const IRREGULAR_PAST = {
-            be:'was/were', have:'had', do:'did', go:'went', make:'made',
+            be:'was', have:'had', do:'did', go:'went', make:'made',
             see:'saw', come:'came', take:'took', get:'got', give:'gave',
             know:'knew', think:'thought', say:'said', tell:'told', find:'found',
             bring:'brought', buy:'bought', catch:'caught', teach:'taught',
@@ -6070,17 +6110,23 @@
             const v = infinitive.toLowerCase().trim();
             const pos = conjugateVerb(v, tense, isIrregular);
 
-            // Helper: insert "not" after the first auxiliary word in a positive form
             function negateForm(form, pi) {
-                // present_simple: use do/does + not + base
-                if (tense === 'present_simple') {
-                    const aux = pi === 2 ? "doesn't" : "don't";
-                    return `${aux} ${v}`;
+                // Special case: "be" in present simple — negate the be-form itself (am/is/are)
+                if (v === 'be' && tense === 'present_simple') {
+                    const negMap = { 'am': "am not", 'is': "isn't", 'are': "aren't" };
+                    return negMap[form] || ('not ' + form);
                 }
-                // past_simple: use did + not + base
+                // Special case: "be" in past simple — negate was/were directly
+                if (v === 'be' && tense === 'past_simple') {
+                    return form === 'was' ? "wasn't" : "weren't";
+                }
+                // present_simple (non-be): use do/does + not + base
+                if (tense === 'present_simple') {
+                    return pi === 2 ? `doesn't ${v}` : `don't ${v}`;
+                }
+                // past_simple (non-be): use didn't + base
                 if (tense === 'past_simple') return `didn't ${v}`;
-                // All other tenses: the positive form already has an auxiliary — insert "not" after it
-                // e.g. "is running" → "isn't running", "will go" → "won't go", "have seen" → "haven't seen"
+                // All other tenses: negate by inserting "not" after the first auxiliary
                 const contractions = {
                     'will ': "won't ", 'am ': "am not ", 'is ': "isn't ", 'are ': "aren't ",
                     'was ': "wasn't ", 'were ': "weren't ", 'have ': "haven't ", 'has ': "hasn't ",
@@ -6089,11 +6135,11 @@
                 for (const [aux, neg] of Object.entries(contractions)) {
                     if (form.startsWith(aux)) return neg + form.slice(aux.length);
                 }
-                // Contracted forms like "I'm going to" → "I'm not going to"
+                // Contracted going_to forms
                 if (form.includes("'m going to")) return form.replace("'m going to", "'m not going to");
                 if (form.includes("'re going to")) return form.replace("'re going to", "'re not going to");
                 if (form.includes("'s going to")) return form.replace("'s going to", "'s not going to");
-                return 'not ' + form; // fallback
+                return 'not ' + form;
             }
             return pos.map((f, i) => negateForm(f, i));
         }
@@ -6103,15 +6149,31 @@
             const v = infinitive.toLowerCase().trim();
             const pos = conjugateVerb(v, tense, isIrregular);
             const subjs = ['I', 'you', 'he/she/it', 'we', 'you', 'they'];
+            const subjsLower = ['I', 'you', 'he/she/it', 'we', 'you', 'they'];
 
             function interrogateForm(form, pi) {
                 const subj = subjs[pi];
+                const sl = subj.toLowerCase();
+
+                // Special case: "be" in present simple — invert am/is/are + subject
+                if (v === 'be' && tense === 'present_simple') {
+                    const auxMap2 = { 'am': 'Am', 'is': 'Is', 'are': 'Are' };
+                    const aux2 = auxMap2[form] || 'Is';
+                    return `${aux2} ${sl}?`;
+                }
+                // Special case: "be" in past simple — invert was/were + subject
+                if (v === 'be' && tense === 'past_simple') {
+                    const aux2 = form === 'was' ? 'Was' : 'Were';
+                    return `${aux2} ${sl}?`;
+                }
+                // present_simple (non-be): Do/Does + subject + base
                 if (tense === 'present_simple') {
                     const aux = pi === 2 ? 'Does' : 'Do';
-                    return `${aux} ${subj.toLowerCase()} ${v}?`;
+                    return `${aux} ${sl} ${v}?`;
                 }
-                if (tense === 'past_simple') return `Did ${subj.toLowerCase()} ${v}?`;
-                // Invert auxiliary and subject
+                // past_simple (non-be): Did + subject + base
+                if (tense === 'past_simple') return `Did ${sl} ${v}?`;
+                // All other tenses: invert auxiliary and subject
                 const auxMap = {
                     'am ': 'Am ', 'is ': 'Is ', 'are ': 'Are ',
                     'was ': 'Was ', 'were ': 'Were ',
@@ -6120,14 +6182,14 @@
                 };
                 for (const [aux, Aux] of Object.entries(auxMap)) {
                     if (form.startsWith(aux)) {
-                        return `${Aux}${subj.toLowerCase()} ${form.slice(aux.length)}?`;
+                        return `${Aux}${sl} ${form.slice(aux.length)}?`;
                     }
                 }
-                // Contracted going_to: "I'm going to go" → "Am I going to go?"
+                // Contracted going_to forms
                 if (form.includes("'m going to")) return `Am I going to ${v}?`;
-                if (form.includes("'re going to")) return `Are ${subj.toLowerCase()} going to ${v}?`;
-                if (form.includes("'s going to")) return `Is ${subj.toLowerCase()} going to ${v}?`;
-                return `${form} ${subj}?`; // fallback
+                if (form.includes("'re going to")) return `Are ${sl} going to ${v}?`;
+                if (form.includes("'s going to")) return `Is ${sl} going to ${v}?`;
+                return `${form} ${subj}?`;
             }
             return pos.map((f, i) => interrogateForm(f, i));
         }
@@ -6136,6 +6198,66 @@
             if (form === 'negative') return conjugateNegative(verb, tense, isIrr);
             if (form === 'interrogative') return conjugateInterrogative(verb, tense, isIrr);
             return conjugateVerb(verb, tense, isIrr); // affirmative
+        }
+
+        // ── DRILL TIMER ──
+        let drillTimerInterval = null;
+        let drillTimerSecondsLeft = 0;
+        let drillTimerSecondsElapsed = 0;
+        let drillDurationMinutes = 5; // default
+
+        function setDuration(mins) {
+            drillDurationMinutes = mins;
+            [1, 2, 5, 10, 0].forEach(m => {
+                const el = document.getElementById('vdur-' + m);
+                if (el) el.classList.toggle('active', m === mins);
+            });
+        }
+
+        function startDrillTimer() {
+            clearDrillTimer();
+            drillTimerSecondsElapsed = 0;
+            const timerEl = document.getElementById('drill-timer');
+
+            if (drillDurationMinutes === 0) {
+                // Unlimited — hide timer
+                timerEl.style.display = 'none';
+                return;
+            }
+
+            drillTimerSecondsLeft = drillDurationMinutes * 60;
+            timerEl.style.display = 'block';
+            updateTimerDisplay();
+
+            drillTimerInterval = setInterval(() => {
+                drillTimerSecondsLeft--;
+                drillTimerSecondsElapsed++;
+                updateTimerDisplay();
+                if (drillTimerSecondsLeft <= 0) {
+                    clearDrillTimer();
+                    showVerbResults('conjugation');
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const el = document.getElementById('drill-timer');
+            if (!el) return;
+            const m = Math.floor(drillTimerSecondsLeft / 60);
+            const s = drillTimerSecondsLeft % 60;
+            el.textContent = `${m}:${String(s).padStart(2, '0')}`;
+            // Turn red in last 30 seconds
+            el.style.color = drillTimerSecondsLeft <= 30 ? 'var(--wrong)' : 'var(--accent)';
+            el.style.background = drillTimerSecondsLeft <= 30 ? 'var(--wrong-bg)' : 'var(--accent-light)';
+        }
+
+        function clearDrillTimer() {
+            if (drillTimerInterval) { clearInterval(drillTimerInterval); drillTimerInterval = null; }
+        }
+
+        function endDrillEarly() {
+            clearDrillTimer();
+            showScreen('screen-verb-conj-select');
         }
 
         function openVerbConjugation() {
@@ -6149,6 +6271,11 @@
             document.getElementById('vtype-irregular').classList.remove('active');
             ['affirmative','negative','interrogative','mixed'].forEach(f => {
                 document.getElementById('vform-' + f).classList.toggle('active', f === 'affirmative');
+            });
+            // Sync duration buttons to current selection
+            [1, 2, 5, 10, 0].forEach(m => {
+                const el = document.getElementById('vdur-' + m);
+                if (el) el.classList.toggle('active', m === drillDurationMinutes);
             });
             renderTenseGrid();
             showScreen('screen-verb-conj-select');
@@ -6209,24 +6336,31 @@
             const forms = ['affirmative', 'negative', 'interrogative'];
             const selectedForm = verbState.verbForm || 'affirmative';
 
+            // For timed sessions, generate a very large shuffled queue (10× verb pool × 6 pronouns)
+            // so it never runs out before the timer ends. For unlimited, use one full pass.
+            const repeats = drillDurationMinutes > 0 ? Math.max(10, Math.ceil((drillDurationMinutes * 60) / (verbPool.length * 6 * 8))) : 1;
             const pairs = [];
-            for (const verb of verbPool) {
-                for (let pi = 0; pi < 6; pi++) {
-                    const form = selectedForm === 'mixed'
-                        ? forms[Math.floor(Math.random() * 3)]
-                        : selectedForm;
-                    pairs.push({ verb, pronounIdx: pi, form });
+            for (let r = 0; r < repeats; r++) {
+                for (const verb of verbPool) {
+                    for (let pi = 0; pi < 6; pi++) {
+                        const form = selectedForm === 'mixed'
+                            ? forms[Math.floor(Math.random() * 3)]
+                            : selectedForm;
+                        pairs.push({ verb, pronounIdx: pi, form });
+                    }
                 }
             }
             verbState.drillQueue = shuffle(pairs);
             verbState.drillPos = 0;
 
             showScreen('screen-verb-drill');
+            startDrillTimer();
             loadDrillItem();
         }
 
         function loadDrillItem() {
             if (verbState.drillPos >= verbState.drillQueue.length) {
+                clearDrillTimer();
                 showVerbResults('conjugation');
                 return;
             }
@@ -6432,6 +6566,7 @@
         }
 
         function showVerbResults(mode) {
+            clearDrillTimer();
             let correct, total;
             if (mode === 'conjugation') {
                 correct = verbState.correct;
@@ -6450,7 +6585,22 @@
             document.getElementById('verb-results-sub').textContent = mode === 'conjugation'
                 ? `You conjugated verbs correctly ${correct} out of ${total} times in the ${TENSE_META[verbState.tense]?.name} tense.`
                 : `You identified ${correct} out of ${total} tense forms correctly.`;
-            // Store retry mode
+
+            // Show elapsed time for conjugation sessions
+            const timeRow = document.getElementById('vr-time-row');
+            if (mode === 'conjugation' && drillTimerSecondsElapsed > 0) {
+                const elapsed = drillDurationMinutes > 0
+                    ? drillDurationMinutes * 60
+                    : drillTimerSecondsElapsed;
+                const m = Math.floor(elapsed / 60);
+                const s = elapsed % 60;
+                const timeStr = m > 0 ? `${m}m ${s}s` : `${s}s`;
+                document.getElementById('vr-time-label').textContent = `Session time: ${timeStr}`;
+                timeRow.style.display = 'block';
+            } else {
+                timeRow.style.display = 'none';
+            }
+
             document.getElementById('vr-retry-btn').onclick = () => {
                 if (mode === 'conjugation') startConjugationDrill(verbState.tense);
                 else openTenseChoice();
