@@ -6270,6 +6270,10 @@
             tag.className = 'level-badge level-' + verbState.level.toLowerCase().replace('/','');
             document.getElementById('vtype-regular').classList.add('active');
             document.getElementById('vtype-irregular').classList.remove('active');
+            // Ensure all form buttons visible (regular mode)
+            ['negative','interrogative','mixed'].forEach(f => {
+                document.getElementById('vform-' + f).style.display = '';
+            });
             ['affirmative','negative','interrogative','mixed'].forEach(f => {
                 document.getElementById('vform-' + f).classList.toggle('active', f === 'affirmative');
             });
@@ -6293,6 +6297,17 @@
             verbState.verbType = type;
             document.getElementById('vtype-regular').classList.toggle('active', type === 'regular');
             document.getElementById('vtype-irregular').classList.toggle('active', type === 'irregular');
+
+            // Negative/interrogative is irrelevant for irregular drills — hide those options
+            const irrelevantForms = ['negative', 'interrogative', 'mixed'];
+            irrelevantForms.forEach(f => {
+                document.getElementById('vform-' + f).style.display = type === 'irregular' ? 'none' : '';
+            });
+            // If currently on a hidden form, reset to affirmative
+            if (type === 'irregular' && irrelevantForms.includes(verbState.verbForm)) {
+                setVerbForm('affirmative');
+            }
+
             renderTenseGrid();
         }
 
