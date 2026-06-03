@@ -2807,27 +2807,36 @@
             <button class="back-home-btn" onclick="showScreen('screen-verb-conj-select')">← Back</button>
             <span class="verb-score-badge" id="drill-score-badge">0 / 0</span>
         </div>
-        <!-- Verb card -->
-        <div class="card" style="padding:20px 24px;">
-            <div class="verb-info-row">
-                <div>
-                    <div style="font-size:0.7rem; letter-spacing:1.2px; text-transform:uppercase; color:var(--ink-light); margin-bottom:4px;" id="drill-tense-label"></div>
-                    <div class="verb-display-big" id="drill-verb-infinitive"></div>
-                    <div style="font-size:0.85rem; color:var(--ink-light); margin-top:2px;" id="drill-verb-meaning"></div>
-                </div>
-                <div id="drill-verb-number" style="font-size:0.8rem; color:var(--ink-light);"></div>
+        <!-- Context strip: tense + verb -->
+        <div class="card" style="padding:16px 20px; width:100%;">
+            <div style="font-size:0.65rem; letter-spacing:1.4px; text-transform:uppercase; color:var(--ink-light); margin-bottom:6px;" id="drill-tense-label"></div>
+            <div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;">
+                <div class="verb-display-big" id="drill-verb-infinitive" style="font-size:1.7rem;"></div>
+                <div id="drill-verb-number" style="font-size:0.78rem; color:var(--ink-light); white-space:nowrap;"></div>
             </div>
-            <div class="divider" style="margin: 12px 0;"></div>
-            <table class="conj-table" id="drill-conj-table">
-                <!-- Rows injected by JS -->
-            </table>
+            <!-- Progress dots for the 6 pronouns -->
+            <div id="drill-pronoun-dots" style="display:flex; gap:6px; margin-top:10px; flex-wrap:wrap;"></div>
+        </div>
+        <!-- Single pronoun question card -->
+        <div class="card" style="padding:24px 24px 20px; width:100%; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div style="font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:600; color:var(--accent); min-width:90px;" id="drill-pronoun-display"></div>
+                <div style="flex:1;">
+                    <input class="conj-input" type="text" id="drill-single-input"
+                        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                        placeholder="conjugated form…"
+                        style="width:100%; font-size:1.1rem; padding:8px 0; border-width:2px;"
+                        onkeydown="if(event.key==='Enter') checkSingleConjugation()">
+                </div>
+            </div>
+            <div id="drill-single-answer" style="font-size:0.85rem; color:var(--correct); display:none; padding:6px 10px; background:var(--correct-bg); border-radius:8px;"></div>
         </div>
         <div class="feedback-banner" id="drill-feedback"></div>
         <div style="width:100%; display:flex; gap:10px;">
-            <button class="btn-primary" id="drill-check-btn" onclick="checkConjugation()" style="flex:2;">Check ✓</button>
-            <button class="btn-primary" id="drill-skip-btn" onclick="skipDrillVerb()" style="flex:1; background:#FFF; border:1.5px solid var(--border); color:var(--ink-light);">Skip →</button>
+            <button class="btn-primary" id="drill-check-btn" onclick="checkSingleConjugation()" style="flex:2;">Check ✓</button>
+            <button class="btn-primary" id="drill-skip-btn" onclick="skipSinglePronoun()" style="flex:1; background:#FFF; border:1.5px solid var(--border); color:var(--ink-light);">Skip →</button>
         </div>
-        <button class="btn-primary hidden" id="drill-next-btn" onclick="nextDrillVerb()" style="margin-top:-4px;">Next Verb →</button>
+        <button class="btn-primary hidden" id="drill-next-btn" onclick="advanceDrill()">Next →</button>
     </div>
 
     <!-- ══════════════════════════════════════════
@@ -2842,10 +2851,10 @@
             <div style="font-size:0.68rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink-light); margin-bottom:10px;" id="tc-progress-label">Question 1</div>
             <div class="tense-sentence-text" id="tc-sentence-display"></div>
             <div class="tense-hint" id="tc-hint"></div>
-            <div class="tense-input-row" style="margin-top:14px;">
-                <input class="tense-input" type="text" id="tc-input" placeholder="Type the correct form…" onkeydown="if(event.key==='Enter') checkTenseChoice()">
-                <button class="btn-primary" onclick="checkTenseChoice()" style="width:auto; padding:12px 18px; flex-shrink:0;">✓</button>
-            </div>
+        </div>
+        <!-- MCQ options grid -->
+        <div class="options-grid" id="tc-options-grid" style="margin-top:4px;">
+            <!-- 4 buttons injected by JS -->
         </div>
         <div class="feedback-banner" id="tc-feedback"></div>
         <button class="btn-primary hidden" id="tc-next-btn" onclick="nextTenseChoice()">Next →</button>
@@ -5838,57 +5847,148 @@
             }
         };
 
-        // Tense-choice sentences: {sentence (with __BLANK__ marker), verb, tense, pronoun_index, answer}
-        // These are generated dynamically per level
+        // Rich sentence bank: each entry has a template (with __BLANK__ for the verb),
+        // the base verb, which tense to use, which pronoun index, and context clue words.
+        // __SUBJ__ is replaced with the pronoun at render time.
+        const TENSE_SENTENCE_BANK = {
+            present_simple: [
+                { template: 'Every morning, __SUBJ__ __BLANK__ to work instead of taking the bus.', subj: 2, clue: 'every morning (habitual routine)' },
+                { template: 'Scientists say the Sun __BLANK__ in the east and sets in the west.', subj: 2, clue: 'general fact / permanent truth' },
+                { template: 'She __BLANK__ three languages fluently, including Mandarin.', subj: 2, clue: 'permanent ability / general truth' },
+                { template: 'The museum __BLANK__ at nine o\'clock and closes at six.', subj: 2, clue: 'timetable / scheduled event' },
+                { template: 'He __BLANK__ coffee every single day, without exception.', subj: 2, clue: 'habitual action' },
+                { template: 'Water __BLANK__ at one hundred degrees Celsius.', subj: 2, clue: 'scientific fact' },
+            ],
+            present_continuous: [
+                { template: 'Look out the window — it __BLANK__ heavily out there!', subj: 2, clue: 'look / right now (action in progress)' },
+                { template: 'She can\'t come to the phone because she __BLANK__ a shower at the moment.', subj: 2, clue: 'at the moment (in progress now)' },
+                { template: 'The number of people using electric cars __BLANK__ rapidly this year.', subj: 2, clue: 'this year / gradual change around now' },
+                { template: 'They __BLANK__ a new shopping centre just outside the town.', subj: 5, clue: 'temporary ongoing project' },
+                { template: 'I __BLANK__ harder these days because the exams are getting closer.', subj: 0, clue: 'these days / temporary situation' },
+            ],
+            past_simple: [
+                { template: 'Last summer, they __BLANK__ across three countries on their motorbikes.', subj: 5, clue: 'last summer (completed past action)' },
+                { template: 'She __BLANK__ the report before the deadline on Friday.', subj: 2, clue: 'on Friday / completed action with time reference' },
+                { template: 'When he was a child, he __BLANK__ to become an astronaut.', subj: 2, clue: 'when he was a child / past habit or state' },
+                { template: 'The earthquake __BLANK__ at exactly 3:17 am and lasted thirty seconds.', subj: 2, clue: 'exact time in the past / single completed event' },
+                { template: 'I __BLANK__ my keys this morning and was late for everything.', subj: 0, clue: 'this morning / completed past action' },
+            ],
+            past_continuous: [
+                { template: 'She __BLANK__ to music when she suddenly heard a strange noise outside.', subj: 2, clue: 'when + sudden interruption (background action)' },
+                { template: 'At midnight last night, the whole team __BLANK__ on the presentation.', subj: 5, clue: 'at midnight (action in progress at that past moment)' },
+                { template: 'While he __BLANK__ the dishes, he accidentally dropped a plate.', subj: 2, clue: 'while + simultaneous past event' },
+                { template: 'The children __BLANK__ so loudly that nobody could hear the announcement.', subj: 5, clue: 'scene-setting — describing background noise' },
+            ],
+            present_perfect: [
+                { template: 'She __BLANK__ to Japan three times already, and she\'s planning another trip.', subj: 2, clue: 'already / life experience up to now' },
+                { template: 'I can\'t find my wallet — I think I __BLANK__ it somewhere.', subj: 0, clue: 'result visible now / indefinite past' },
+                { template: 'The government __BLANK__ a new law that affects millions of workers.', subj: 2, clue: 'recently / result relevant now' },
+                { template: 'He __BLANK__ in this city for over twenty years and knows every street.', subj: 2, clue: 'for + duration continuing until now' },
+                { template: 'Have you __BLANK__ the new exhibition at the art gallery yet?', subj: 1, clue: 'yet / experience up to now' },
+            ],
+            present_perfect_continuous: [
+                { template: 'She __BLANK__ for the marathon for six months, and it really shows.', subj: 2, clue: 'for six months / activity still in progress' },
+                { template: 'I __BLANK__ all morning and I still haven\'t finished the chapter.', subj: 0, clue: 'all morning / ongoing activity with visible results' },
+                { template: 'They __BLANK__ about buying a house for years, but nothing has happened.', subj: 5, clue: 'for years / repeated or continuous action up to now' },
+                { template: 'He looks exhausted — he __BLANK__ non-stop since six in the morning.', subj: 2, clue: 'since + visible result now' },
+            ],
+            past_perfect: [
+                { template: 'By the time the ambulance arrived, the patient __BLANK__ consciousness.', subj: 2, clue: 'by the time + earlier past event' },
+                { template: 'She realised she __BLANK__ her passport at home after reaching the airport.', subj: 2, clue: 'realised + earlier mistake before main past event' },
+                { template: 'The thief __BLANK__ before the police even reached the scene.', subj: 2, clue: 'sequence — first event before another past event' },
+                { template: 'He was furious because nobody __BLANK__ him about the change of plan.', subj: 0, clue: 'because + earlier cause before the main past reaction' },
+            ],
+            past_perfect_continuous: [
+                { template: 'She was out of breath because she __BLANK__ for over an hour.', subj: 2, clue: 'because + sustained activity before a past result' },
+                { template: 'By the time he retired, he __BLANK__ for the same company for forty years.', subj: 2, clue: 'by the time + long duration before a past point' },
+                { template: 'They were exhausted — they __BLANK__ all night to fix the server.', subj: 5, clue: 'all night / sustained effort before a past result' },
+            ],
+            future_will: [
+                { template: 'I\'m sure she __BLANK__ the job — she was easily the strongest candidate.', subj: 2, clue: 'I\'m sure / prediction based on opinion' },
+                { template: 'Don\'t worry, I __BLANK__ the project by Thursday, I promise.', subj: 0, clue: 'promise / spontaneous decision at moment of speaking' },
+                { template: 'Scientists predict that the global temperature __BLANK__ by two degrees by 2050.', subj: 2, clue: 'scientists predict / future prediction' },
+                { template: 'If you press that button, the machine __BLANK__ immediately.', subj: 2, clue: 'if + conditional result (future)' },
+            ],
+            future_going_to: [
+                { template: 'Look at those dark clouds — it __BLANK__ rain any minute now.', subj: 2, clue: 'look at (evidence-based prediction)' },
+                { template: 'They\'ve already bought the tickets — they __BLANK__ move to Canada next spring.', subj: 5, clue: 'already bought / prior plan or intention' },
+                { template: 'She told me she __BLANK__ quit her job and start her own business.', subj: 2, clue: 'told me / stated intention' },
+                { template: 'I\'ve decided — I __BLANK__ study medicine at university.', subj: 0, clue: 'I\'ve decided / firm plan made before now' },
+            ],
+            future_perfect: [
+                { template: 'By the time you wake up tomorrow, I __BLANK__ the whole novel.', subj: 0, clue: 'by the time + action complete before a future point' },
+                { template: 'She __BLANK__ all the exams before the end of June.', subj: 2, clue: 'before the end of + completed before future deadline' },
+                { template: 'By 2030, scientists predict they __BLANK__ a cure for that disease.', subj: 5, clue: 'by 2030 / completed action before future point' },
+            ],
+            future_continuous: [
+                { template: 'This time tomorrow, she __BLANK__ on a beach in the Maldives.', subj: 2, clue: 'this time tomorrow / action in progress at a future moment' },
+                { template: 'Don\'t call at noon — the board __BLANK__ its annual meeting then.', subj: 2, clue: 'at noon / activity in progress at that future time' },
+                { template: 'I __BLANK__ from the office next week, so you can reach me there.', subj: 0, clue: 'next week / ongoing arrangement at a future time' },
+            ]
+        };
+
         function generateTenseChoiceSentences(level) {
             const tenses = VERB_TENSES_BY_LEVEL[level];
-            const sentences = [];
             const regularVerbs = VERB_LISTS.regular[level] || VERB_LISTS.regular.B1;
             const irregularVerbs = VERB_LISTS.irregular[level] || VERB_LISTS.irregular.B1;
-            const allVerbs = [...regularVerbs.slice(0,6), ...irregularVerbs.slice(0,6)];
+            const allVerbPool = [...regularVerbs, ...irregularVerbs];
 
-            const contextPhrases = {
-                present_simple: ['Every morning, she', 'He usually', 'They always', 'On Sundays, I', 'My teacher'],
-                present_continuous: ['Right now, she', 'At the moment, he', 'Look! They', 'Listen! Someone', 'Currently, I'],
-                past_simple: ['Yesterday, she', 'Last week, he', 'In 2020, they', 'Last night, I', 'A moment ago, she'],
-                past_continuous: ['At 8pm last night, she', 'While I was reading, he', 'They __BLANK__ when the phone rang', 'This time yesterday, I', 'When she arrived, he'],
-                present_perfect: ['She has just', 'Have you ever', 'They have already', 'I have never', 'He has recently'],
-                present_perfect_continuous: ['She has been', 'I have been', 'They have been', 'He has been', 'We have been'],
-                past_perfect: ['By the time she arrived, he had already', 'Before the test, I had', 'They had never', 'She had already', 'By noon, they had'],
-                past_perfect_continuous: ['Before she stopped, she had been', 'He had been', 'They had been', 'I had been', 'She had been'],
-                future_will: ['I think she will', 'Maybe he will', 'Tomorrow, they will', 'I promise I will', 'Don\'t worry, she will'],
-                future_going_to: ["She's going to", "Look at the sky — it's going to", "They are going to", "He is going to", "I am going to"],
-                future_perfect: ['By next year, she will have', 'By the time you arrive, I will have', 'In five years, they will have', 'By midnight, he will have', 'By 2030, we will have'],
-                future_continuous: ['This time tomorrow, she will be', 'At noon, they will be', 'Next month, I will be', 'While you sleep, he will be', 'By 6pm, she will be']
-            };
+            const questions = [];
+            const usedTenses = new Set();
 
-            let idx = 0;
-            for (const tense of tenses.slice(0, 6)) {
-                const phrases = contextPhrases[tense] || contextPhrases.present_simple;
-                const verb = allVerbs[idx % allVerbs.length];
-                idx++;
+            // Pick up to 8 questions, at least one per available tense
+            const tensePool = shuffle([...tenses]);
+            for (const tenseKey of tensePool) {
+                if (questions.length >= 8) break;
+                const bank = TENSE_SENTENCE_BANK[tenseKey];
+                if (!bank || bank.length === 0) continue;
+
+                const template = bank[Math.floor(Math.random() * bank.length)];
+                // Pick a verb appropriate for this tense
+                const verb = allVerbPool[Math.floor(Math.random() * allVerbPool.length)];
                 const isIrr = irregularVerbs.includes(verb);
-                const conjForms = conjugateVerb(verb, tense, isIrr);
-                // Pick pronoun index based on phrasing
-                const pIdx = 2; // he/she/it form for most example phrases
-                const answer = conjForms[pIdx];
-                const phrase = phrases[idx % phrases.length];
-                let sentence;
-                if (phrase.includes('__BLANK__')) {
-                    sentence = phrase.replace('__BLANK__', `__BLANK__`);
-                } else {
-                    sentence = phrase + ' __BLANK__';
+                const forms = conjugateVerb(verb, tenseKey, isIrr);
+                const pIdx = template.subj;
+                const answer = forms[pIdx];
+
+                // Build the sentence: replace __SUBJ__ with pronoun, __BLANK__ stays
+                const pronounDisplay = ['I', 'you', 'he/she', 'we', 'you', 'they'][pIdx];
+                const sentence = template.template.replace('__SUBJ__', pronounDisplay);
+
+                // Generate 3 distractors from other tenses of the same verb
+                const distractorTenses = tenses.filter(t => t !== tenseKey);
+                const distractors = [];
+                for (const dt of shuffle(distractorTenses)) {
+                    const df = conjugateVerb(verb, dt, isIrr);
+                    const cand = df[pIdx];
+                    if (cand !== answer && !distractors.includes(cand)) {
+                        distractors.push(cand);
+                        if (distractors.length === 3) break;
+                    }
                 }
-                sentences.push({
+                // Pad with forms from neighboring pronoun if needed
+                if (distractors.length < 3) {
+                    for (let pi = 0; pi < 6 && distractors.length < 3; pi++) {
+                        const cand = forms[pi];
+                        if (cand !== answer && !distractors.includes(cand)) distractors.push(cand);
+                    }
+                }
+
+                const options = shuffle([answer, ...distractors.slice(0, 3)]);
+                const tenseName = TENSE_META[tenseKey]?.name || tenseKey;
+
+                questions.push({
                     sentence,
                     verb,
-                    tense: TENSE_META[tense]?.name || tense,
-                    hint: `Use the ${TENSE_META[tense]?.name || tense} of "${verb}"`,
-                    answer
+                    tenseKey,
+                    answer,
+                    options,
+                    hint: `Verb: "${verb}" — think about the context clue: ${template.clue}`,
+                    explanation: `Use the ${tenseName} here because: ${template.clue}.`
                 });
             }
-            // Shuffle
-            return shuffle(sentences);
+
+            return shuffle(questions);
         }
 
         // ══════════════════════════════════════════
@@ -5965,8 +6065,11 @@
             verbState.tense = tenseKey;
             verbState.verbList = shuffle([...(VERB_LISTS[verbState.verbType][verbState.level] || VERB_LISTS[verbState.verbType].A1)]);
             verbState.verbIndex = 0;
+            verbState.pronounIndex = 0;   // which of the 6 pronouns we're on
             verbState.correct = 0;
             verbState.total = 0;
+            verbState.currentForms = [];  // conjugated forms for current verb
+            verbState.dotStates = [];     // 'pending'|'correct'|'wrong'|'skipped' per pronoun
             showScreen('screen-verb-drill');
             loadDrillVerb();
         }
@@ -5978,100 +6081,127 @@
             }
             const verb = verbState.verbList[verbState.verbIndex];
             const isIrr = verbState.verbType === 'irregular';
-            const forms = conjugateVerb(verb, verbState.tense, isIrr);
+            verbState.currentForms = conjugateVerb(verb, verbState.tense, isIrr);
+            verbState.pronounIndex = 0;
+            verbState.dotStates = Array(6).fill('pending');
+
             const tenseName = TENSE_META[verbState.tense]?.name || verbState.tense;
-
-            document.getElementById('drill-tense-label').textContent = tenseName + (isIrr ? ' — Irregular' : ' — Regular');
+            document.getElementById('drill-tense-label').textContent = tenseName + (isIrr ? ' · Irregular' : ' · Regular');
             document.getElementById('drill-verb-infinitive').textContent = 'to ' + verb;
-            document.getElementById('drill-verb-meaning').textContent = '';
             document.getElementById('drill-verb-number').textContent = `${verbState.verbIndex + 1} / ${verbState.verbList.length}`;
-            document.getElementById('drill-score-badge').textContent = `${verbState.correct} / ${verbState.total}`;
 
-            // Build table
-            const table = document.getElementById('drill-conj-table');
-            table.innerHTML = '';
+            renderPronounDots();
+            loadSinglePronoun();
+        }
+
+        function renderPronounDots() {
+            const container = document.getElementById('drill-pronoun-dots');
+            container.innerHTML = '';
+            const colorMap = { pending: 'var(--border)', correct: 'var(--correct)', wrong: 'var(--wrong)', skipped: 'var(--ink-light)', active: 'var(--accent)' };
             PRONOUNS.forEach((pron, i) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="pronoun">${pron}</td>
-                    <td>
-                        <input class="conj-input" type="text" data-index="${i}" data-answer="${forms[i]}" autocomplete="off" autocorrect="off" spellcheck="false">
-                        <div class="conj-answer" id="conj-answer-${i}">✓ ${forms[i]}</div>
-                    </td>`;
-                table.appendChild(tr);
+                const dot = document.createElement('div');
+                const state = i === verbState.pronounIndex ? 'active' : verbState.dotStates[i];
+                dot.style.cssText = `width:28px; height:6px; border-radius:3px; background:${colorMap[state]}; transition:background 0.2s; title="${pron}"`;
+                dot.title = pron;
+                container.appendChild(dot);
             });
+        }
 
-            // Focus first input
-            setTimeout(() => {
-                const first = table.querySelector('.conj-input');
-                if (first) first.focus();
-            }, 100);
+        function loadSinglePronoun() {
+            const i = verbState.pronounIndex;
+            const pron = PRONOUNS[i];
 
-            // Allow Enter to check
-            table.querySelectorAll('.conj-input').forEach((inp, i) => {
-                inp.addEventListener('keydown', e => {
-                    if (e.key === 'Enter') {
-                        const inputs = table.querySelectorAll('.conj-input');
-                        if (i < inputs.length - 1) inputs[i+1].focus();
-                        else checkConjugation();
-                    }
-                });
-            });
+            // Reset input area
+            const input = document.getElementById('drill-single-input');
+            input.value = '';
+            input.disabled = false;
+            input.className = 'conj-input';
+            input.placeholder = 'conjugated form…';
+
+            document.getElementById('drill-pronoun-display').textContent = pron;
+            document.getElementById('drill-single-answer').style.display = 'none';
+            document.getElementById('drill-single-answer').textContent = '';
 
             const feedback = document.getElementById('drill-feedback');
             feedback.className = 'feedback-banner';
             feedback.textContent = '';
+
             document.getElementById('drill-check-btn').classList.remove('hidden');
             document.getElementById('drill-skip-btn').classList.remove('hidden');
             document.getElementById('drill-next-btn').classList.add('hidden');
+
+            renderPronounDots();
+            setTimeout(() => input.focus(), 80);
         }
 
-        function checkConjugation() {
-            const table = document.getElementById('drill-conj-table');
-            const inputs = table.querySelectorAll('.conj-input');
-            let allCorrect = true;
-            let correctCount = 0;
-            inputs.forEach((inp, i) => {
-                const expected = inp.dataset.answer.toLowerCase().trim();
-                const given = inp.value.toLowerCase().trim();
-                const ok = given === expected;
-                if (ok) { inp.classList.add('correct'); correctCount++; }
-                else { inp.classList.add('wrong'); allCorrect = false; }
-                inp.disabled = true;
-                const answerDiv = document.getElementById(`conj-answer-${i}`);
-                if (answerDiv && !ok) answerDiv.classList.add('show');
-            });
+        function checkSingleConjugation() {
+            const i = verbState.pronounIndex;
+            const expected = verbState.currentForms[i].toLowerCase().trim();
+            const input = document.getElementById('drill-single-input');
+            const given = input.value.toLowerCase().trim();
+            const ok = given === expected;
 
-            verbState.total += 6;
-            verbState.correct += correctCount;
-            document.getElementById('drill-score-badge').textContent = `${verbState.correct} / ${verbState.total}`;
+            input.disabled = true;
+            input.className = 'conj-input ' + (ok ? 'correct' : 'wrong');
 
-            const feedback = document.getElementById('drill-feedback');
-            if (allCorrect) {
-                feedback.className = 'feedback-banner correct show';
-                feedback.textContent = '✓ Perfect! All 6 correct.';
+            verbState.total++;
+            if (ok) {
+                verbState.correct++;
+                verbState.dotStates[i] = 'correct';
+                document.getElementById('drill-feedback').className = 'feedback-banner correct show';
+                document.getElementById('drill-feedback').textContent = '✓ Correct!';
                 document.body.classList.add('glow-correct');
-                setTimeout(() => document.body.classList.remove('glow-correct'), 1000);
+                setTimeout(() => document.body.classList.remove('glow-correct'), 800);
             } else {
-                const wrong = 6 - correctCount;
-                feedback.className = 'feedback-banner wrong show';
-                feedback.textContent = `✗ ${wrong} mistake${wrong>1?'s':''} — check the correct forms above.`;
+                verbState.dotStates[i] = 'wrong';
+                const answerDiv = document.getElementById('drill-single-answer');
+                answerDiv.textContent = `✓ Correct form: ${verbState.currentForms[i]}`;
+                answerDiv.style.display = 'block';
+                document.getElementById('drill-feedback').className = 'feedback-banner wrong show';
+                document.getElementById('drill-feedback').textContent = '✗ Not quite — see the correct form above.';
+                document.body.classList.add('glow-wrong');
+                setTimeout(() => document.body.classList.remove('glow-wrong'), 800);
             }
+
+            document.getElementById('drill-score-badge').textContent = `${verbState.correct} / ${verbState.total}`;
+            renderPronounDots();
             document.getElementById('drill-check-btn').classList.add('hidden');
             document.getElementById('drill-skip-btn').classList.add('hidden');
             document.getElementById('drill-next-btn').classList.remove('hidden');
+
+            // Update next button label
+            const isLastPronoun = (i === 5);
+            const isLastVerb = (verbState.verbIndex === verbState.verbList.length - 1);
+            if (isLastPronoun && isLastVerb) {
+                document.getElementById('drill-next-btn').textContent = 'See Results →';
+            } else if (isLastPronoun) {
+                document.getElementById('drill-next-btn').textContent = 'Next Verb →';
+            } else {
+                document.getElementById('drill-next-btn').textContent = 'Next →';
+            }
         }
 
-        function skipDrillVerb() {
-            verbState.verbIndex++;
-            verbState.total += 6;
-            loadDrillVerb();
+        function skipSinglePronoun() {
+            verbState.dotStates[verbState.pronounIndex] = 'skipped';
+            verbState.total++;
+            renderPronounDots();
+            advanceDrill();
         }
 
-        function nextDrillVerb() {
-            verbState.verbIndex++;
-            loadDrillVerb();
+        function advanceDrill() {
+            verbState.pronounIndex++;
+            if (verbState.pronounIndex >= 6) {
+                verbState.verbIndex++;
+                loadDrillVerb();
+            } else {
+                loadSinglePronoun();
+            }
         }
+
+        // Keep legacy stubs so nothing breaks if called
+        function checkConjugation() { checkSingleConjugation(); }
+        function skipDrillVerb() { skipSinglePronoun(); }
+        function nextDrillVerb() { advanceDrill(); }
 
         function openTenseChoice() {
             verbState.sessionMode = 'tense_choice';
@@ -6088,49 +6218,60 @@
                 return;
             }
             const q = tcSentences[tcIndex];
-            const displaySentence = q.sentence.replace('__BLANK__', `<span class="tense-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>`);
+            const displaySentence = q.sentence.replace('__BLANK__', `<span class="tense-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>`);
             document.getElementById('tc-sentence-display').innerHTML = displaySentence;
             document.getElementById('tc-hint').textContent = q.hint;
             document.getElementById('tc-progress-label').textContent = `Question ${tcIndex + 1} of ${tcSentences.length}`;
             document.getElementById('tc-score-badge').textContent = `${tcCorrect} / ${tcIndex}`;
-            document.getElementById('tc-input').value = '';
-            document.getElementById('tc-input').disabled = false;
-            document.getElementById('tc-input').className = 'tense-input';
+
             const feedback = document.getElementById('tc-feedback');
             feedback.className = 'feedback-banner';
             feedback.textContent = '';
             document.getElementById('tc-next-btn').classList.add('hidden');
-            setTimeout(() => document.getElementById('tc-input').focus(), 100);
+
+            // Build MCQ options
+            const grid = document.getElementById('tc-options-grid');
+            grid.innerHTML = '';
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opt;
+                btn.onclick = () => selectTenseOption(btn, opt, q);
+                grid.appendChild(btn);
+            });
         }
 
-        function checkTenseChoice() {
-            const q = tcSentences[tcIndex];
-            const given = document.getElementById('tc-input').value.toLowerCase().trim();
-            const expected = q.answer.toLowerCase().trim();
-            const ok = given === expected;
-            const input = document.getElementById('tc-input');
-            input.disabled = true;
-            input.className = 'tense-input ' + (ok ? 'correct' : 'wrong');
+        function selectTenseOption(btn, chosen, q) {
+            // Disable all options
+            const grid = document.getElementById('tc-options-grid');
+            grid.querySelectorAll('.option-btn').forEach(b => {
+                b.disabled = true;
+                if (b.textContent === q.answer) b.classList.add('correct');
+            });
 
-            const feedback = document.getElementById('tc-feedback');
+            const ok = chosen === q.answer;
             if (ok) {
                 tcCorrect++;
-                feedback.className = 'feedback-banner correct show';
-                feedback.textContent = '✓ Correct!';
+                btn.classList.add('correct');
+                document.getElementById('tc-feedback').className = 'feedback-banner correct show';
+                document.getElementById('tc-feedback').textContent = '✓ Correct!';
                 document.body.classList.add('glow-correct');
-                setTimeout(() => document.body.classList.remove('glow-correct'), 1000);
+                setTimeout(() => document.body.classList.remove('glow-correct'), 800);
             } else {
-                feedback.className = 'feedback-banner wrong show';
-                feedback.innerHTML = `✗ The correct form is: <strong>${q.answer}</strong>`;
+                btn.classList.add('wrong');
+                document.getElementById('tc-feedback').className = 'feedback-banner wrong show';
+                document.getElementById('tc-feedback').innerHTML = `✗ The correct answer is <strong>${q.answer}</strong> — ${q.explanation}`;
                 document.body.classList.add('glow-wrong');
-                setTimeout(() => document.body.classList.remove('glow-wrong'), 1000);
-                // Show answer in blank
-                const displaySentence = q.sentence.replace('__BLANK__', `<span class="tense-blank" style="color:var(--correct);">${q.answer}</span>`);
-                document.getElementById('tc-sentence-display').innerHTML = displaySentence;
+                setTimeout(() => document.body.classList.remove('glow-wrong'), 800);
+                // Fill blank with correct answer
+                const filled = q.sentence.replace('__BLANK__', `<span class="tense-blank" style="color:var(--correct); border-color:var(--correct);">${q.answer}</span>`);
+                document.getElementById('tc-sentence-display').innerHTML = filled;
             }
             document.getElementById('tc-score-badge').textContent = `${tcCorrect} / ${tcIndex + 1}`;
             document.getElementById('tc-next-btn').classList.remove('hidden');
         }
+
+        function checkTenseChoice() { /* replaced by selectTenseOption */ }
 
         function nextTenseChoice() {
             tcIndex++;
