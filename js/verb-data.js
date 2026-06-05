@@ -1,4 +1,9 @@
-        const IRREGULAR_PAST = {
+        // ── Lazy-loaded verb data ──
+        // These large data objects are only initialized when the verb practice
+        // section is first opened, deferring ~15KB of parsing.
+        var _irregularPast = null;
+        function getIrregularPast() {
+            if (!_irregularPast) _irregularPast = {
             be:'was', have:'had', do:'did', go:'went', make:'made',
             see:'saw', come:'came', take:'took', get:'got', give:'gave',
             know:'knew', think:'thought', say:'said', tell:'told', find:'found',
@@ -13,8 +18,13 @@
             hide:'hid', hit:'hit', let:'let', ride:'rode', rise:'rose',
             set:'set', shut:'shut', throw:'threw', wake:'woke', wear:'wore',
             fly:'flew', draw:'drew', cut:'cut', hurt:'hurt', cost:'cost'
-        };
-        const IRREGULAR_PP = {
+            };
+            return _irregularPast;
+        }
+
+        var _irregularPP = null;
+        function getIrregularPP() {
+            if (!_irregularPP) _irregularPP = {
             be:'been', have:'had', do:'done', go:'gone', make:'made',
             see:'seen', come:'come', take:'taken', get:'gotten', give:'given',
             know:'known', think:'thought', say:'said', tell:'told', find:'found',
@@ -29,10 +39,13 @@
             hide:'hidden', hit:'hit', let:'let', ride:'ridden', rise:'risen',
             set:'set', shut:'shut', throw:'thrown', wake:'woken', wear:'worn',
             fly:'flown', draw:'drawn', cut:'cut', hurt:'hurt', cost:'cost'
-        };
+            };
+            return _irregularPP;
+        }
 
-        // Verb lists by level and type
-        const VERB_LISTS = {
+        var _verbLists = null;
+        function getVerbLists() {
+            if (!_verbLists) _verbLists = {
             regular: {
                 A1: ['walk', 'talk', 'play', 'open', 'close', 'help', 'work', 'watch', 'listen', 'clean', 'cook', 'start', 'stop', 'finish', 'jump'],
                 A2: ['travel', 'arrive', 'visit', 'like', 'love', 'hate', 'need', 'want', 'study', 'learn', 'practice', 'ask', 'answer', 'explain', 'happen', 'change'],
@@ -47,11 +60,13 @@
                 B2: ['arise', 'bear', 'beat', 'become', 'bind', 'bite', 'blow', 'build', 'burn', 'burst', 'cast', 'dig', 'draw', 'fall', 'fight', 'fly', 'forget', 'freeze', 'grow', 'hide'],
                 C1: ['forbid', 'forsake', 'grind', 'hang', 'kneel', 'lean', 'leap', 'lend', 'let', 'lie', 'light', 'mean', 'mow', 'prove', 'rid', 'rise', 'sew', 'shed', 'shine', 'shrink', 'slay']
             }
-        };
+            };
+            return _verbLists;
+        }
 
-        // Rich sentence bank. Each entry has a fixed verb that grammatically fits the sentence.
-        // subjKey drives conjugation and must match the grammatical subject already in the template.
-        const TENSE_SENTENCE_BANK = {
+        var _tenseSentenceBank = null;
+        function getTenseSentenceBank() {
+            if (!_tenseSentenceBank) _tenseSentenceBank = {
             present_simple: [
                 { template: 'Every morning, Maria __BLANK__ to work instead of taking the bus.', verb: 'walk', subjKey: 'he', clue: 'every morning (habitual routine)' },
                 { template: 'Scientists say the Sun __BLANK__ in the east and sets in the west.', verb: 'rise', subjKey: 'he', clue: 'general fact / permanent truth' },
@@ -137,4 +152,6 @@
                 { template: 'Don\'t call at noon — the board __BLANK__ its annual meeting then.', verb: 'hold', subjKey: 'he', clue: 'at noon / activity in progress at that future time' },
                 { template: 'I __BLANK__ from the office next week, so you can reach me there.', verb: 'work', subjKey: 'I', clue: 'next week / ongoing arrangement at a future time' },
             ]
-        };
+            };
+            return _tenseSentenceBank;
+        }
