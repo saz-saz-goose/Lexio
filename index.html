@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -1795,7 +1795,81 @@
             letter-spacing: 0.8px;
         }
 
-	/* ── MATCH TABLE ── */
+        /* ── ACCESSIBILITY & TOUCH TARGETS ── */
+
+        /* Focus-visible ring for all interactive elements — keyboard only, doesn't affect mouse */
+        :focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* Suppress the default outline only when we've provided a visible replacement */
+        .btn-primary:focus-visible,
+        .option-btn:focus-visible,
+        .cloze-option:focus-visible,
+        .verb-tense-btn:focus-visible,
+        .verb-type-btn:focus-visible,
+        .back-home-btn:focus-visible,
+        .verb-practice-mode-card:focus-visible,
+        .verb-level-btn:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Remove default outline only on elements with a styled :focus state */
+        .type-input,
+        .tense-input,
+        .conj-input {
+            /* outline:none is kept but we ensure a border change is always visible */
+        }
+        .type-input:focus-visible,
+        .tense-input:focus-visible {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(61, 90, 128, 0.2);
+        }
+        .conj-input:focus-visible {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(61, 90, 128, 0.2);
+        }
+
+        /* Minimum 44px touch targets on mobile */
+        @media (pointer: coarse) {
+            .verb-type-btn {
+                min-height: 44px;
+                padding: 12px 10px;
+            }
+            .verb-level-btn {
+                min-height: 44px;
+            }
+            .verb-tense-btn {
+                min-height: 54px;
+                padding: 14px 12px;
+            }
+            .back-home-btn {
+                min-height: 44px;
+                padding: 10px 14px;
+            }
+            .option-btn {
+                min-height: 54px;
+            }
+            .cloze-option {
+                min-height: 44px;
+            }
+            .match-cell {
+                min-height: 44px;
+            }
+        }
+
+        /* Correct/wrong states — add shape cue alongside colour for colour-blind users */
+        .option-btn.correct::before { content: '✓ '; font-weight: 700; }
+        .option-btn.wrong::before   { content: '✗ '; font-weight: 700; }
+        .cloze-option.correct::before { content: '✓ '; font-weight: 700; }
+        .cloze-option.wrong::before   { content: '✗ '; font-weight: 700; }
+        .feedback-banner.correct::before { content: '✓ '; font-size: 1.1em; }
+        .feedback-banner.wrong::before   { content: '✗ '; font-size: 1.1em; }
 	.match-table-wrap {
     width: 100%;
     background: var(--card);
@@ -2785,30 +2859,30 @@
         <!-- Regular / Irregular toggle -->
         <div style="width:100%;">
             <div class="category-title" style="margin-bottom:8px;">Verb Type</div>
-            <div class="verb-type-toggle">
-                <button class="verb-type-btn active" id="vtype-regular" onclick="setVerbType('regular')">Regular</button>
-                <button class="verb-type-btn" id="vtype-irregular" onclick="setVerbType('irregular')">Irregular</button>
+            <div class="verb-type-toggle" role="group" aria-label="Verb type">
+                <button class="verb-type-btn active" id="vtype-regular" onclick="setVerbType('regular')" aria-pressed="true">Regular</button>
+                <button class="verb-type-btn" id="vtype-irregular" onclick="setVerbType('irregular')" aria-pressed="false">Irregular</button>
             </div>
         </div>
         <!-- Form toggle -->
         <div style="width:100%;">
             <div class="category-title" style="margin-bottom:8px;">Form</div>
-            <div class="verb-type-toggle" style="flex-wrap:wrap; gap:8px;">
-                <button class="verb-type-btn active" id="vform-affirmative" onclick="setVerbForm('affirmative')" style="flex:1; min-width:120px;">✓ Affirmative</button>
-                <button class="verb-type-btn" id="vform-negative" onclick="setVerbForm('negative')" style="flex:1; min-width:120px;">✗ Negative</button>
-                <button class="verb-type-btn" id="vform-interrogative" onclick="setVerbForm('interrogative')" style="flex:1; min-width:120px;">? Interrogative</button>
-                <button class="verb-type-btn" id="vform-mixed" onclick="setVerbForm('mixed')" style="flex:1; min-width:120px;">⇄ Mixed</button>
+            <div class="verb-type-toggle" style="flex-wrap:wrap; gap:8px;" role="group" aria-label="Conjugation form">
+                <button class="verb-type-btn active" id="vform-affirmative" onclick="setVerbForm('affirmative')" aria-pressed="true" style="flex:1; min-width:120px;">✓ Affirmative</button>
+                <button class="verb-type-btn" id="vform-negative" onclick="setVerbForm('negative')" aria-pressed="false" style="flex:1; min-width:120px;">✗ Negative</button>
+                <button class="verb-type-btn" id="vform-interrogative" onclick="setVerbForm('interrogative')" aria-pressed="false" style="flex:1; min-width:120px;">? Interrogative</button>
+                <button class="verb-type-btn" id="vform-mixed" onclick="setVerbForm('mixed')" aria-pressed="false" style="flex:1; min-width:120px;">⇄ Mixed</button>
             </div>
         </div>
         <!-- Duration picker -->
         <div style="width:100%;">
             <div class="category-title" style="margin-bottom:8px;">Duration</div>
-            <div class="verb-type-toggle" style="flex-wrap:wrap; gap:8px;">
-                <button class="verb-type-btn" id="vdur-1"  onclick="setDuration(1)"  style="flex:1; min-width:60px;">1 min</button>
-                <button class="verb-type-btn" id="vdur-2"  onclick="setDuration(2)"  style="flex:1; min-width:60px;">2 min</button>
-                <button class="verb-type-btn active" id="vdur-5"  onclick="setDuration(5)"  style="flex:1; min-width:60px;">5 min</button>
-                <button class="verb-type-btn" id="vdur-10" onclick="setDuration(10)" style="flex:1; min-width:60px;">10 min</button>
-                <button class="verb-type-btn" id="vdur-0"  onclick="setDuration(0)"  style="flex:1; min-width:60px;">∞ Free</button>
+            <div class="verb-type-toggle" style="flex-wrap:wrap; gap:8px;" role="group" aria-label="Session duration">
+                <button class="verb-type-btn" id="vdur-1"  onclick="setDuration(1)"  aria-pressed="false" style="flex:1; min-width:60px;">1 min</button>
+                <button class="verb-type-btn" id="vdur-2"  onclick="setDuration(2)"  aria-pressed="false" style="flex:1; min-width:60px;">2 min</button>
+                <button class="verb-type-btn active" id="vdur-5"  onclick="setDuration(5)"  aria-pressed="true" style="flex:1; min-width:60px;">5 min</button>
+                <button class="verb-type-btn" id="vdur-10" onclick="setDuration(10)" aria-pressed="false" style="flex:1; min-width:60px;">10 min</button>
+                <button class="verb-type-btn" id="vdur-0"  onclick="setDuration(0)"  aria-pressed="false" style="flex:1; min-width:60px;">∞ Free</button>
             </div>
         </div>
         <!-- Tense grid -->
@@ -2852,6 +2926,7 @@
                     <input class="conj-input" type="text" id="drill-single-input"
                         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
                         placeholder="conjugated form…"
+                        aria-label="Type the conjugated form"
                         style="width:100%; font-size:1.1rem; padding:8px 0; border-width:2px;"
                         onkeydown="if(event.key==='Enter') checkSingleConjugation()">
                 </div>
@@ -6289,21 +6364,27 @@
         function setVerbForm(form) {
             verbState.verbForm = form;
             ['affirmative','negative','interrogative','mixed'].forEach(f => {
-                document.getElementById('vform-' + f).classList.toggle('active', f === form);
+                const el = document.getElementById('vform-' + f);
+                if (el) {
+                    el.classList.toggle('active', f === form);
+                    el.setAttribute('aria-pressed', f === form ? 'true' : 'false');
+                }
             });
         }
 
         function setVerbType(type) {
             verbState.verbType = type;
+            ['regular','irregular'].forEach(t => {
+                const el = document.getElementById('vtype-' + t);
+                if (el) el.setAttribute('aria-pressed', t === type ? 'true' : 'false');
+            });
             document.getElementById('vtype-regular').classList.toggle('active', type === 'regular');
             document.getElementById('vtype-irregular').classList.toggle('active', type === 'irregular');
 
-            // Negative/interrogative is irrelevant for irregular drills — hide those options
             const irrelevantForms = ['negative', 'interrogative', 'mixed'];
             irrelevantForms.forEach(f => {
                 document.getElementById('vform-' + f).style.display = type === 'irregular' ? 'none' : '';
             });
-            // If currently on a hidden form, reset to affirmative
             if (type === 'irregular' && irrelevantForms.includes(verbState.verbForm)) {
                 setVerbForm('affirmative');
             }
