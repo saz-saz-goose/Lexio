@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -1999,8 +1999,11 @@
             .game-bubble { transition: none; }
             .mole { transition: none; }
         }
+        .skip-link { position: absolute; top: -100px; left: 8px; background: var(--accent); color: #FFF; padding: 8px 16px; border-radius: 8px; font-size: 0.9rem; z-index: 10000; text-decoration: none; }
+        .skip-link:focus { top: 8px; }
     </style>
 	</head><body>
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
     <!-- SVG Icon Definitions -->
     <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
         <symbol id="avatar-snake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c2-4 4-8 4-12S10 2 14 4s4 6 2 10-4 4-6 2c-2-2 0-6 4-6s6 4 6 8"/></symbol>
@@ -2014,7 +2017,7 @@
         <symbol id="icon-celebrate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2 4-4 3 2 4-4 2 2 4-4 3"/><circle cx="18" cy="5" r="2" fill="currentColor" stroke="none"/><circle cx="6" cy="18" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="15" r="1.5" fill="currentColor" stroke="none"/></symbol>
         <symbol id="icon-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
     </svg>
-    <div class="app-header">
+    <header class="app-header">
         <div class="logo-area">
             <button class="back-home-btn hidden" id="header-home-btn" onclick="goToHome()">
                 ← Accueil
@@ -2029,8 +2032,9 @@
 <button class="avatar-btn" id="header-avatar-btn" style="width: 40px; height: 40px; font-size: 1.2rem;"
     onclick="showScreen('screen-profile-own')"><svg width="24" height="24" style="color:var(--accent)"><use href="#avatar-snake"/></svg></button>
         </div>
-    </div>
+    </header>
 
+    <main id="main-content">
     <!-- ══════════════════════════════════════════
      SCREEN: LOADING SCREEN
 	══════════════════════════════════════════ -->
@@ -2085,26 +2089,26 @@
     <div class="screen" id="screen-signup">
         <div class="card">
             <div class="logo" style="text-align: center; font-size: 2rem; margin-bottom: 24px;">Lexio</div>
-            <div class="section-title">Créer un compte</div>
+            <h2 class="section-title">Créer un compte</h2>
             <div class="section-sub" style="margin-bottom: 24px;">Inscris-toi pour sauvegarder ta progression</div>
 
 
 
             <form id="form-signup" onsubmit="handleSignup(event)">
                 <div class="form-group">
-                    <label class="form-label">Email</label>
+                    <label class="form-label" for="signup-email">Email</label>
                     <input type="email" class="form-input" id="signup-email" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Nom d'utilisateur</label>
+                    <label class="form-label" for="signup-username">Nom d'utilisateur</label>
                     <input type="text" class="form-input" id="signup-username" required>
                     <div class="username-status" id="status-signup-username" aria-live="polite"></div>
                     <div class="form-error" id="err-signup-username" aria-live="polite"></div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Mot de passe</label>
+                    <label class="form-label" for="signup-password">Mot de passe</label>
                     <div class="password-wrapper">
                         <input type="password" class="form-input" id="signup-password" required oninput="updatePasswordStrength()">
                         <button type="button" class="password-toggle" onclick="togglePasswordVisibility('signup-password')" aria-label="Afficher le mot de passe">
@@ -2119,7 +2123,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Confirmer le mot de passe</label>
+                    <label class="form-label" for="signup-confirm-password">Confirmer le mot de passe</label>
                     <div class="password-wrapper">
                         <input type="password" class="form-input" id="signup-confirm-password" required>
                         <button type="button" class="password-toggle" onclick="togglePasswordVisibility('signup-confirm-password')" aria-label="Afficher le mot de passe">
@@ -2132,15 +2136,15 @@
                 <div class="form-group">
                     <label class="form-label" style="text-align: center; margin-bottom: 8px;">Choisis ton avatar</label>
         <div class="avatar-grid" id="signup-avatar-grid">
-            <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'snake')"
+            <button aria-label="Avatar serpent" type="button" class="avatar-btn" onclick="selectAvatar('signup', 'snake')"
                 aria-label="Snake avatar" data-avatar="snake"><svg width="28" height="28"><use href="#avatar-snake"/></svg></button>
-            <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'dragon')"
+            <button aria-label="Avatar dragon" type="button" class="avatar-btn" onclick="selectAvatar('signup', 'dragon')"
                 aria-label="Dragon avatar" data-avatar="dragon"><svg width="28" height="28"><use href="#avatar-dragon"/></svg></button>
-            <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'horse')"
+            <button aria-label="Avatar cheval" type="button" class="avatar-btn" onclick="selectAvatar('signup', 'horse')"
                 aria-label="Horse avatar" data-avatar="horse"><svg width="28" height="28"><use href="#avatar-horse"/></svg></button>
-            <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'rabbit')"
+            <button aria-label="Avatar lapin" type="button" class="avatar-btn" onclick="selectAvatar('signup', 'rabbit')"
                 aria-label="Rabbit avatar" data-avatar="rabbit"><svg width="28" height="28"><use href="#avatar-rabbit"/></svg></button>
-            <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'lion')"
+            <button aria-label="Avatar lion" type="button" class="avatar-btn" onclick="selectAvatar('signup', 'lion')"
                 aria-label="Lion avatar" data-avatar="lion"><svg width="28" height="28"><use href="#avatar-lion"/></svg></button>
         </div>
                     <div class="form-error" id="err-signup-avatar" aria-live="polite" style="text-align: center;"></div>
@@ -2166,19 +2170,19 @@
     <div class="screen" id="screen-login">
         <div class="card">
             <div class="logo" style="text-align: center; font-size: 2rem; margin-bottom: 24px;">Lexio</div>
-            <div class="section-title">Connexion</div>
+            <h2 class="section-title">Connexion</h2>
             <div class="section-sub" style="margin-bottom: 24px;">Content de te revoir !</div>
 
 
 
             <form id="form-login" onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <label class="form-label">Email</label>
+                    <label class="form-label" for="login-email">Email</label>
                     <input type="email" class="form-input" id="login-email" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Mot de passe</label>
+                    <label class="form-label" for="login-password">Mot de passe</label>
                     <div class="password-wrapper">
                         <input type="password" class="form-input" id="login-password" required>
                         <button type="button" class="password-toggle" onclick="togglePasswordVisibility('login-password')" aria-label="Afficher le mot de passe">
@@ -2211,11 +2215,11 @@
 
     <div class="screen" id="screen-oauth-setup">
         <div class="card">
-            <div class="section-title">Dernière étape</div>
+            <h2 class="section-title">Dernière étape</h2>
             <div class="section-sub" style="margin-bottom: 24px;">Choisis ton profil pour terminer l'inscription.</div>
             <form id="form-oauth-setup" onsubmit="handleOAuthSetup(event)">
                 <div class="form-group">
-                    <label class="form-label">Nom d'utilisateur</label>
+                    <label class="form-label" for="oauth-username">Nom d'utilisateur</label>
                     <input type="text" class="form-input" id="oauth-username" required>
                     <div class="username-status" id="status-oauth-username" aria-live="polite"></div>
                     <div class="form-error" id="err-oauth-username" aria-live="polite"></div>
@@ -2223,11 +2227,11 @@
                 <div class="form-group">
                     <label class="form-label" style="text-align: center; margin-bottom: 8px;">Choisis ton avatar</label>
                     <div class="avatar-grid" id="oauth-avatar-grid">
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'snake')" data-avatar="snake"><svg width="28" height="28"><use href="#avatar-snake"/></svg></button>
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'dragon')" data-avatar="dragon"><svg width="28" height="28"><use href="#avatar-dragon"/></svg></button>
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'horse')" data-avatar="horse"><svg width="28" height="28"><use href="#avatar-horse"/></svg></button>
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'rabbit')" data-avatar="rabbit"><svg width="28" height="28"><use href="#avatar-rabbit"/></svg></button>
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'lion')" data-avatar="lion"><svg width="28" height="28"><use href="#avatar-lion"/></svg></button>
+                        <button aria-label="Avatar serpent" type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'snake')" data-avatar="snake"><svg width="28" height="28"><use href="#avatar-snake"/></svg></button>
+                        <button aria-label="Avatar dragon" type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'dragon')" data-avatar="dragon"><svg width="28" height="28"><use href="#avatar-dragon"/></svg></button>
+                        <button aria-label="Avatar cheval" type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'horse')" data-avatar="horse"><svg width="28" height="28"><use href="#avatar-horse"/></svg></button>
+                        <button aria-label="Avatar lapin" type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'rabbit')" data-avatar="rabbit"><svg width="28" height="28"><use href="#avatar-rabbit"/></svg></button>
+                        <button aria-label="Avatar lion" type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'lion')" data-avatar="lion"><svg width="28" height="28"><use href="#avatar-lion"/></svg></button>
                     </div>
                     <div class="form-error" id="err-oauth-avatar" aria-live="polite" style="text-align: center;"></div>
                 </div>
@@ -2241,7 +2245,7 @@
     <div class="screen" id="screen-verify-email">
         <div class="card" style="text-align: center;">
             <div class="complete-icon" style="margin-bottom: 16px;"><svg width="48" height="48" style="color:var(--accent)"><use href="#icon-mail"/></svg></div>
-            <div class="section-title">Vérifie tes emails</div>
+            <h2 class="section-title">Vérifie tes emails</h2>
             <div class="section-sub" id="verify-email-msg" style="margin-top: 12px; margin-bottom: 24px;">
                 Nous t'avons envoyé un lien de confirmation. Clique dessus pour activer ton compte.
             </div>
@@ -2252,7 +2256,7 @@
     <div class="screen" id="screen-link-expired">
         <div class="card" style="text-align: center;">
             <div class="complete-icon" style="margin-bottom: 16px;"><svg width="48" height="48" style="color:var(--wrong)"><use href="#icon-warning"/></svg></div>
-            <div class="section-title">Lien invalide</div>
+            <h2 class="section-title">Lien invalide</h2>
             <div class="section-sub" style="margin-top: 12px; margin-bottom: 24px;">
                 Ce lien de confirmation est expiré ou invalide.
             </div>
@@ -2267,12 +2271,12 @@
 
     <div class="screen" id="screen-forgot-password">
         <div class="card">
-            <div class="section-title">Mot de passe oublié</div>
+            <h2 class="section-title">Mot de passe oublié</h2>
             <div class="section-sub" style="margin-bottom: 24px;">Saisis ton email pour recevoir un lien de
                 réinitialisation.</div>
             <form id="form-forgot-password" onsubmit="handleForgotPassword(event)">
                 <div class="form-group">
-                    <label class="form-label">Email</label>
+                    <label class="form-label" for="forgot-email">Email</label>
                     <input type="email" class="form-input" id="forgot-email" required>
                 </div>
                 <button type="submit" class="btn-primary" id="btn-forgot-submit">Envoyer le lien</button>
@@ -2288,11 +2292,11 @@
 
     <div class="screen" id="screen-reset-password">
         <div class="card">
-            <div class="section-title">Nouveau mot de passe</div>
+            <h2 class="section-title">Nouveau mot de passe</h2>
             <div class="section-sub" style="margin-bottom: 24px;">Choisis un nouveau mot de passe pour ton compte.</div>
             <form id="form-reset-password" onsubmit="handleResetPassword(event)">
                 <div class="form-group">
-                    <label class="form-label">Nouveau mot de passe</label>
+                    <label class="form-label" for="reset-password">Nouveau mot de passe</label>
                     <div class="password-wrapper">
                         <input type="password" class="form-input" id="reset-password" required>
                         <button type="button" class="password-toggle" onclick="togglePasswordVisibility('reset-password')" aria-label="Afficher le mot de passe">
@@ -2302,7 +2306,7 @@
                     <div class="form-error" id="err-reset-password" aria-live="polite"></div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Confirmer le mot de passe</label>
+                    <label class="form-label" for="reset-confirm-password">Confirmer le mot de passe</label>
                     <div class="password-wrapper">
                         <input type="password" class="form-input" id="reset-confirm-password" required>
                         <button type="button" class="password-toggle" onclick="togglePasswordVisibility('reset-confirm-password')" aria-label="Afficher le mot de passe">
@@ -2359,7 +2363,7 @@
         <div class="card">
             <button class="back-home-btn" onclick="checkUnsavedChangesAndGoBack('screen-profile-own')"
                 style="margin-bottom: 16px;">← Retour</button>
-            <div class="section-title">Modifier le profil</div>
+            <h2 class="section-title">Modifier le profil</h2>
             <form id="form-profile-edit" onsubmit="handleProfileEdit(event)" style="margin-top: 24px;">
                 <div class="form-group">
                     <label class="form-label">Email <span
@@ -2371,7 +2375,7 @@
                         contacte le support.</div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Nom d'utilisateur</label>
+                    <label class="form-label" for="edit-username">Nom d'utilisateur</label>
                     <input type="text" class="form-input" id="edit-username" required oninput="markUnsavedChanges()">
                     <div class="username-status" id="status-edit-username" aria-live="polite"></div>
                     <div class="form-error" id="err-edit-username" aria-live="polite"></div>
@@ -2379,15 +2383,15 @@
                 <div class="form-group">
                     <label class="form-label" style="text-align: center; margin-bottom: 8px;">Choisis ton avatar</label>
                     <div class="avatar-grid" id="edit-avatar-grid">
-                        <button type="button" class="avatar-btn"
+                        <button aria-label="Avatar serpent" type="button" class="avatar-btn"
                             onclick="selectAvatar('edit', 'snake'); markUnsavedChanges();" data-avatar="snake"><svg width="28" height="28"><use href="#avatar-snake"/></svg></button>
-                        <button type="button" class="avatar-btn"
+                        <button aria-label="Avatar dragon" type="button" class="avatar-btn"
                             onclick="selectAvatar('edit', 'dragon'); markUnsavedChanges();" data-avatar="dragon"><svg width="28" height="28"><use href="#avatar-dragon"/></svg></button>
-                        <button type="button" class="avatar-btn"
+                        <button aria-label="Avatar cheval" type="button" class="avatar-btn"
                             onclick="selectAvatar('edit', 'horse'); markUnsavedChanges();" data-avatar="horse"><svg width="28" height="28"><use href="#avatar-horse"/></svg></button>
-                        <button type="button" class="avatar-btn"
+                        <button aria-label="Avatar lapin" type="button" class="avatar-btn"
                             onclick="selectAvatar('edit', 'rabbit'); markUnsavedChanges();" data-avatar="rabbit"><svg width="28" height="28"><use href="#avatar-rabbit"/></svg></button>
-                        <button type="button" class="avatar-btn"
+                        <button aria-label="Avatar lion" type="button" class="avatar-btn"
                             onclick="selectAvatar('edit', 'lion'); markUnsavedChanges();" data-avatar="lion"><svg width="28" height="28"><use href="#avatar-lion"/></svg></button>
                     </div>
                 </div>
@@ -2403,7 +2407,7 @@
         <div class="card">
             <button class="back-home-btn" onclick="showScreen('screen-profile-own')" style="margin-bottom: 16px;">←
                 Retour</button>
-            <div class="section-title">Paramètres du compte</div>
+            <h2 class="section-title">Paramètres du compte</h2>
             <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 16px;">
                 <div class="card" style="padding: 16px; box-shadow: none; border-color: var(--border);">
                     <div class="section-sub"
@@ -2433,7 +2437,7 @@
     <div id="delete-modal"
         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
         <div class="card" style="max-width: 400px; margin: 20px;">
-            <div class="section-title" style="color: var(--wrong);">Supprimer le compte</div>
+            <h2 class="section-title" style="color: var(--wrong);">Supprimer le compte</h2>
             <p style="font-size: 0.9rem; color: var(--ink); margin: 16px 0; line-height: 1.5;">
                 Es-tu sûr(e) de vouloir supprimer ton compte ? Cette action est irréversible. Ta progression sera
                 perdue.
@@ -2454,7 +2458,7 @@
         <div class="card" style="padding: 24px; max-height: 80vh; overflow-y: auto;">
             <button class="back-home-btn" onclick="showScreen('screen-signup')" style="margin-bottom: 16px;">←
                 Retour</button>
-            <div class="section-title">Politique de confidentialité</div>
+            <h2 class="section-title">Politique de confidentialité</h2>
             <div class="section-sub" style="margin-bottom: 24px;">Dernière mise à jour : 20 Mai 2026</div>
 
             <div style="font-size: 0.9rem; color: var(--ink); line-height: 1.6; text-align: left;">
@@ -2499,7 +2503,7 @@
 	══════════════════════════════════════════ -->
     <div class="screen" id="screen-home">
         <div class="home-hero">
-            <div class="home-title">Lexio</div>
+            <h1 class="home-title">Lexio</h1>
             <div class="home-subtitle" id="home-subtitle-text">Comment voulez-vous apprendre aujourd'hui ?</div>
         </div>
 
@@ -2535,7 +2539,7 @@
                 <div class="phase-tag" style="margin-bottom: 0;">Liste de vocabulaire</div>
                 <span class="word-counter" id="preview-word-count"></span>
             </div>
-            <div class="section-title" id="preview-course-title" style="margin-bottom: 4px; font-size: 1.3rem;"></div>
+            <h2 class="section-title" id="preview-course-title" style="margin-bottom: 4px; font-size: 1.3rem;"></h2>
             <div class="section-sub" id="preview-level-badge" style="margin-bottom: 16px; font-size: 0.8rem;"></div>
             <div class="word-preview-grid" id="preview-word-grid">
                 <div style="grid-column: span 2; text-align: center; padding: 20px; color: var(--ink-light);">
@@ -2546,7 +2550,7 @@
 
         <!-- Per-course leaderboard -->
         <div id="preview-leaderboard" style="width: 100%; display: none;">
-            <div class="section-title" id="preview-leaderboard-title" style="font-size: 1.1rem; text-align: left; margin-bottom: 12px;">Classement pour ce cours</div>
+            <h2 class="section-title" id="preview-leaderboard-title" style="font-size: 1.1rem; text-align: left; margin-bottom: 12px;">Classement pour ce cours</h2>
             <table class="leaderboard-table" id="preview-leaderboard-table">
                 <thead>
                     <tr>
@@ -2592,7 +2596,7 @@
     <!-- ══════════════════════════════════════════
      SCREEN: EX1 — MCQ (FR word → EN options)
 	══════════════════════════════════════════ -->
-    <div class="screen" id="screen-ex1">
+    <div class="screen" id="screen-ex1" lang="en">
         <div class="question-prompt">
             <div class="q-word" id="ex1-word"></div>
             <div class="q-sub">Quel est le sens de ce mot en anglais ?</div>
@@ -2607,9 +2611,9 @@
     </div>
 
     <!-- EX1 RETEST (native → TL) -->
-    <div class="screen" id="screen-ex1-retest">
+    <div class="screen" id="screen-ex1-retest" lang="en">
         <div class="card">
-            <div class="section-title mt-4">Révision des mots manqués</div>
+            <div class="section-title mt-4">Révision des mots manqués</h2>
             <div class="section-sub mt-8">Cette fois, vous voyez le mot en anglais et choisissez la bonne traduction
                 française.</div>
         </div>
@@ -2649,7 +2653,7 @@
 	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex2-intro">
         <div class="card" style="text-align:center;">
-            <div class="section-title mt-4">Tap the Translation</div>
+            <div class="section-title mt-4">Tap the Translation</h2>
             <div class="section-sub mt-8">
                 Trouvez et tapez sur la bonne traduction en anglais le plus de fois possible en 15 secondes !<br><br>
                 Attention aux autres mots (distracteurs) qui apparaissent pour vous tromper.
@@ -2696,7 +2700,7 @@
     ══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex4-intro">
         <div class="card" style="text-align:center;">
-            <div class="section-title mt-4">🔨 Whack-a-Mole !</div>
+            <div class="section-title mt-4">🔨 Whack-a-Mole !</h2>
             <div class="section-sub mt-8">
                 Un mot en français apparaît en haut. Des moles surgissent des trous avec des traductions anglaises — tapez la <strong>bonne</strong> avant qu'elle redisparaisse !<br><br>
                 Attention aux faux mots qui essaient de vous piéger. Vous avez <strong>5 secondes</strong> par mot.
@@ -2732,7 +2736,7 @@
     <!-- ══════════════════════════════════════════
      SCREEN: EX3 — Partial word typing
 	══════════════════════════════════════════ -->
-    <div class="screen" id="screen-ex3">
+    <div class="screen" id="screen-ex3" lang="en">
         <div class="question-prompt">
             <div class="q-word" id="ex3-french"></div>
             <div class="q-sub">Remettez les lettres dans le bon ordre pour trouver le mot anglais</div>
@@ -2755,9 +2759,9 @@
     <!-- ══════════════════════════════════════════
      SCREEN: EX3 RETEST
 	══════════════════════════════════════════ -->
-    <div class="screen" id="screen-ex3-retest">
+    <div class="screen" id="screen-ex3-retest" lang="en">
         <div class="card">
-            <div class="section-title mt-4">Révision des mots manqués (Ex3)</div>
+            <div class="section-title mt-4">Révision des mots manqués (Ex3)</h2>
             <div class="section-sub mt-8">Mémorisez le mot puis tapez-le de mémoire !</div>
         </div>
 
@@ -2847,7 +2851,7 @@
         <div style="width:100%; display:flex; align-items:center; gap:12px; margin-bottom:4px;">
             <button class="back-home-btn" onclick="goToHome()">← Retour</button>
             <div style="flex:1;">
-                <div class="section-title" style="margin:0; font-size:1.2rem;">🔁 Réviser</div>
+                <h2 class="section-title" style="margin:0; font-size:1.2rem;">🔁 Réviser</h2>
             </div>
             <button onclick="toggleReviseViewAll()" id="revise-view-toggle"
                 style="font-size:0.78rem; background:none; border:1px solid var(--border);
@@ -2948,12 +2952,12 @@
     <!-- ══════════════════════════════════════════
      SCREEN: VERB PRACTICE — Level Select
     ══════════════════════════════════════════ -->
-    <div class="screen" id="screen-verb-home">
+    <div class="screen" id="screen-verb-home" lang="en">
         <div style="width:100%; display:flex; align-items:center; gap:12px; margin-bottom:4px;">
             <button class="back-home-btn" onclick="goToHome()">← Accueil</button>
         </div>
         <div class="home-hero" style="text-align:left; margin-bottom:0;">
-            <div class="home-title" style="font-size:1.7rem;">Verb Practice</div>
+            <h2 class="home-title" style="font-size:1.7rem;">Verb Practice</h2>
             <div class="home-subtitle">Choose your level, then pick a practice type.</div>
             <div style="font-size:0.75rem; color:var(--ink-light); margin-top:6px; padding:6px 10px; background:var(--accent-light); border-radius:6px;">
                 🇬🇧 Les exercices de cette section sont en anglais — l'interface reste en français.
@@ -2993,13 +2997,13 @@
     <!-- ══════════════════════════════════════════
      SCREEN: VERB PRACTICE — Conjugation (Tense/Type Select)
     ══════════════════════════════════════════ -->
-    <div class="screen" id="screen-verb-conj-select">
+    <div class="screen" id="screen-verb-conj-select" lang="en">
         <div style="width:100%; display:flex; align-items:center; gap:12px; margin-bottom:8px;">
             <button class="back-home-btn" onclick="showScreen('screen-verb-home')">← Back</button>
             <span id="verb-conj-level-tag" class="level-badge level-a1" style="font-size:0.75rem; padding:3px 10px;"></span>
         </div>
         <div class="home-hero" style="text-align:left; margin-bottom:4px;">
-            <div class="home-title" style="font-size:1.5rem;">Conjugation Practice</div>
+            <h2 class="home-title" style="font-size:1.5rem;">Conjugation Practice</h2>
         </div>
         <!-- Regular / Irregular toggle -->
         <div style="width:100%;">
@@ -3042,7 +3046,7 @@
     <!-- ══════════════════════════════════════════
      SCREEN: VERB PRACTICE — Active Conjugation Drill
     ══════════════════════════════════════════ -->
-    <div class="screen" id="screen-verb-drill">
+    <div class="screen" id="screen-verb-drill" lang="en">
         <div style="width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
             <button class="back-home-btn" onclick="endDrillEarly()">← Back</button>
             <div style="display:flex; align-items:center; gap:10px;">
@@ -3089,7 +3093,7 @@
     <!-- ══════════════════════════════════════════
      SCREEN: VERB PRACTICE — Tense Choice
     ══════════════════════════════════════════ -->
-    <div class="screen" id="screen-tense-choice">
+    <div class="screen" id="screen-tense-choice" lang="en">
         <div style="width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
             <button class="back-home-btn" onclick="showScreen('screen-verb-home')">← Back</button>
             <span class="verb-score-badge" id="tc-score-badge">0 / 0</span>
@@ -3110,7 +3114,7 @@
     <!-- ══════════════════════════════════════════
      SCREEN: VERB PRACTICE — Results
     ══════════════════════════════════════════ -->
-    <div class="screen" id="screen-verb-results">
+    <div class="screen" id="screen-verb-results" lang="en">
         <div class="complete-icon" id="verb-results-icon">🎉</div>
         <div class="complete-title" id="verb-results-title">Session Complete!</div>
         <div class="section-sub" id="verb-results-sub" style="text-align:center; margin-top:4px; line-height:1.6;"></div>
@@ -3135,6 +3139,7 @@
         </div>
     </div>
 
+</main>
     <script>
         console.log('Script tag started parsing');
 
@@ -3478,7 +3483,7 @@
             const header = document.getElementById('profile-own-header');
             header.innerHTML = `
         <div class="profile-avatar-large">${getAvatarEmoji(currentProfile.avatar_id)}</div>
-        <div class="section-title" style="margin: 0;">${currentProfile.username || 'Utilisateur'}</div>
+        <h2 class="section-title" style="margin: 0;">${currentProfile.username || 'Utilisateur'}</h2>
         <div style="font-size: 0.85rem; color: var(--ink-light);">
           Score: <strong style="color: var(--accent);">${currentProfile.total_score || 0}</strong> • 
           Streak: <strong style="color: var(--accent);">${currentProfile.streak_days || 0}🔥</strong>
@@ -5767,7 +5772,7 @@
             const header = document.createElement('div');
             header.className = 'revise-course-header';
             header.innerHTML = `
-                <input type="checkbox" class="revise-course-checkbox"
+                <input type="checkbox" id="revise-course-select-all" class="revise-course-checkbox"
                     ${allSelected ? 'checked' : ''}
                     ${someSelected && !allSelected ? 'indeterminate' : ''}>
                 <span class="revise-course-title">${title}</span>
@@ -5802,7 +5807,7 @@
                 const sel = _isRevisionSelected(w.english);
                 chip.className = 'revise-word-chip' + (sel ? ' selected' : '');
                 chip.innerHTML = `
-                    <input type="checkbox" ${sel ? 'checked' : ''}>
+                    <input type="checkbox" id="revise-word-checkbox" ${sel ? 'checked' : ''}>
                     <span class="revise-word-en">${w.english}</span>
                     <span class="revise-word-fr">${w.french || '—'}</span>
                 `;

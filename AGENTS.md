@@ -235,4 +235,32 @@ npx serve .          # or: python -m http.server 8000
 
 ---
 
-*Last updated: June 5, 2026 — after Performance pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
+## ACCESSIBILITY
+
+### What was done (Accessibility pass — June 5, 2026)
+
+- **`lang="fr"`**: Root `<html>` language set to French (was `en`). The UI is primarily French; screen readers now pronounce French text correctly.
+- **`lang="en"` on 9 English-content screens**: `screen-ex1`, `screen-ex1-retest`, `screen-ex3`, `screen-ex3-retest`, `screen-verb-home`, `screen-verb-conj-select`, `screen-verb-drill`, `screen-verb-results`, `screen-tense-choice` all declare `lang="en"` so screen readers switch pronunciation for English exercise content.
+- **Skip-to-content link**: `<a href="#main-content" class="skip-link">Aller au contenu principal</a>` is the first body child. CSS hides it off-screen; `:focus` and `:focus-visible` bring it into view.
+- **Semantic landmarks**: `.app-header` div → `<header>`, and all `.screen` divs wrapped in `<main id="main-content">`. Screen readers can now navigate via landmark regions.
+- **Semantic heading hierarchy**: All `.section-title` divs → `<h2>`. `.home-title` "Lexio" → `<h1>`, "Verb Practice" and "Conjugation Practice" → `<h2>`. Enables screen reader heading navigation.
+- **Label `for` attributes**: 11 `<label class="form-label">` elements now have `for="..."` matching their input `id`. Covers signup, login, OAuth, forgot-password, reset-password, and profile-edit forms. ("Choisis ton avatar" labels for avatar grids excluded — they label button groups, not single inputs.)
+- **Avatar button `aria-label`**: All 15 avatar selection buttons (5 signup + 5 OAuth + 5 edit) have descriptive `aria-label="Avatar …"`.
+- **Checkbox IDs**: Two checkboxes in revision lists (`revise-course-select-all`, `revise-word-checkbox`) now have `id` attributes.
+- **`:focus-visible` ring**: Already present from Design Polish pass — applies to all interactive elements for keyboard navigation.
+- **`aria-live` on form errors**: Already present from earlier passes — screen readers announce validation errors.
+
+### Conventions for future agents
+
+- **Every new screen**: Always include `lang="en"` on English-content screens, `lang="fr"` (default) on French UI screens.
+- **Headings**: Use semantic `<h1>`–`<h6>`, never `<div>` with a title class. Preserve the existing CSS class (e.g., `class="section-title"`) for styling.
+- **Labels**: Every `<label>` must have a `for` attribute matching its input `id`. If labelling a group (e.g., avatar grid), use `aria-labelledby` or a `<fieldset>` + `<legend>`.
+- **Interactive elements**: Every button, link, and interactive element must have an accessible name — text content, `aria-label`, or `aria-labelledby`.
+- **Landmarks**: Keep `<header>`, `<main>`, and other landmark regions. New sections should use `<section>` or `<nav>` with `aria-label` if multiple.
+- **Skip link**: The skip-to-content link must remain the first focusable element in the DOM.
+- **`:focus-visible`**: All interactive elements must have a visible `:focus-visible` style. Never suppress outlines without providing a visible replacement.
+- **Alt text**: If images are ever added, every `<img>` needs `alt` (descriptive for content images, empty `alt=""` for decorative).
+
+---
+
+*Last updated: June 5, 2026 — after Accessibility pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
