@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lexio — Apprends l'anglais</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -49,7 +49,9 @@
         }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
             background: var(--bg);
             color: var(--ink);
             min-height: 100vh;
@@ -59,7 +61,7 @@
             justify-content: flex-start;
             padding: 0;
             overflow-x: hidden;
-            transition: background 0.4s ease;
+            transition: background-color 0.4s ease;
         }
 
         body.glow-correct {
@@ -100,7 +102,7 @@
         .back-home-btn {
             background: transparent;
             border: none;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
             color: var(--accent);
             cursor: pointer;
@@ -183,6 +185,7 @@
             font-weight: 600;
             color: var(--accent);
             margin-bottom: 6px;
+            text-wrap: balance;
         }
 
         .home-subtitle {
@@ -204,6 +207,7 @@
             margin-bottom: 12px;
             border-left: 3px solid var(--accent);
             padding-left: 8px;
+            text-wrap: balance;
         }
 
         .courses-grid {
@@ -287,7 +291,7 @@
         }
 
         .course-name {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 1rem;
             font-weight: 500;
             color: var(--ink);
@@ -326,7 +330,7 @@
             display: flex;
             align-items: center;
             gap: 20px;
-            transition: all 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
         }
 
@@ -345,7 +349,7 @@
             width: 60px;
             height: 60px;
             background: white;
-            border-radius: 12px;
+            border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
@@ -361,6 +365,7 @@
             font-size: 1.4rem;
             font-weight: 600;
             color: var(--ink);
+            text-wrap: balance;
         }
 
         .mode-desc {
@@ -399,6 +404,7 @@
             color: var(--ink);
             line-height: 1.1;
             margin-bottom: 8px;
+            text-wrap: balance;
         }
 
         .translation-display {
@@ -416,7 +422,7 @@
             border: none;
             border-radius: 8px;
             padding: 8px 16px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
             font-weight: 500;
             cursor: pointer;
@@ -464,9 +470,9 @@
             background: var(--accent);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 16px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
@@ -495,7 +501,7 @@
             border: 1.5px solid var(--border);
             border-radius: 12px;
             padding: 16px 12px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             font-weight: 400;
             color: var(--ink);
@@ -614,7 +620,7 @@
             border: 1.5px solid var(--border);
             border-radius: 10px;
             padding: 13px 18px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             color: var(--ink);
             cursor: pointer;
@@ -649,7 +655,7 @@
             border: 1.5px solid var(--border);
             border-radius: 10px;
             padding: 14px 16px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 1.1rem;
             color: var(--ink);
             background: var(--card);
@@ -697,6 +703,7 @@
             font-weight: 600;
             color: var(--ink);
             text-align: center;
+            text-wrap: balance;
         }
 
         .section-sub {
@@ -718,6 +725,7 @@
             font-weight: 600;
             text-align: center;
             color: var(--ink);
+            text-wrap: balance;
         }
 
         .complete-sub {
@@ -737,6 +745,7 @@
         /* ── WORD COUNTER ── */
         .word-counter {
             font-size: 0.8rem;
+            font-variant-numeric: tabular-nums;
             color: var(--ink-light);
             text-align: center;
         }
@@ -766,7 +775,7 @@
             background: transparent;
             border: 1px solid var(--accent);
             color: var(--accent);
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.72rem;
             font-weight: 500;
             padding: 4px 10px;
@@ -798,6 +807,7 @@
         }
         .test-out-stat-num {
             font-family: 'Playfair Display', serif;
+            font-variant-numeric: tabular-nums;
             font-size: 2.4rem;
             font-weight: 600;
             line-height: 1;
@@ -835,7 +845,7 @@
         }
         .theme-topic-info { flex: 1; }
         .theme-topic-title {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-weight: 600;
             font-size: 0.95rem;
             color: var(--ink);
@@ -879,7 +889,7 @@
             flex-shrink: 0;
         }
         .revise-course-title {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-weight: 600;
             font-size: 0.92rem;
             flex: 1;
@@ -906,11 +916,11 @@
             border: 1.5px solid var(--border);
             border-radius: 10px;
             padding: 5px 10px 5px 8px;
-            cursor: pointer;
-            transition: all 0.15s;
+            cursor: pointer;            transition: border-color 0.15s, background 0.15s;
             background: var(--bg);
             font-size: 0.82rem;
         }
+
         .revise-word-chip:hover { border-color: var(--accent); }
         .revise-word-chip.selected {
             border-color: var(--correct);
@@ -993,6 +1003,7 @@
             font-weight: 600;
             color: var(--ink);
             text-align: center;
+            text-wrap: balance;
         }
 
         /* ── AUTH & PROFILE CSS ── */
@@ -1016,7 +1027,7 @@
             border: 1.5px solid var(--border);
             border-radius: 10px;
             padding: 12px 16px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 1rem;
             color: var(--ink);
             background: var(--card);
@@ -1068,7 +1079,7 @@
             cursor: pointer;
             background: none;
             border: none;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         .oauth-btn {
@@ -1078,7 +1089,7 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 12px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             font-weight: 500;
             cursor: pointer;
@@ -1283,7 +1294,8 @@
         }
 
         .game-timer {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
+            font-variant-numeric: tabular-nums;
             font-size: 1.2rem;
             font-weight: 600;
             color: var(--accent);
@@ -1363,7 +1375,7 @@
             width: calc(100% - 8px);
             padding: 8px 4px;
             border-radius: 10px 10px 6px 6px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.82rem;
             font-weight: 600;
             text-align: center;
@@ -1578,14 +1590,14 @@
             border: 2px solid var(--border);
             border-radius: 12px;
             padding: 14px 8px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             font-weight: 600;
             color: var(--ink);
-            cursor: pointer;
-            transition: all 0.2s;
+            cursor: pointer;            transition: border-color 0.2s, background 0.2s, color 0.2s;
             text-align: center;
         }
+
         .verb-level-btn:hover, .verb-level-btn.selected {
             border-color: var(--accent);
             background: var(--accent-light);
@@ -1600,7 +1612,7 @@
             display: flex;
             align-items: flex-start;
             gap: 16px;
-            transition: all 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
             width: 100%;
         }
         .verb-practice-mode-card:hover {
@@ -1617,7 +1629,7 @@
             align-items: center;
             justify-content: center;
             background: white;
-            border-radius: 12px;
+            border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             flex-shrink: 0;
         }
@@ -1632,12 +1644,12 @@
             border: 1.5px solid var(--border);
             border-radius: 12px;
             padding: 14px 10px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
             font-weight: 500;
             color: var(--ink);
             cursor: pointer;
-            transition: all 0.15s;
+            transition: border-color 0.15s, background 0.15s, color 0.15s;
             text-align: left;
             display: flex;
             flex-direction: column;
@@ -1660,11 +1672,11 @@
             border-radius: 10px;
             border: 1.5px solid var(--border);
             background: var(--card);
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: border-color 0.15s, background 0.15s, color 0.15s;
             color: var(--ink);
         }
         .verb-type-btn.active {
@@ -1694,7 +1706,7 @@
             border: none;
             outline: none;
             background: transparent;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.9rem;
             color: var(--ink);
             border-bottom: 2px solid var(--border);
@@ -1760,7 +1772,7 @@
             border: 1.5px solid var(--border);
             border-radius: 10px;
             padding: 12px 14px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 1rem;
             color: var(--ink);
             background: var(--bg);
@@ -1785,6 +1797,7 @@
         }
         .verb-score-num {
             font-family: 'Playfair Display', serif;
+            font-variant-numeric: tabular-nums;
             font-size: 2rem;
             font-weight: 600;
         }
@@ -1897,11 +1910,32 @@
 	.match-cell.wrong { background: var(--wrong-bg); color: var(--wrong); }
 	.match-cell.matched { opacity: 0; transition: opacity 0.4s ease; pointer-events: none; 
 	}
+        /* ── ACCESSIBILITY: Reduced motion ── */
+        @media (prefers-reduced-motion: reduce) {
+            .screen { animation: none; }
+            .transition-icon { animation: none; }
+            .spinner { animation: none; }
+            .game-score-fly, .mole-score-fly { animation: none; }
+            body { transition: none; }
+            body.glow-correct, body.glow-wrong { transition: none; }
+            .game-bubble { transition: none; }
+            .mole { transition: none; }
+        }
     </style>
-	</head>
-
-	<body>
-
+	</head><body>
+    <!-- SVG Icon Definitions -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+        <symbol id="avatar-snake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c2-4 4-8 4-12S10 2 14 4s4 6 2 10-4 4-6 2c-2-2 0-6 4-6s6 4 6 8"/></symbol>
+        <symbol id="avatar-dragon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2 4-4 2-2-2z"/><path d="M10 9l2 2 2-2"/><path d="M8 12c0 4 4 8 4 8s4-4 4-8"/><circle cx="12" cy="10" r="1" fill="currentColor"/><path d="M6 9l-3 3M18 9l3 3"/></symbol>
+        <symbol id="avatar-horse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20v-4l4-8h4l4 8v4"/><path d="M14 8l2-4M10 8l-2-5"/><circle cx="12" cy="10" r="1" fill="currentColor"/><path d="M8 16h8"/></symbol>
+        <symbol id="avatar-rabbit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20l2-8V8l2-4 2 4v4l2 8"/><path d="M8 8c0-2-2-4-4-4M16 8c0-2 2-4 4-4"/><circle cx="12" cy="10" r="1" fill="currentColor"/><path d="M10 15h4"/></symbol>
+        <symbol id="avatar-lion" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="4"/><path d="M8 8C6 4 4 6 4 6s0 4 4 6M16 8c2-4 4-2 4-2s0 4-4 6M10 6l-1-3M14 6l1-3M12 5V2"/><circle cx="10" cy="9" r="0.5" fill="currentColor"/><circle cx="14" cy="9" r="0.5" fill="currentColor"/><path d="M10 11.5c.5.5 1.5.5 2 .5s1.5 0 2-.5"/></symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+        <symbol id="icon-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+        <symbol id="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></symbol>
+        <symbol id="icon-celebrate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2 4-4 3 2 4-4 2 2 4-4 3"/><circle cx="18" cy="5" r="2" fill="currentColor" stroke="none"/><circle cx="6" cy="18" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="15" r="1.5" fill="currentColor" stroke="none"/></symbol>
+        <symbol id="icon-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+    </svg>
     <div class="app-header">
         <div class="logo-area">
             <button class="back-home-btn hidden" id="header-home-btn" onclick="goToHome()">
@@ -1914,8 +1948,8 @@
         </div>
         <div class="lives-container" id="lives-container" style="display:none;"></div>
         <div id="header-profile-btn-container" style="display:none; margin-left: auto;">
-            <button class="avatar-btn" id="header-avatar-btn" style="width: 40px; height: 40px; font-size: 1.2rem;"
-                onclick="showScreen('screen-profile-own')">🐍</button>
+<button class="avatar-btn" id="header-avatar-btn" style="width: 40px; height: 40px; font-size: 1.2rem;"
+    onclick="showScreen('screen-profile-own')"><svg width="24" height="24" style="color:var(--accent)"><use href="#avatar-snake"/></svg></button>
         </div>
     </div>
 
@@ -2005,18 +2039,18 @@
 
                 <div class="form-group">
                     <label class="form-label" style="text-align: center; margin-bottom: 8px;">Choisis ton avatar</label>
-                    <div class="avatar-grid" id="signup-avatar-grid">
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'snake')"
-                            aria-label="Snake avatar">🐍</button>
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'dragon')"
-                            aria-label="Dragon avatar">🐉</button>
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'horse')"
-                            aria-label="Horse avatar">🐴</button>
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'rabbit')"
-                            aria-label="Rabbit avatar">🐰</button>
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'lion')"
-                            aria-label="Lion avatar">🦁</button>
-                    </div>
+        <div class="avatar-grid" id="signup-avatar-grid">
+            <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'snake')"
+                aria-label="Snake avatar" data-avatar="snake"><svg width="28" height="28"><use href="#avatar-snake"/></svg></button>
+            <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'dragon')"
+                aria-label="Dragon avatar" data-avatar="dragon"><svg width="28" height="28"><use href="#avatar-dragon"/></svg></button>
+            <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'horse')"
+                aria-label="Horse avatar" data-avatar="horse"><svg width="28" height="28"><use href="#avatar-horse"/></svg></button>
+            <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'rabbit')"
+                aria-label="Rabbit avatar" data-avatar="rabbit"><svg width="28" height="28"><use href="#avatar-rabbit"/></svg></button>
+            <button type="button" class="avatar-btn" onclick="selectAvatar('signup', 'lion')"
+                aria-label="Lion avatar" data-avatar="lion"><svg width="28" height="28"><use href="#avatar-lion"/></svg></button>
+        </div>
                     <div class="form-error" id="err-signup-avatar" aria-live="polite" style="text-align: center;"></div>
                 </div>
 
@@ -2092,11 +2126,11 @@
                 <div class="form-group">
                     <label class="form-label" style="text-align: center; margin-bottom: 8px;">Choisis ton avatar</label>
                     <div class="avatar-grid" id="oauth-avatar-grid">
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'snake')">🐍</button>
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'dragon')">🐉</button>
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'horse')">🐴</button>
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'rabbit')">🐰</button>
-                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'lion')">🦁</button>
+                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'snake')" data-avatar="snake"><svg width="28" height="28"><use href="#avatar-snake"/></svg></button>
+                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'dragon')" data-avatar="dragon"><svg width="28" height="28"><use href="#avatar-dragon"/></svg></button>
+                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'horse')" data-avatar="horse"><svg width="28" height="28"><use href="#avatar-horse"/></svg></button>
+                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'rabbit')" data-avatar="rabbit"><svg width="28" height="28"><use href="#avatar-rabbit"/></svg></button>
+                        <button type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'lion')" data-avatar="lion"><svg width="28" height="28"><use href="#avatar-lion"/></svg></button>
                     </div>
                     <div class="form-error" id="err-oauth-avatar" aria-live="polite" style="text-align: center;"></div>
                 </div>
@@ -2109,7 +2143,7 @@
 
     <div class="screen" id="screen-verify-email">
         <div class="card" style="text-align: center;">
-            <div class="complete-icon" style="margin-bottom: 16px;">✉️</div>
+            <div class="complete-icon" style="margin-bottom: 16px;"><svg width="48" height="48" style="color:var(--accent)"><use href="#icon-mail"/></svg></div>
             <div class="section-title">Vérifie tes emails</div>
             <div class="section-sub" id="verify-email-msg" style="margin-top: 12px; margin-bottom: 24px;">
                 Nous t'avons envoyé un lien de confirmation. Clique dessus pour activer ton compte.
@@ -2120,7 +2154,7 @@
 
     <div class="screen" id="screen-link-expired">
         <div class="card" style="text-align: center;">
-            <div class="complete-icon" style="margin-bottom: 16px;">⚠️</div>
+            <div class="complete-icon" style="margin-bottom: 16px;"><svg width="48" height="48" style="color:var(--wrong)"><use href="#icon-warning"/></svg></div>
             <div class="section-title">Lien invalide</div>
             <div class="section-sub" style="margin-top: 12px; margin-bottom: 24px;">
                 Ce lien de confirmation est expiré ou invalide.
@@ -2239,15 +2273,15 @@
                     <label class="form-label" style="text-align: center; margin-bottom: 8px;">Choisis ton avatar</label>
                     <div class="avatar-grid" id="edit-avatar-grid">
                         <button type="button" class="avatar-btn"
-                            onclick="selectAvatar('edit', 'snake'); markUnsavedChanges();">🐍</button>
+                            onclick="selectAvatar('edit', 'snake'); markUnsavedChanges();" data-avatar="snake"><svg width="28" height="28"><use href="#avatar-snake"/></svg></button>
                         <button type="button" class="avatar-btn"
-                            onclick="selectAvatar('edit', 'dragon'); markUnsavedChanges();">🐉</button>
+                            onclick="selectAvatar('edit', 'dragon'); markUnsavedChanges();" data-avatar="dragon"><svg width="28" height="28"><use href="#avatar-dragon"/></svg></button>
                         <button type="button" class="avatar-btn"
-                            onclick="selectAvatar('edit', 'horse'); markUnsavedChanges();">🐴</button>
+                            onclick="selectAvatar('edit', 'horse'); markUnsavedChanges();" data-avatar="horse"><svg width="28" height="28"><use href="#avatar-horse"/></svg></button>
                         <button type="button" class="avatar-btn"
-                            onclick="selectAvatar('edit', 'rabbit'); markUnsavedChanges();">🐰</button>
+                            onclick="selectAvatar('edit', 'rabbit'); markUnsavedChanges();" data-avatar="rabbit"><svg width="28" height="28"><use href="#avatar-rabbit"/></svg></button>
                         <button type="button" class="avatar-btn"
-                            onclick="selectAvatar('edit', 'lion'); markUnsavedChanges();">🦁</button>
+                            onclick="selectAvatar('edit', 'lion'); markUnsavedChanges();" data-avatar="lion"><svg width="28" height="28"><use href="#avatar-lion"/></svg></button>
                     </div>
                 </div>
                 <button type="submit" class="btn-primary" id="btn-edit-submit">Sauvegarder</button>
@@ -2640,7 +2674,7 @@
      SCREEN: SESSION COMPLETE
 	══════════════════════════════════════════ -->
     <div class="screen" id="screen-complete">
-        <div class="complete-icon">🎉</div>
+        <div class="complete-icon"><svg width="48" height="48" style="color:var(--accent)"><use href="#icon-celebrate"/></svg></div>
         <div class="complete-title" id="complete-title">Session terminée !</div>
 
         <div class="card" style="margin-top:10px; margin-bottom:10px; width:100%; text-align:center; padding:20px;">
@@ -2901,7 +2935,7 @@
         <div style="width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
             <button class="back-home-btn" onclick="endDrillEarly()">← Back</button>
             <div style="display:flex; align-items:center; gap:10px;">
-                <div id="drill-timer" style="display:none; font-family:'DM Sans',sans-serif; font-size:0.9rem; font-weight:600; color:var(--accent); background:var(--accent-light); padding:4px 12px; border-radius:20px; min-width:54px; text-align:center;"></div>
+                <div id="drill-timer" style="display:none; font-family:'Inter',sans-serif; font-size:0.9rem; font-weight:600; color:var(--accent); background:var(--accent-light); padding:4px 12px; border-radius:20px; min-width:54px; text-align:center;"></div>
                 <span class="verb-score-badge" id="drill-score-badge">0 / 0</span>
             </div>
         </div>
@@ -3116,8 +3150,12 @@
         }
 
         function getAvatarEmoji(name) {
-            const map = { snake: '🐍', dragon: '🐉', horse: '🐴', rabbit: '🐰', lion: '🦁' };
-            return map[name] || '🐍';
+            return `<svg width="24" height="24" style="color:var(--accent)"><use href="#avatar-${name}"/></svg>`;
+        }
+
+        function getAvatarIconHTML(name) {
+            const id = name || 'snake';
+            return `<svg width="24" height="24" style="color:var(--accent)"><use href="#avatar-${id}"/></svg>`;
         }
 
         // ══════════════════════════════════════════
@@ -5195,7 +5233,7 @@
         async function initializeDashboard() {
             if (currentProfile) {
                 document.getElementById('header-profile-btn-container').style.display = 'block';
-                document.getElementById('header-avatar-btn').innerText = getAvatarEmoji(currentProfile.avatar_id);
+                document.getElementById('header-avatar-btn').innerHTML = getAvatarEmoji(currentProfile.avatar_id);
             } else {
                 document.getElementById('header-profile-btn-container').style.display = 'none';
             }
