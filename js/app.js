@@ -2938,7 +2938,6 @@
             };
             return (conj[tense] || conj.present_simple)();
         }
-        };
 
         const SUBJ_KEY_TO_IDX = { 'I': 0, 'you': 1, 'he': 2, 'we': 3, 'they': 5 };
 
@@ -3589,4 +3588,3 @@
             console.error('initAuth uncaught error:', err);
             showScreen('screen-login');
         });
-    </script>

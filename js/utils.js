@@ -1,4 +1,5 @@
-        function log() { if (DEBUG) console.console.log.apply(console, arguments); }
+        const DEBUG = false;
+        function log() { if (DEBUG) console.log.apply(console, arguments); }
 
         // --- Toast notification (replaces native alert) ---
         function showToast(m, t) {
@@ -41,8 +42,6 @@
             throw lastErr;
         }
 
-        log('Script tag started parsing');
-        log('Script tag started parsing');
 
         // --- UTILITY: Password visibility toggle ---
         function togglePasswordVisibility(inputId) {
