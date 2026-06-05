@@ -290,4 +290,47 @@ npx serve .          # or: python -m http.server 8000
 
 ---
 
-*Last updated: June 5, 2026 — after Security pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
+## PERFORMANCE
+
+### What was done (Performance pass — June 5, 2026)
+
+- **Google Fonts preconnect hints**: `<link rel="preconnect">` for `fonts.googleapis.com` and `fonts.gstatic.com` (with `crossorigin`) added to `<head>`. Reduces font download latency by opening the connection early.
+- **`display=swap` already present**: Confirmed from Design Polish pass — prevents FOIT (Flash of Invisible Text) by showing fallback text until the web font loads.
+
+### Remaining: lazy-load verb practice data
+
+`IRREGULAR_PAST`, `IRREGULAR_PP`, `VERB_LISTS`, and `TENSE_SENTENCE_BANK` are large inline JS objects (~200 lines, ~15KB) initialized at parse time. They are only needed when the user opens the verb practice section. Convert them to lazy-loaded getter functions:
+
+```js
+var _irregularPast = null;
+function getIrregularPast() {
+    if (!_irregularPast) _irregularPast = { /* ... data ... */ };
+    return _irregularPast;
+}
+```
+
+Then replace direct references (`IRREGULAR_PAST[v]`, `VERB_LISTS.regular[level]`, etc.) with getter calls (`getIrregularPast()[v]`, `getVerbLists().regular[level]`). This defers ~15KB of JS parsing until the verb practice screen is first opened.
+
+### Remaining: single-file split (future milestone)
+
+The entire app — CSS, HTML, 4000+ lines of JS, game logic, conjugation data, sentence banks — lives in one ~7,000-line `index.html`. Splitting into modules would improve load time and maintainability:
+
+- `css/style.css` — all styles
+- `js/auth.js` — Supabase auth logic
+- `js/verb-data.js` — `IRREGULAR_PAST`, `IRREGULAR_PP`, `VERB_LISTS`, `TENSE_SENTENCE_BANK`
+- `js/verb-practice.js` — verb conjugation and tense practice logic
+- `js/games.js` — Whack-a-Mole, Tap the Translation, etc.
+- `js/revision.js` — course revision logic
+
+This is a non-trivial refactor that requires care around shared state, DOM references, and event handlers. Marked as a future milestone — do not attempt without explicit user request.
+
+### Conventions for future agents
+
+- **New data objects**: Always lazy-load large data objects (verb lists, sentence banks, config) behind getter functions. Never initialize them at parse time.
+- **Font loading**: Keep the preconnect hints. For any new third-party font or CDN resource, add a `<link rel="preconnect">`.
+- **New features**: If adding significant new functionality, consider creating a separate `.js` file rather than appending to `index.html`.
+- **`loading="lazy"`**: If images are ever added, always include `loading="lazy"` on below-the-fold images.
+
+---
+
+*Last updated: June 5, 2026 — after Performance pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
