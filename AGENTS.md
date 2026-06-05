@@ -131,6 +131,7 @@ npx serve .          # or: python -m http.server 8000
 - Whack-a-mole and Bubble game exercises
 - Design polish pass (fonts, transitions, a11y, icons — June 2026)
 - Interaction & Usability pass (password toggle, strength, loading states, active states, touch targets — June 2026)
+- Content & Copy pass (French/English boundary, capitalization, DELETE note — June 2026)
 
 ### ⬜ Not yet built:
 - Full Production exercise (Third Encounter)
@@ -165,6 +166,20 @@ npx serve .          # or: python -m http.server 8000
 ---
 
 ## RECENT CHANGES
+
+### Content & Copy Pass (June 2026)
+
+| Change | Details |
+|---|---|
+| Language boundary | 🇬🇧 banner before Verb Practice: "Les exercices de cette section sont en anglais — l'interface reste en français." |
+| French capitalisation | "Politique de Confidentialité" → "Politique de confidentialité" (sentence case, consistent with all other French titles) |
+| DELETE note | Added explanation in deletion modal: "(Le mot « DELETE » est en anglais pour éviter toute confusion avec le français « supprimer ».)" |
+
+### Content & Copy conventions (for future agents):
+- **French UI uses sentence case** — only the first word capitalized (e.g. "Créer un compte", not "Créer un Compte")
+- **Verb Practice section is in English** — this is intentional (the content being practiced is English). The 🇬🇧 banner explains this.
+- **DELETE in the deletion modal is English** — intentional safety gate. A French word could be typed accidentally.
+- **No mixed Fr/En in the same sentence** — keep UI labels in French, exercise content in English, never blend them.
 
 ### Interaction & Usability Pass (June 2026)
 
@@ -209,4 +224,4 @@ npx serve .          # or: python -m http.server 8000
 
 ---
 
-*Last updated: June 5, 2026 — after Interaction & Usability pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
+*Last updated: June 5, 2026 — after Content & Copy pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
