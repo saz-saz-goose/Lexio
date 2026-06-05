@@ -1382,7 +1382,7 @@
                 return;
             }
             const w = ex1Queue[ex1Index];
-            document.getElementById('ex1-prompt').textContent = w.french;
+            document.getElementById('ex1-word').textContent = w.french;
             document.getElementById('ex1-counter').textContent = `${ex1Index + 1} / ${ex1Queue.length}`;
             document.getElementById('ex1-feedback').className = 'feedback-banner';
             document.getElementById('ex1-next-btn').classList.add('hidden');
