@@ -263,4 +263,31 @@ npx serve .          # or: python -m http.server 8000
 
 ---
 
-*Last updated: June 5, 2026 — after Accessibility pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
+## SECURITY & PRODUCTION READINESS
+
+### What was done (Security pass — June 5, 2026)
+
+- **Production logging disabled**: `const DEBUG = false;` — all `console.log(...)` calls replaced with `log(...)`, which is a no-op unless `DEBUG` is set to `true`. One internal `console.log.apply` remains inside the `log()` function itself. Set `DEBUG = true` during local development only.
+- **Native `alert()` replaced with in-app toast**: `showToast(message, type)` renders a positioned, auto-dismissing notification. Types: `"error"`, `"success"`, `"info"`. Five `alert()` calls replaced: email validation error, confirmation resend success, error display, profile deletion confirmation, level test auth check.
+- **Client-side rate limiting on auth forms**: `isAuthOnCooldown(formId, seconds)` blocks rapid-fire submissions. Cooldowns: signup/login/reset = 3s, forgot-password = 5s. Cooldown is set before the async auth call completes — this prevents brute force but means a typo also incurs the cooldown (acceptable trade-off).
+- **Word-list fetch retry with exponential backoff**: `fetchWithRetry(url, maxRetries=3)` wraps 4 word-list `fetch()` calls (course index, word list file, and two dynamic word-list loads). Backoff: 500ms, 1s, 2s between attempts.
+- **Supabase RLS (Row-Level Security)**: This MUST be configured on the Supabase dashboard side — it cannot be enforced from client code alone. Ensure RLS policies are enabled on all tables (`profiles`, `user_progress`, etc.) to prevent unauthorized data access. Without RLS, any authenticated user can read/write any row via the Supabase client.
+
+### Known remaining items
+
+- **Toast stacking**: Rapid successive `showToast()` calls create overlapping toasts. Consider tracking a single active toast element and replacing its content.
+- **Cooldown on failure**: `isAuthOnCooldown` sets the timestamp before the async call completes. A failed login (typo) still incurs the full cooldown. Consider only setting cooldown after a successful attempt if this proves frustrating in practice.
+- **Generic fetch calls not retried**: Line ~3850 (`const response = await fetch(url)`) and line ~5584 (`fetch(testOutCourseKey)`) are not wrapped — these are Supabase/internal calls where retry may not be appropriate.
+- **Supabase RLS verification**: Confirm RLS is enabled on the Supabase project dashboard for all tables.
+
+### Conventions for future agents
+
+- **Logging**: Never use `console.log()` directly. Use `log()` or add a `DEBUG`-guarded block.
+- **User feedback**: Never use `alert()` — always use `showToast(message, type)`.
+- **Auth forms**: Every new auth-related form handler must include an `isAuthOnCooldown()` check.
+- **External fetches**: All fetches to external resources (word lists, APIs) should use `fetchWithRetry()`. Supabase SDK calls are excluded.
+- **RLS**: When adding new Supabase tables, document the required RLS policies and remind that they must be configured on the dashboard.
+
+---
+
+*Last updated: June 5, 2026 — after Security pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*

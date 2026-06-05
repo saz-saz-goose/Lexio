@@ -3141,7 +3141,51 @@
 
 </main>
     <script>
-        console.log('Script tag started parsing');
+        function log() { if (DEBUG) console.console.log.apply(console, arguments); }
+
+        // --- Toast notification (replaces native alert) ---
+        function showToast(m, t) {
+            t = t || 'info';
+            var c = { success: 'var(--correct)', error: 'var(--wrong)', info: 'var(--accent)' };
+            var b = { success: 'var(--correct-bg)', error: 'var(--wrong-bg)', info: 'var(--accent-light)' };
+            var el = document.createElement('div');
+            el.textContent = m;
+            el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:12px;font-size:0.9rem;font-weight:500;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.12);opacity:0;transition:opacity 0.3s;max-width:90vw;text-align:center;';
+            el.style.background = b[t] || b.info;
+            el.style.color = c[t] || c.info;
+            document.body.appendChild(el);
+            requestAnimationFrame(function() { el.style.opacity = '1'; });
+            setTimeout(function() { el.style.opacity = '0'; setTimeout(function() { el.remove(); }, 300); }, 4000);
+        }
+
+        // --- Client-side rate limiting for auth forms ---
+        var authCooldowns = {};
+        function isAuthOnCooldown(id, s) {
+            var n = Date.now();
+            if (authCooldowns[id] && n - authCooldowns[id] < s * 1000) return true;
+            authCooldowns[id] = n;
+            return false;
+        }
+
+        // --- Fetch with exponential backoff retry ---
+        async function fetchWithRetry(url, maxR) {
+            maxR = maxR || 3;
+            var lastErr;
+            for (var i = 0; i < maxR; i++) {
+                try {
+                    var resp = await fetch(url);
+                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                    return resp;
+                } catch(e) {
+                    lastErr = e;
+                    if (i < maxR - 1) await new Promise(function(r) { setTimeout(r, Math.pow(2, i) * 500); });
+                }
+            }
+            throw lastErr;
+        }
+
+        log('Script tag started parsing');
+        log('Script tag started parsing');
 
         // --- UTILITY: Password visibility toggle ---
         function togglePasswordVisibility(inputId) {
@@ -3214,7 +3258,7 @@
         let hasUnsavedChanges = false;
 
         async function initAuth() {
-            console.log('initAuth started');
+            log('initAuth started');
             try {
                 if (!sbClient) {
                     console.error('Supabase not initialized');
@@ -3222,7 +3266,7 @@
                     return;
                 }
                 const { data: { session }, error } = await sbClient.auth.getSession();
-                console.log('getSession finished', { session, error });
+                log('getSession finished', { session, error });
                 if (session) {
                     currentUser = session.user;
                     await fetchProfile();
@@ -3333,6 +3377,7 @@
         // ══════════════════════════════════════════
         async function handleSignup(e) {
             e.preventDefault();
+            if (isAuthOnCooldown('signup', 3)) { showToast('Merci de patienter quelques secondes.', 'info'); return; }
             const email = document.getElementById('signup-email').value;
             const username = document.getElementById('signup-username').value;
             const password = document.getElementById('signup-password').value;
@@ -3373,6 +3418,7 @@
 
         async function handleLogin(e) {
             e.preventDefault();
+            if (isAuthOnCooldown('login', 3)) { showToast('Merci de patienter quelques secondes.', 'info'); return; }
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             const errGeneral = document.getElementById('err-login-general');
@@ -3403,19 +3449,20 @@
         async function resendVerificationEmail() {
             const email = document.getElementById('login-email').value || '';
             if (!email) {
-                alert("Veuillez saisir votre email dans le formulaire de connexion.");
+                showToast("Veuillez saisir votre email dans le formulaire de connexion.", "error");
                 return;
             }
             const { error } = await sbClient.auth.resend({ type: 'signup', email });
             if (!error) {
-                alert("Email de confirmation renvoyé !");
+                showToast("Email de confirmation renvoyé !", "success");
             } else {
-                alert("Erreur: " + error.message);
+                showToast("Erreur: " + error.message, "error");
             }
         }
 
         async function handleForgotPassword(e) {
             e.preventDefault();
+            if (isAuthOnCooldown('forgot', 5)) { showToast('Merci de patienter avant de renvoyer.', 'info'); return; }
             const email = document.getElementById('forgot-email').value;
             const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '#type=recovery' });
             if (!error) {
@@ -3428,6 +3475,7 @@
 
         async function handleResetPassword(e) {
             e.preventDefault();
+            if (isAuthOnCooldown('reset', 3)) { showToast('Merci de patienter quelques secondes.', 'info'); return; }
             const pwd = document.getElementById('reset-password').value;
             const confirm = document.getElementById('reset-confirm-password').value;
             if (pwd !== confirm) {
@@ -3616,7 +3664,7 @@
             // Actually, Supabase has auth.admin.deleteUser but we can't use it here. 
             // We will just sign out after wiping the profile.
             closeDeleteModal();
-            alert("Ton profil a été supprimé. Ton compte sera définitivement effacé par l'administrateur.");
+            showToast("Ton profil a été supprimé. Ton compte sera définitivement effacé par l'administrateur.", "success");
             await handleSignOut();
         }
 
@@ -3697,7 +3745,7 @@
         // UTILS
         // ══════════════════════════════════════════
         function showScreen(id) {
-            console.log('showScreen called with id:', id);
+            log('showScreen called with id:', id);
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             const el = document.getElementById(id);
             if (el) {
@@ -4006,7 +4054,7 @@
 
             let data;
             try {
-                const res = await fetch('word-lists/' + file.filename);
+                const res = await fetchWithRetry('word-lists/' + file.filename);
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 data = await res.json();
             } catch (e) {
@@ -4228,7 +4276,7 @@
         _renderPreviewWordChips(parsed, courseKey);
     } else {
         const [wordResult] = await Promise.allSettled([
-            fetch('word-lists/' + filename).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }),
+            fetchWithRetry('word-lists/' + filename).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }),
         ]);
 
         if (wordResult.status === 'fulfilled') {
@@ -4825,7 +4873,7 @@
         let matchSelected = null;
 
         function startMatch() {
-            console.log('🎯 startMatch called, words:', words.length);
+            log('🎯 startMatch called, words:', words.length);
             matchPairs = words.map(w => ({ english: w.english, french: w.french }));
             matchSelected = null;
             buildMatchTable();
@@ -5414,7 +5462,7 @@
             document.getElementById('header-progress-wrap').style.display = 'none';
 
             try {
-                const response = await fetch(INDEX_FILE);
+                const response = await fetchWithRetry(INDEX_FILE);
                 if (!response.ok) {
                     throw new Error(`HTTP Error: ${response.status}`);
                 }
@@ -5439,7 +5487,7 @@
             document.getElementById('header-progress-wrap').style.display = 'none';
 
             try {
-                const response = await fetch(WORD_LIST_FILE);
+                const response = await fetchWithRetry(WORD_LIST_FILE);
                 if (!response.ok) {
                     throw new Error(`HTTP Error: ${response.status}`);
                 }
@@ -5522,7 +5570,7 @@
         async function initiateTestOut(filename, title, e) {
             if (e) e.stopPropagation();
             if (!currentProfile) {
-                alert("Vous devez être connecté pour utiliser le test de niveau.");
+                showToast("Vous devez être connecté pour utiliser le test de niveau.", "error");
                 return;
             }
             testOutCourseKey = 'word-lists/' + filename;
@@ -6915,7 +6963,7 @@
 
         function retryVerbSession() { /* handled by vr-retry-btn onclick */ }
 
-        console.log('Calling initAuth now');
+        log('Calling initAuth now');
         initAuth().catch(err => {
             console.error('initAuth uncaught error:', err);
             showScreen('screen-login');
