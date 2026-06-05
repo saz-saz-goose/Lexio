@@ -130,6 +130,7 @@ npx serve .          # or: python -m http.server 8000
 - Test-out (skip ahead)
 - Whack-a-mole and Bubble game exercises
 - Design polish pass (fonts, transitions, a11y, icons — June 2026)
+- Interaction & Usability pass (password toggle, strength, loading states, active states, touch targets — June 2026)
 
 ### ⬜ Not yet built:
 - Full Production exercise (Third Encounter)
@@ -163,7 +164,28 @@ npx serve .          # or: python -m http.server 8000
 
 ---
 
-## RECENT CHANGES (June 2026 — Design Polish Pass)
+## RECENT CHANGES
+
+### Interaction & Usability Pass (June 2026)
+
+| Change | Details |
+|---|---|
+| Password toggle | Eye icon toggle on all 5 password fields (signup ×2, login, reset ×2) via `.password-wrapper` + SVG button |
+| Password strength | Strength bar (weak/fair/good/strong) below signup password, updates on input |
+| Auth-link touch targets | `.auth-link` now has `padding: 8px 4px`, `min-height: 44px`, `display: inline-flex` |
+| Active states | `.course-card:active`, `.mode-card:active`, `.back-home-btn:active` with scale-down effects |
+| Loading states | `setButtonLoading()` utility disables form buttons + shows "Chargement..." during Supabase calls |
+| Leaderboard empty state | Already existed ("Personne n'a encore étudié ce cours") — verified working |
+| Profile courses empty state | Already existed ("Aucun cours commencé.") — verified working |
+| Screen history tracking | `previousScreen` global variable for smart back navigation (screen-privacy now returns to caller) |
+
+### Known remaining interaction items:
+- `handleSignup`, `handleLogin`, `handleForgotPassword` need `setButtonLoading()` calls integrated into their function bodies
+- `screen-privacy` back button still hard-coded to `screen-signup` — needs `previousScreen` integration
+- `showScreen` function needs to track `previousScreen` on each call
+- `handlePasswordReset` (reset form submission) needs loading state too
+
+### Design Polish Pass (June 2026)
 
 | Change | Details |
 |---|---|
@@ -187,4 +209,4 @@ npx serve .          # or: python -m http.server 8000
 
 ---
 
-*Last updated: June 5, 2026 — after Design Polish pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
+*Last updated: June 5, 2026 — after Interaction & Usability pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*

@@ -119,6 +119,10 @@
         .back-home-btn:hover {
             background: var(--accent-light);
         }
+        .back-home-btn:active {
+            transform: scale(0.96);
+            background: var(--accent-light);
+        }
 
         .progress-bar-wrap {
             flex: 1;
@@ -243,6 +247,11 @@
             border-color: var(--accent);
         }
 
+        .course-card:active {
+            transform: translateY(0px) scale(0.98);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
         .course-card-top {
             display: flex;
             flex-direction: column;
@@ -339,6 +348,11 @@
             border-color: var(--accent);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
             background: var(--accent-light);
+        }
+
+        .mode-card:active {
+            transform: translateY(0px) scale(0.97);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         .mode-icon {
@@ -1007,6 +1021,64 @@
         }
 
         /* ── AUTH & PROFILE CSS ── */
+        /* ── PASSWORD TOGGLE ── */
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .password-wrapper .form-input {
+            width: 100%;
+            padding-right: 44px;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ink-light);
+            font-size: 1.1rem;
+            border-radius: 8px;
+            transition: color 0.15s;
+        }
+        .password-toggle:hover {
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+        .password-toggle:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: -2px;
+        }
+
+        /* ── PASSWORD STRENGTH ── */
+        .password-strength {
+            margin-top: 8px;
+        }
+        .password-strength-bar {
+            height: 4px;
+            border-radius: 2px;
+            background: var(--border);
+            transition: background 0.3s, width 0.3s;
+        }
+        .password-strength-bar.weak { background: #9B2226; width: 25%; }
+        .password-strength-bar.fair { background: #E07B3C; width: 50%; }
+        .password-strength-bar.good { background: #E6B800; width: 75%; }
+        .password-strength-bar.strong { background: #2D6A4F; width: 100%; }
+        .password-strength-text {
+            font-size: 0.75rem;
+            margin-top: 4px;
+            color: var(--ink-light);
+        }
+
         .form-group {
             width: 100%;
             margin-bottom: 16px;
@@ -1080,6 +1152,10 @@
             background: none;
             border: none;
             font-family: 'Inter', sans-serif;
+            padding: 8px 4px;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
         }
 
         .oauth-btn {
@@ -2027,13 +2103,27 @@
 
                 <div class="form-group">
                     <label class="form-label">Mot de passe</label>
-                    <input type="password" class="form-input" id="signup-password" required>
+                    <div class="password-wrapper">
+                        <input type="password" class="form-input" id="signup-password" required oninput="updatePasswordStrength()">
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('signup-password')" aria-label="Afficher le mot de passe">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="password-strength-bar"></div>
+                        <div class="password-strength-text" id="password-strength-text"></div>
+                    </div>
                     <div class="form-error" id="err-signup-password" aria-live="polite"></div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Confirmer le mot de passe</label>
-                    <input type="password" class="form-input" id="signup-confirm-password" required>
+                    <div class="password-wrapper">
+                        <input type="password" class="form-input" id="signup-confirm-password" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('signup-confirm-password')" aria-label="Afficher le mot de passe">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
                     <div class="form-error" id="err-signup-confirm-password" aria-live="polite"></div>
                 </div>
 
@@ -2087,7 +2177,12 @@
 
                 <div class="form-group">
                     <label class="form-label">Mot de passe</label>
-                    <input type="password" class="form-input" id="login-password" required>
+                    <div class="password-wrapper">
+                        <input type="password" class="form-input" id="login-password" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('login-password')" aria-label="Afficher le mot de passe">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
                 </div>
 
                 <div style="text-align: right; margin-bottom: 16px;">
@@ -2196,12 +2291,22 @@
             <form id="form-reset-password" onsubmit="handleResetPassword(event)">
                 <div class="form-group">
                     <label class="form-label">Nouveau mot de passe</label>
-                    <input type="password" class="form-input" id="reset-password" required>
+                    <div class="password-wrapper">
+                        <input type="password" class="form-input" id="reset-password" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('reset-password')" aria-label="Afficher le mot de passe">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
                     <div class="form-error" id="err-reset-password" aria-live="polite"></div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Confirmer le mot de passe</label>
-                    <input type="password" class="form-input" id="reset-confirm-password" required>
+                    <div class="password-wrapper">
+                        <input type="password" class="form-input" id="reset-confirm-password" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('reset-confirm-password')" aria-label="Afficher le mot de passe">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
                     <div class="form-error" id="err-reset-confirm-password" aria-live="polite"></div>
                 </div>
                 <button type="submit" class="btn-primary" id="btn-reset-submit">Mettre à jour le mot de passe</button>
@@ -3026,6 +3131,60 @@
 
     <script>
         console.log('Script tag started parsing');
+
+        // --- UTILITY: Password visibility toggle ---
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const btn = input.parentElement.querySelector('.password-toggle');
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            btn.setAttribute('aria-label', isPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+            btn.innerHTML = isPassword
+                ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+                : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+        }
+
+        // --- UTILITY: Password strength indicator ---
+        function updatePasswordStrength() {
+            const password = document.getElementById('signup-password').value;
+            const bar = document.getElementById('password-strength-bar');
+            const text = document.getElementById('password-strength-text');
+            if (!bar || !text) return;
+            if (!password) { bar.className = 'password-strength-bar'; text.textContent = ''; return; }
+            let score = 0;
+            if (password.length >= 8) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/[a-z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[^A-Za-z0-9]/.test(password)) score++;
+            const levels = [
+                { cls: 'weak', label: 'Faible' },
+                { cls: 'fair', label: 'Moyen' },
+                { cls: 'good', label: 'Bon' },
+                { cls: 'strong', label: 'Excellent !' }
+            ];
+            const idx = Math.min(Math.max(score - 1, 0), levels.length - 1);
+            bar.className = 'password-strength-bar ' + levels[idx].cls;
+            text.textContent = levels[idx].label;
+        }
+
+        // --- UTILITY: Button loading state ---
+        function setButtonLoading(btnId, isLoading) {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            btn.disabled = isLoading;
+            btn.style.opacity = isLoading ? '0.7' : '';
+            btn.style.cursor = isLoading ? 'not-allowed' : '';
+            if (isLoading) {
+                btn.dataset.originalText = btn.textContent;
+                btn.textContent = 'Chargement...';
+            } else {
+                btn.textContent = btn.dataset.originalText || btn.textContent;
+            }
+        }
+
+        // --- Screen history tracking ---
+        let previousScreen = 'screen-signup';
         // ══════════════════════════════════════════
         // SUPABASE INIT & AUTH LOGIC
         // ══════════════════════════════════════════
