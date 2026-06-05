@@ -1,5 +1,5 @@
         // --- Screen history tracking ---
-        let previousScreen = 'screen-signup';
+        var previousScreen = 'screen-signup';
         // ══════════════════════════════════════════
         // SUPABASE INIT & AUTH LOGIC
         // ══════════════════════════════════════════
@@ -150,29 +150,33 @@
                 return;
             }
 
-            // Check username
-            const { data: existingUser } = await sbClient.from('profiles').select('id').eq('username', username).single();
-            if (existingUser) {
-                document.getElementById('err-signup-username').textContent = "Ce nom d'utilisateur est déjà pris.";
-                return;
-            }
-
-            const { data, error } = await sbClient.auth.signUp({
-                email,
-                password,
-                options: {
-                    data: {
-                        username: username,
-                        avatar_id: selectedAvatar
-                    }
+            setButtonLoading('btn-signup-submit', true);
+            try {
+                // Check username
+                const { data: existingUser } = await sbClient.from('profiles').select('id').eq('username', username).single();
+                if (existingUser) {
+                    document.getElementById('err-signup-username').textContent = "Ce nom d'utilisateur est déjà pris.";
+                    return;
                 }
-            });
 
-            if (error) {
-                errGeneral.textContent = error.message;
-            } else {
-                // Assume email verification is required
-                showScreen('screen-verify-email');
+                const { data, error } = await sbClient.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            username: username,
+                            avatar_id: selectedAvatar
+                        }
+                    }
+                });
+
+                if (error) {
+                    errGeneral.textContent = error.message;
+                } else {
+                    showScreen('screen-verify-email');
+                }
+            } finally {
+                setButtonLoading('btn-signup-submit', false);
             }
         }
 
@@ -184,13 +188,18 @@
             const errGeneral = document.getElementById('err-login-general');
             errGeneral.textContent = '';
 
-            const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
+            setButtonLoading('btn-login-submit', true);
+            try {
+                const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
 
-            if (error) {
-                errGeneral.textContent = "Email ou mot de passe incorrect.";
-                if (error.message.includes('Email not confirmed')) {
-                    document.getElementById('login-resend-container').style.display = 'block';
+                if (error) {
+                    errGeneral.textContent = "Email ou mot de passe incorrect.";
+                    if (error.message.includes('Email not confirmed')) {
+                        document.getElementById('login-resend-container').style.display = 'block';
+                    }
                 }
+            } finally {
+                setButtonLoading('btn-login-submit', false);
             }
         }
 
@@ -224,12 +233,18 @@
             e.preventDefault();
             if (isAuthOnCooldown('forgot', 5)) { showToast('Merci de patienter avant de renvoyer.', 'info'); return; }
             const email = document.getElementById('forgot-email').value;
-            const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '#type=recovery' });
-            if (!error) {
-                document.getElementById('msg-forgot-success').textContent = "Lien envoyé ! Vérifiez vos emails.";
-                document.getElementById('msg-forgot-success').style.display = 'block';
-            } else {
-                document.getElementById('err-forgot-general').textContent = error.message;
+
+            setButtonLoading('btn-forgot-submit', true);
+            try {
+                const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '#type=recovery' });
+                if (!error) {
+                    document.getElementById('msg-forgot-success').textContent = "Lien envoyé ! Vérifiez vos emails.";
+                    document.getElementById('msg-forgot-success').style.display = 'block';
+                } else {
+                    document.getElementById('err-forgot-general').textContent = error.message;
+                }
+            } finally {
+                setButtonLoading('btn-forgot-submit', false);
             }
         }
 
@@ -242,13 +257,19 @@
                 document.getElementById('err-reset-confirm-password').textContent = "Les mots de passe ne correspondent pas.";
                 return;
             }
-            const { error } = await sbClient.auth.updateUser({ password: pwd });
-            if (!error) {
-                document.getElementById('msg-reset-success').textContent = "Mot de passe mis à jour !";
-                document.getElementById('msg-reset-success').style.display = 'block';
-                setTimeout(() => showScreen('screen-login'), 2000);
-            } else {
-                document.getElementById('err-reset-general').textContent = error.message;
+
+            setButtonLoading('btn-reset-submit', true);
+            try {
+                const { error } = await sbClient.auth.updateUser({ password: pwd });
+                if (!error) {
+                    document.getElementById('msg-reset-success').textContent = "Mot de passe mis à jour !";
+                    document.getElementById('msg-reset-success').style.display = 'block';
+                    setTimeout(() => showScreen('screen-login'), 2000);
+                } else {
+                    document.getElementById('err-reset-general').textContent = error.message;
+                }
+            } finally {
+                setButtonLoading('btn-reset-submit', false);
             }
         }
 
@@ -506,6 +527,12 @@
         // ══════════════════════════════════════════
         function showScreen(id) {
             log('showScreen called with id:', id);
+            // Track previous screen for smart back-navigation
+            const currentActive = document.querySelector('.screen.active');
+            if (currentActive && currentActive.id !== id) {
+                previousScreen = currentActive.id;
+            }
+
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             const el = document.getElementById(id);
             if (el) {
@@ -521,6 +548,25 @@
                 } else if (id === 'screen-profile-edit' && typeof prepareProfileEdit === 'function') {
                     prepareProfileEdit();
                 }
+
+                // Update document.title for screen reader announcement
+                const screenTitles = {
+                    'screen-home': 'Lexio — Accueil',
+                    'screen-login': 'Lexio — Connexion',
+                    'screen-signup': 'Lexio — Inscription',
+                    'screen-privacy': 'Lexio — Politique de confidentialité',
+                    'screen-profile-own': 'Lexio — Mon profil',
+                    'screen-profile-edit': 'Lexio — Modifier le profil',
+                    'screen-account-settings': 'Lexio — Paramètres',
+                    'screen-verb-home': 'Lexio — Verb Practice',
+                    'screen-verb-conj-select': 'Lexio — Conjugation Practice',
+                    'screen-verb-drill': 'Lexio — Conjugation Drill',
+                    'screen-tense-choice': 'Lexio — Tense Choice',
+                    'screen-verb-results': 'Lexio — Results',
+                    'screen-forgot-password': 'Lexio — Mot de passe oublié',
+                    'screen-reset-password': 'Lexio — Nouveau mot de passe',
+                };
+                document.title = screenTitles[id] || 'Lexio — Apprends l\'anglais';
             }
         }
 
@@ -591,6 +637,8 @@
         function updateProgress() {
             const pct = totalSteps > 0 ? Math.round((stepsCompleted / totalSteps) * 100) : 0;
             document.getElementById('progressBar').style.width = pct + '%';
+            const wrap = document.getElementById('header-progress-wrap');
+            if (wrap) wrap.setAttribute('aria-valuenow', pct);
         }
 
         function playAudio(slow = false, specificWord = null) {

@@ -1,19 +1,28 @@
         const DEBUG = false;
         function log() { if (DEBUG) console.log.apply(console, arguments); }
 
-        // --- Toast notification (replaces native alert) ---
+        // --- Toast notification (replaces native alert, single-toast stacking) ---
+        var _activeToast = null;
+        var _toastTimeout = null;
         function showToast(m, t) {
             t = t || 'info';
             var c = { success: 'var(--correct)', error: 'var(--wrong)', info: 'var(--accent)' };
             var b = { success: 'var(--correct-bg)', error: 'var(--wrong-bg)', info: 'var(--accent-light)' };
+            // Remove existing toast immediately
+            if (_activeToast) { _activeToast.remove(); _activeToast = null; }
+            if (_toastTimeout) { clearTimeout(_toastTimeout); _toastTimeout = null; }
             var el = document.createElement('div');
             el.textContent = m;
             el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:12px;font-size:0.9rem;font-weight:500;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.12);opacity:0;transition:opacity 0.3s;max-width:90vw;text-align:center;';
             el.style.background = b[t] || b.info;
             el.style.color = c[t] || c.info;
             document.body.appendChild(el);
+            _activeToast = el;
             requestAnimationFrame(function() { el.style.opacity = '1'; });
-            setTimeout(function() { el.style.opacity = '0'; setTimeout(function() { el.remove(); }, 300); }, 4000);
+            _toastTimeout = setTimeout(function() {
+                el.style.opacity = '0';
+                setTimeout(function() { if (_activeToast === el) _activeToast = null; el.remove(); }, 300);
+            }, 4000);
         }
 
         // --- Client-side rate limiting for auth forms ---
