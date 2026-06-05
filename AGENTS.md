@@ -333,4 +333,37 @@ This is a non-trivial refactor that requires care around shared state, DOM refer
 
 ---
 
-*Last updated: June 5, 2026 — after Performance pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
+## MODULE SPLIT (Performance — June 5, 2026)
+
+### What was done
+
+The monolithic ~7,000-line `index.html` was split into separate modules:
+
+| File | Lines | Content |
+|---|---|---|
+| `index.html` | 1,165 | HTML skeleton with `<link>` and `<script defer>` tags |
+| `css/style.css` | 1,989 | All CSS (extracted from `<style>` block) |
+| `js/utils.js` | 97 | Utility functions: `log()`, `showToast()`, `isAuthOnCooldown()`, `fetchWithRetry()`, `togglePasswordVisibility()`, `updatePasswordStrength()`, `setButtonLoading()` |
+| `js/verb-data.js` | 140 | Pure data: `IRREGULAR_PAST`, `IRREGULAR_PP`, `VERB_LISTS`, `TENSE_SENTENCE_BANK` |
+| `js/app.js` | 3,731 | All remaining logic: Supabase auth, screens, games, revision, verb practice logic |
+
+**Load order** (preserved by `defer`):
+1. Supabase CDN script (blocking, in `<head>`)
+2. `js/verb-data.js` — zero dependencies, pure data
+3. `js/utils.js` — depends only on DOM APIs
+4. `js/app.js` — depends on Supabase, verb-data, and utils
+
+**Critical CSS**: ~5 lines of essential styles (box-sizing reset, body font/background) are inlined in a `<style>` tag to prevent FOUC while the external stylesheet loads.
+
+### Conventions for future agents
+
+- **New JS code**: Add to `js/app.js` or create a new file in `js/` and add a `<script defer>` to `index.html`.
+- **New CSS code**: Add to `css/style.css`.
+- **New data objects**: Add to `js/verb-data.js` or create a new data file.
+- **New utility functions**: Add to `js/utils.js`.
+- **File order matters**: Scripts with `defer` execute in document order. Ensure dependency order when adding new scripts.
+- **No inline `<script>` or `<style>`**: Keep all CSS in `css/style.css` and all JS in `js/*.js`. The only exception is the critical CSS `<style>` block.
+
+---
+
+*Last updated: June 5, 2026 — after Module Split. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
