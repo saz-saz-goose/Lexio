@@ -150,7 +150,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" style="text-align: center; margin-bottom: 8px;">Choisis ton avatar</label>
+                    <div class="form-label" style="text-align: center; margin-bottom: 8px;">Choisis ton avatar</div>
         <div class="avatar-grid" id="signup-avatar-grid">
             <button aria-label="Avatar serpent" type="button" class="avatar-btn" onclick="selectAvatar('signup', 'snake')"
                 aria-label="Snake avatar" data-avatar="snake"><svg width="28" height="28"><use href="#avatar-snake"/></svg></button>
@@ -241,7 +241,7 @@
                     <div class="form-error" id="err-oauth-username" aria-live="polite"></div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" style="text-align: center; margin-bottom: 8px;">Choisis ton avatar</label>
+                    <div class="form-label" style="text-align: center; margin-bottom: 8px;">Choisis ton avatar</div>
                     <div class="avatar-grid" id="oauth-avatar-grid">
                         <button aria-label="Avatar serpent" type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'snake')" data-avatar="snake"><svg width="28" height="28"><use href="#avatar-snake"/></svg></button>
                         <button aria-label="Avatar dragon" type="button" class="avatar-btn" onclick="selectAvatar('oauth', 'dragon')" data-avatar="dragon"><svg width="28" height="28"><use href="#avatar-dragon"/></svg></button>
@@ -382,7 +382,7 @@
             <h2 class="section-title">Modifier le profil</h2>
             <form id="form-profile-edit" onsubmit="handleProfileEdit(event)" style="margin-top: 24px;">
                 <div class="form-group">
-                    <label class="form-label">Email <span
+                    <label class="form-label" for="edit-email">Email <span
                             style="font-size: 0.7rem; color: var(--ink-light); font-weight: 400;">(Non
                             modifiable)</span></label>
                     <input type="email" class="form-input" id="edit-email" disabled
@@ -397,7 +397,7 @@
                     <div class="form-error" id="err-edit-username" aria-live="polite"></div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" style="text-align: center; margin-bottom: 8px;">Choisis ton avatar</label>
+                    <div class="form-label" style="text-align: center; margin-bottom: 8px;">Choisis ton avatar</div>
                     <div class="avatar-grid" id="edit-avatar-grid">
                         <button aria-label="Avatar serpent" type="button" class="avatar-btn"
                             onclick="selectAvatar('edit', 'snake'); markUnsavedChanges();" data-avatar="snake"><svg width="28" height="28"><use href="#avatar-snake"/></svg></button>
