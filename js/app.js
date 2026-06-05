@@ -1529,6 +1529,12 @@
 
         function loadEx2GameWord() {
             if (ex2GameIndex >= ex2GameQueue.length) {
+                // Stop all running timers so they can't fire again and navigate away
+                ex2GameActive = false;
+                clearInterval(ex2GameTimerInterval);
+                clearInterval(ex2GameLoopInterval);
+                ex2GameTimerInterval = null;
+                ex2GameLoopInterval = null;
                 stepsCompleted++;
                 updateProgress();
                 const msgs = ["Now let's test your memory!", "Exercise time!", "Keep going!"];
