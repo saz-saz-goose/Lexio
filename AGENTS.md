@@ -167,6 +167,17 @@ npx serve .          # or: python -m http.server 8000
 
 ## RECENT CHANGES
 
+### Performance Pass (June 2026)
+
+| Change | Details |
+|---|---|
+| Font preconnect | Added `<link rel="preconnect">` for `fonts.googleapis.com` and `fonts.gstatic.com` (crossorigin) — reduces font load time by ~100ms |
+| display=swap | Already present on the Google Fonts `<link>` (confirmed) — prevents FOIT |
+
+### Known remaining performance items:
+- **Lazy-load verb data** — `IRREGULAR_PAST`, `IRREGULAR_PP`, `VERB_LISTS`, `TENSE_SENTENCE_BANK` (~15KB) are parsed on page load but only needed when verb practice is opened. Wrap in getter functions that initialize on first access.
+- **Single-file refactoring** — The ~6900-line `index.html` should eventually be split into separate CSS/JS/HTML modules. Currently deferred per user preference.
+
 ### Content & Copy Pass (June 2026)
 
 | Change | Details |
@@ -224,4 +235,4 @@ npx serve .          # or: python -m http.server 8000
 
 ---
 
-*Last updated: June 5, 2026 — after Content & Copy pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
+*Last updated: June 5, 2026 — after Performance pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
