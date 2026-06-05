@@ -206,10 +206,12 @@ npx serve .          # or: python -m http.server 8000
 | Screen history tracking | `previousScreen` global variable for smart back navigation (screen-privacy now returns to caller) |
 
 ### Known remaining interaction items:
-- `handleSignup`, `handleLogin`, `handleForgotPassword` need `setButtonLoading()` calls integrated into their function bodies
-- `screen-privacy` back button still hard-coded to `screen-signup` — needs `previousScreen` integration
-- `showScreen` function needs to track `previousScreen` on each call
-- `handlePasswordReset` (reset form submission) needs loading state too
+
+_All completed by Claude (June 5, 2026):_
+- ~~`handleSignup`, `handleLogin`, `handleForgotPassword` need `setButtonLoading()` calls~~ ✅
+- ~~`screen-privacy` back button still hard-coded to `screen-signup`~~ ✅ Now uses `previousScreen`
+- ~~`showScreen` function needs to track `previousScreen`~~ ✅ Tracks active screen on every call
+- ~~`handlePasswordReset` needs loading state~~ ✅
 
 ### Design Polish Pass (June 2026)
 
@@ -275,7 +277,7 @@ npx serve .          # or: python -m http.server 8000
 
 ### Known remaining items
 
-- **Toast stacking**: Rapid successive `showToast()` calls create overlapping toasts. Consider tracking a single active toast element and replacing its content.
+- ~~**Toast stacking**: Rapid successive `showToast()` calls create overlapping toasts.~~ ✅ Fixed by Claude (June 5, 2026) — `showToast()` now tracks `_activeToast` and removes the previous toast before creating a new one.
 - **Cooldown on failure**: `isAuthOnCooldown` sets the timestamp before the async call completes. A failed login (typo) still incurs the full cooldown. Consider only setting cooldown after a successful attempt if this proves frustrating in practice.
 - **Generic fetch calls not retried**: Line ~3850 (`const response = await fetch(url)`) and line ~5584 (`fetch(testOutCourseKey)`) are not wrapped — these are Supabase/internal calls where retry may not be appropriate.
 - **Supabase RLS verification**: Confirm RLS is enabled on the Supabase project dashboard for all tables.
@@ -359,4 +361,31 @@ The monolithic ~7,000-line `index.html` was split into separate modules:
 
 ---
 
-*Last updated: June 5, 2026 — after Module Split. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
+## REMAINING ITEMS PASS (Claude — June 5, 2026)
+
+### What was done
+
+| Change | Files | Details |
+|---|---|---|
+| `setButtonLoading()` wired in | `js/app.js` | All 4 auth handlers (`handleSignup`, `handleLogin`, `handleForgotPassword`, `handleResetPassword`) now wrap their async Supabase calls in `try/finally` with `setButtonLoading(btnId, true/false)`. Buttons show "Chargement..." and are disabled during requests. |
+| `previousScreen` tracking | `js/app.js` | `showScreen()` now records the currently active screen in `previousScreen` (declared as `var` for inline handler access) before switching. |
+| Privacy back button | `index.html` | `screen-privacy` back button changed from `showScreen('screen-signup')` to `showScreen(previousScreen \|\| 'screen-signup')` — returns to whatever screen the user came from. |
+| `document.title` updates | `js/app.js` | `showScreen()` now updates `document.title` with a screen-specific title (e.g. "Lexio — Connexion", "Lexio — Verb Practice") so screen readers announce navigation changes. |
+| Toast stacking fix | `js/utils.js` | `showToast()` now tracks `_activeToast` and `_toastTimeout`. A new toast removes the previous one immediately instead of stacking. |
+| Progress bar ARIA | `index.html` | `#header-progress-wrap` now has `role="progressbar"`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, and `aria-label`. |
+| Progress bar update | `js/app.js` | `updateProgress()` now sets `aria-valuenow` on the progress bar wrapper on each update. |
+| Score badge ARIA | `index.html` | `#drill-score-badge` and `#tc-score-badge` now have `role="status"` and `aria-live="polite"` for screen reader announcements. |
+| Timer ARIA | `index.html` | `#drill-timer` now has `role="timer"`, `aria-live="off"` (to avoid constant announcements), and `aria-label="Temps restant"`. |
+
+### Known remaining items (lower priority)
+
+- `🔥`, `💪`, `📚` emojis still used in non-avatar contexts (streak, results, topic icons) — lower priority than avatar SVGs
+- `getAvatarIconHTML` is redundant with `getAvatarEmoji` — consolidate when convenient
+- `.avatar-btn` `font-size: 1.5rem` is dead CSS after SVG migration — clean up
+- Cooldown on auth failure: `isAuthOnCooldown` sets timestamp before async completes, so a typo still incurs cooldown
+- Generic Supabase/internal fetch calls not wrapped in `fetchWithRetry` — intentional, retry may not be appropriate
+- Supabase RLS verification still needed on dashboard
+
+---
+
+*Last updated: June 5, 2026 — after Remaining Items Pass. Maintained by Buffy (Codebuff), Claude, and Antigravity.*
