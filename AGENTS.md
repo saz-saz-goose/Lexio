@@ -297,38 +297,31 @@ npx serve .          # or: python -m http.server 8000
 - **Google Fonts preconnect hints**: `<link rel="preconnect">` for `fonts.googleapis.com` and `fonts.gstatic.com` (with `crossorigin`) added to `<head>`. Reduces font download latency by opening the connection early.
 - **`display=swap` already present**: Confirmed from Design Polish pass — prevents FOIT (Flash of Invisible Text) by showing fallback text until the web font loads.
 
-### Remaining: lazy-load verb practice data
+### Remaining: single-file split (future milestone) ✅ DONE (June 5, 2026)
 
-`IRREGULAR_PAST`, `IRREGULAR_PP`, `VERB_LISTS`, and `TENSE_SENTENCE_BANK` are large inline JS objects (~200 lines, ~15KB) initialized at parse time. They are only needed when the user opens the verb practice section. Convert them to lazy-loaded getter functions:
-
-```js
-var _irregularPast = null;
-function getIrregularPast() {
-    if (!_irregularPast) _irregularPast = { /* ... data ... */ };
-    return _irregularPast;
-}
-```
-
-Then replace direct references (`IRREGULAR_PAST[v]`, `VERB_LISTS.regular[level]`, etc.) with getter calls (`getIrregularPast()[v]`, `getVerbLists().regular[level]`). This defers ~15KB of JS parsing until the verb practice screen is first opened.
-
-### Remaining: single-file split (future milestone)
-
-The entire app — CSS, HTML, 4000+ lines of JS, game logic, conjugation data, sentence banks — lives in one ~7,000-line `index.html`. Splitting into modules would improve load time and maintainability:
-
+The monolithic ~7,000-line `index.html` has been split into separate modules:
 - `css/style.css` — all styles
-- `js/auth.js` — Supabase auth logic
-- `js/verb-data.js` — `IRREGULAR_PAST`, `IRREGULAR_PP`, `VERB_LISTS`, `TENSE_SENTENCE_BANK`
-- `js/verb-practice.js` — verb conjugation and tense practice logic
-- `js/games.js` — Whack-a-Mole, Tap the Translation, etc.
-- `js/revision.js` — course revision logic
+- `js/utils.js` — utility functions (log, showToast, isAuthOnCooldown, fetchWithRetry, etc.)
+- `js/verb-data.js` — lazy-loaded verb data behind getter functions
+- `js/app.js` — all remaining logic (auth, screens, games, revision, verb practice)
+- `index.html` — HTML skeleton with `<link>` and `<script defer>` tags
 
-This is a non-trivial refactor that requires care around shared state, DOM references, and event handlers. Marked as a future milestone — do not attempt without explicit user request.
+See the MODULE SPLIT section below for details.
 
 ### Conventions for future agents
 
-- **New data objects**: Always lazy-load large data objects (verb lists, sentence banks, config) behind getter functions. Never initialize them at parse time.
+- **New data objects**: Always lazy-load large data objects behind getter functions. Pattern:
+  ```js
+  var _cached = null;
+  function getData() {
+      if (!_cached) _cached = { /* expensive data */ };
+      return _cached;
+  }
+  ```
+  Never initialize large data at parse time — defer until first access.
+- **New computed derivations**: If a `Set`, `Map`, or other derived structure depends on lazy-loaded data (like `ALL_IRREGULAR_VERBS` from `getVerbLists()`), make it lazy too — otherwise the derivation forces the source data to load immediately.
 - **Font loading**: Keep the preconnect hints. For any new third-party font or CDN resource, add a `<link rel="preconnect">`.
-- **New features**: If adding significant new functionality, consider creating a separate `.js` file rather than appending to `index.html`.
+- **New features**: If adding significant new functionality, create a new file in `js/` and add a `<script defer>` to `index.html`. Do not append to `js/app.js` indefinitely.
 - **`loading="lazy"`**: If images are ever added, always include `loading="lazy"` on below-the-fold images.
 
 ---
