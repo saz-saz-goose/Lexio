@@ -1204,7 +1204,7 @@
             <div id="reading-ex-find" style="display:none;">
                 <div style="font-size:0.95rem; margin-bottom:8px; color:var(--ink-light);">Find the English translation for:</div>
                 <div id="reading-find-question" style="font-size:1.2rem; font-weight:600; margin-bottom:16px; color:var(--accent);"></div>
-                <input type="text" id="reading-find-input" class="conj-input" placeholder="Type or paste here..." autocomplete="off" style="width:100%; font-size:1rem; padding:10px; margin-bottom:12px;">
+                <input type="text" id="reading-find-input" class="conj-input" placeholder="Type or paste here..." autocomplete="off" onkeydown="if(event.key==='Enter') checkReadingFind()" style="width:100%; font-size:1rem; padding:10px; margin-bottom:12px;">
                 <button class="btn-primary" onclick="checkReadingFind()">Check</button>
             </div>
 

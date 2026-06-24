@@ -3670,7 +3670,6 @@ async function loadReadingData() {
     if (readingTextsData.length > 0) return;
     try {
         const response = await fetchWithRetry('reading-texts/a1-texts.json');
-        if (!response.ok) throw new Error("Failed to load reading texts");
         readingTextsData = await response.json();
     } catch (e) {
         console.error("Error loading reading data", e);
@@ -3679,9 +3678,7 @@ async function loadReadingData() {
 }
 
 async function openReadingMenu() {
-    showScreen('screen-home'); // temp switch to avoid glitch
-    
-    // Show spinner if needed
+    // Show spinner immediately on the reading menu screen (no home-screen flash)
     const grid = document.getElementById('reading-menu-grid');
     grid.innerHTML = `<div style="text-align:center; padding:20px; color:var(--ink-light);"><div class="spinner" style="width:28px;height:28px;border-width:3px;margin-bottom:12px;"></div>Loading texts...</div>`;
     showScreen('screen-reading-menu');
@@ -3696,7 +3693,7 @@ async function openReadingMenu() {
         
         card.innerHTML = `
             <div class="course-card-top">
-                <div class="course-icon">??</div>
+                <div class="course-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
                 <div style="flex:1;">
                     <div class="course-title">${text.title}</div>
                     <div class="course-stats" style="color:var(--ink-light);">A1 Level</div>
