@@ -3642,3 +3642,278 @@
             console.error('initAuth uncaught error:', err);
             showScreen('screen-login');
         });
+
+// ==========================================
+// READING MODULE
+// ==========================================
+
+let readingTextsData = [];
+let currentReadingSession = null; // { textData, phase, exIndex, correctCount, totalQuestions, currentQuestionObj }
+
+async function loadReadingData() {
+    if (readingTextsData.length > 0) return;
+    try {
+        const response = await fetchWithRetry('reading-texts/a1-texts.json');
+        if (!response.ok) throw new Error("Failed to load reading texts");
+        readingTextsData = await response.json();
+    } catch (e) {
+        console.error("Error loading reading data", e);
+        alert("Failed to load reading exercises.");
+    }
+}
+
+async function openReadingMenu() {
+    showScreen('screen-home'); // temp switch to avoid glitch
+    
+    // Show spinner if needed
+    const grid = document.getElementById('reading-menu-grid');
+    grid.innerHTML = `<div style="text-align:center; padding:20px; color:var(--ink-light);"><div class="spinner" style="width:28px;height:28px;border-width:3px;margin-bottom:12px;"></div>Loading texts...</div>`;
+    showScreen('screen-reading-menu');
+    
+    await loadReadingData();
+    
+    grid.innerHTML = '';
+    readingTextsData.forEach(text => {
+        const card = document.createElement('div');
+        card.className = 'course-card';
+        card.onclick = () => startReadingSession(text.id);
+        
+        card.innerHTML = `
+            <div class="course-card-top">
+                <div class="course-icon">??</div>
+                <div style="flex:1;">
+                    <div class="course-title">${text.title}</div>
+                    <div class="course-stats" style="color:var(--ink-light);">A1 Level</div>
+                </div>
+            </div>
+            <div class="course-progress-bar">
+                <div class="course-progress-fill" style="width: 0%;"></div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function startReadingSession(textId) {
+    const textData = readingTextsData.find(t => t.id === textId);
+    if (!textData) return;
+    
+    currentReadingSession = {
+        textData: textData,
+        phase: 0, // 0 = TF, 1 = Find, 2 = Comp
+        exIndex: 0,
+        correctCount: 0,
+        score: 0,
+        totalQuestions: textData.exercises.tf.length + textData.exercises.find_translation.length + textData.exercises.completion.length,
+        currentQuestionObj: null
+    };
+    
+    document.getElementById('reading-text-title').textContent = textData.title;
+    document.getElementById('reading-text-content').textContent = textData.content;
+    document.getElementById('reading-score-badge').textContent = `0 pts`;
+    
+    // Reset UI
+    document.getElementById('reading-exercise-container').style.display = 'none';
+    document.getElementById('reading-start-btn').style.display = 'flex';
+    document.getElementById('reading-feedback').className = 'feedback-banner';
+    document.getElementById('reading-next-btn').classList.add('hidden');
+    
+    showScreen('screen-reading-view');
+}
+
+function startReadingExercises() {
+    document.getElementById('reading-start-btn').style.display = 'none';
+    document.getElementById('reading-exercise-container').style.display = 'block';
+    nextReadingExercise();
+}
+
+function nextReadingExercise() {
+    const s = currentReadingSession;
+    document.getElementById('reading-feedback').className = 'feedback-banner';
+    document.getElementById('reading-next-btn').classList.add('hidden');
+    
+    // Hide all exercise UIs
+    document.getElementById('reading-ex-tf').style.display = 'none';
+    document.getElementById('reading-ex-find').style.display = 'none';
+    document.getElementById('reading-ex-comp').style.display = 'none';
+    
+    // Determine current phase
+    if (s.phase === 0) {
+        if (s.exIndex >= s.textData.exercises.tf.length) {
+            s.phase++;
+            s.exIndex = 0;
+            return nextReadingExercise();
+        }
+        setupReadingTF();
+    } else if (s.phase === 1) {
+        if (s.exIndex >= s.textData.exercises.find_translation.length) {
+            s.phase++;
+            s.exIndex = 0;
+            return nextReadingExercise();
+        }
+        setupReadingFind();
+    } else if (s.phase === 2) {
+        if (s.exIndex >= s.textData.exercises.completion.length) {
+            return showReadingResults();
+        }
+        setupReadingComp();
+    }
+}
+
+function setupReadingTF() {
+    const s = currentReadingSession;
+    const q = s.textData.exercises.tf[s.exIndex];
+    s.currentQuestionObj = q;
+    
+    document.getElementById('reading-ex-header').textContent = "Part 1: True or False?";
+    document.getElementById('reading-tf-question').textContent = q.question;
+    
+    // Enable buttons
+    const btns = document.querySelectorAll('#reading-ex-tf .option-btn');
+    btns.forEach(b => {
+        b.classList.remove('correct', 'incorrect');
+        b.disabled = false;
+    });
+    
+    document.getElementById('reading-ex-tf').style.display = 'block';
+}
+
+function checkReadingTF(userChoice) {
+    const s = currentReadingSession;
+    const q = s.currentQuestionObj;
+    
+    // Disable buttons
+    const btns = document.querySelectorAll('#reading-ex-tf .option-btn');
+    btns.forEach(b => b.disabled = true);
+    
+    const isCorrect = userChoice === q.answer;
+    const feedback = document.getElementById('reading-feedback');
+    
+    if (isCorrect) {
+        s.correctCount++;
+        s.score += 10;
+        feedback.className = 'feedback-banner show correct';
+        feedback.textContent = "Correct! Well done.";
+        playSound('correct');
+    } else {
+        feedback.className = 'feedback-banner show incorrect';
+        feedback.textContent = `Incorrect. The answer is ${q.answer ? 'True' : 'False'}.`;
+        playSound('incorrect');
+    }
+    
+    document.getElementById('reading-score-badge').textContent = `${s.score} pts`;
+    document.getElementById('reading-next-btn').classList.remove('hidden');
+    s.exIndex++;
+}
+
+function setupReadingFind() {
+    const s = currentReadingSession;
+    const q = s.textData.exercises.find_translation[s.exIndex];
+    s.currentQuestionObj = q;
+    
+    document.getElementById('reading-ex-header').textContent = "Part 2: Find the Translation";
+    document.getElementById('reading-find-question').textContent = `"${q.french}"`;
+    
+    const input = document.getElementById('reading-find-input');
+    input.value = '';
+    input.disabled = false;
+    
+    document.getElementById('reading-ex-find').style.display = 'block';
+    setTimeout(() => input.focus(), 100);
+}
+
+function checkReadingFind() {
+    const s = currentReadingSession;
+    const q = s.currentQuestionObj;
+    
+    const input = document.getElementById('reading-find-input');
+    const userVal = input.value.trim().toLowerCase();
+    const correctVal = q.english.toLowerCase();
+    
+    // Simple string cleaning (remove punctuation)
+    const clean = str => str.replace(/[.,!?]/g, '').trim();
+    
+    const isCorrect = clean(userVal) === clean(correctVal);
+    const feedback = document.getElementById('reading-feedback');
+    
+    input.disabled = true;
+    
+    if (isCorrect) {
+        s.correctCount++;
+        s.score += 20;
+        feedback.className = 'feedback-banner show correct';
+        feedback.textContent = "Spot on!";
+        playSound('correct');
+    } else {
+        feedback.className = 'feedback-banner show incorrect';
+        feedback.textContent = `The correct phrase is: "${q.english}"`;
+        playSound('incorrect');
+    }
+    
+    document.getElementById('reading-score-badge').textContent = `${s.score} pts`;
+    document.getElementById('reading-next-btn').classList.remove('hidden');
+    s.exIndex++;
+}
+
+function setupReadingComp() {
+    const s = currentReadingSession;
+    const q = s.textData.exercises.completion[s.exIndex];
+    s.currentQuestionObj = q;
+    
+    document.getElementById('reading-ex-header').textContent = "Part 3: Complete the Sentence";
+    document.getElementById('reading-comp-question').innerHTML = q.text.replace('...', `<span style="border-bottom: 2px solid var(--accent); padding: 0 10px; color: var(--accent); display:inline-block; min-width:40px;">?</span>`);
+    
+    const optionsContainer = document.getElementById('reading-comp-options');
+    optionsContainer.innerHTML = '';
+    
+    q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.onclick = () => checkReadingComp(opt, btn);
+        optionsContainer.appendChild(btn);
+    });
+    
+    document.getElementById('reading-ex-comp').style.display = 'block';
+}
+
+function checkReadingComp(userChoice, btnElement) {
+    const s = currentReadingSession;
+    const q = s.currentQuestionObj;
+    
+    const btns = document.querySelectorAll('#reading-comp-options .option-btn');
+    btns.forEach(b => b.disabled = true);
+    
+    const isCorrect = userChoice === q.answer;
+    const feedback = document.getElementById('reading-feedback');
+    
+    if (isCorrect) {
+        btnElement.classList.add('correct');
+        s.correctCount++;
+        s.score += 15;
+        feedback.className = 'feedback-banner show correct';
+        feedback.textContent = "Correct!";
+        playSound('correct');
+    } else {
+        btnElement.classList.add('incorrect');
+        // highlight correct one
+        btns.forEach(b => {
+            if (b.textContent === q.answer) b.classList.add('correct');
+        });
+        feedback.className = 'feedback-banner show incorrect';
+        feedback.textContent = "Oops, wrong word!";
+        playSound('incorrect');
+    }
+    
+    document.getElementById('reading-score-badge').textContent = `${s.score} pts`;
+    document.getElementById('reading-next-btn').classList.remove('hidden');
+    s.exIndex++;
+}
+
+function showReadingResults() {
+    const s = currentReadingSession;
+    document.getElementById('reading-results-score').textContent = s.score;
+    document.getElementById('reading-results-correct').textContent = `${s.correctCount}/${s.totalQuestions}`;
+    showScreen('screen-reading-results');
+    playSound('lesson_complete');
+}

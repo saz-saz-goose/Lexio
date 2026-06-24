@@ -1,0 +1,107 @@
+﻿[
+  {
+    "id": "a1-daily-routine",
+    "title": "My Daily Routine",
+    "content": "My name is Tom. I get up at 7 o'clock every morning. I eat toast and drink coffee for breakfast. I go to work by bus. I work in an office. At 1 o'clock, I eat a sandwich for lunch. I finish work at 5 o'clock and I go home. In the evening, I watch TV and I read a book. I go to bed at 10 o'clock.",
+    "exercises": {
+      "tf": [
+        {"question": "Tom gets up at 8 o'clock.", "answer": false},
+        {"question": "He eats a sandwich for lunch.", "answer": true},
+        {"question": "He goes to work by car.", "answer": false}
+      ],
+      "find_translation": [
+        {"french": "Je me lève", "english": "I get up"},
+        {"french": "le soir", "english": "In the evening"},
+        {"french": "Je vais au lit", "english": "I go to bed"}
+      ],
+      "completion": [
+        {"text": "For breakfast, he eats ... and drinks coffee.", "options": ["eggs", "toast", "fruit"], "answer": "toast"},
+        {"text": "He finishes work at ... o'clock.", "options": ["5", "6", "7"], "answer": "5"}
+      ]
+    }
+  },
+  {
+    "id": "a1-supermarket",
+    "title": "A Visit to the Supermarket",
+    "content": "Today is Saturday. Sarah goes to the supermarket because she has no food in her fridge. She buys some apples, bananas, and a big bottle of water. She also buys some cheese and bread for lunch. She pays at the cash register. The food costs twenty euros. She puts the food in her bag and walks home.",
+    "exercises": {
+      "tf": [
+        {"question": "Sarah goes to the supermarket on Sunday.", "answer": false},
+        {"question": "She buys a big bottle of water.", "answer": true},
+        {"question": "The food costs thirty euros.", "answer": false}
+      ],
+      "find_translation": [
+        {"french": "Aujourd'hui, c'est", "english": "Today is"},
+        {"french": "Elle achète aussi", "english": "She also buys"},
+        {"french": "dans son sac", "english": "in her bag"}
+      ],
+      "completion": [
+        {"text": "She has no food in her ...", "options": ["car", "bag", "fridge"], "answer": "fridge"},
+        {"text": "She buys cheese and ... for lunch.", "options": ["bread", "apples", "bananas"], "answer": "bread"}
+      ]
+    }
+  },
+  {
+    "id": "a1-my-family",
+    "title": "My Family",
+    "content": "Hello! I am Emma. I have a small family. My husband is John. He is a teacher. We have two children. Their names are Leo and Mia. Leo is five years old and Mia is two years old. We also have a dog. His name is Max. Max is a big black dog. We love our family very much.",
+    "exercises": {
+      "tf": [
+        {"question": "Emma has a big family.", "answer": false},
+        {"question": "John is a teacher.", "answer": true},
+        {"question": "They have two dogs.", "answer": false}
+      ],
+      "find_translation": [
+        {"french": "Nous avons", "english": "We have"},
+        {"french": "Ils s'appellent", "english": "Their names are"},
+        {"french": "Nous aimons beaucoup", "english": "We love"}
+      ],
+      "completion": [
+        {"text": "Emma's husband is a ...", "options": ["doctor", "teacher", "farmer"], "answer": "teacher"},
+        {"text": "Leo is ... years old.", "options": ["two", "five", "seven"], "answer": "five"}
+      ]
+    }
+  },
+  {
+    "id": "a1-my-house",
+    "title": "My House",
+    "content": "I live in a small house. The house is white with a red door. Inside, there is a living room, a kitchen, a bathroom, and two bedrooms. The living room has a big sofa and a television. The kitchen is small but it has a big window. My bedroom has a bed and a desk. I like my house because it is very comfortable.",
+    "exercises": {
+      "tf": [
+        {"question": "The house is big.", "answer": false},
+        {"question": "The house has a red door.", "answer": true},
+        {"question": "There are three bedrooms.", "answer": false}
+      ],
+      "find_translation": [
+        {"french": "J'habite", "english": "I live"},
+        {"french": "il y a", "english": "there is"},
+        {"french": "parce que c'est", "english": "because it is"}
+      ],
+      "completion": [
+        {"text": "The living room has a big ... and a television.", "options": ["table", "sofa", "bed"], "answer": "sofa"},
+        {"text": "The kitchen has a big ...", "options": ["door", "window", "clock"], "answer": "window"}
+      ]
+    }
+  },
+  {
+    "id": "a1-weekend-plans",
+    "title": "My Weekend Plans",
+    "content": "This weekend, I am very busy. On Saturday morning, I play tennis with my friend Paul. Then, I have lunch with my parents. On Saturday evening, I go to the cinema to watch a new movie. On Sunday, I clean my house. In the afternoon, I read a book and listen to music. I do not work on Sunday.",
+    "exercises": {
+      "tf": [
+        {"question": "The person plays tennis on Sunday.", "answer": false},
+        {"question": "He has lunch with his parents.", "answer": true},
+        {"question": "He works on Sunday.", "answer": false}
+      ],
+      "find_translation": [
+        {"french": "Ce week-end", "english": "This weekend"},
+        {"french": "avec mon ami", "english": "with my friend"},
+        {"french": "Je ne travaille pas", "english": "I do not work"}
+      ],
+      "completion": [
+        {"text": "On Saturday morning, he plays ... with Paul.", "options": ["football", "tennis", "basketball"], "answer": "tennis"},
+        {"text": "On Saturday evening, he goes to the ...", "options": ["cinema", "park", "supermarket"], "answer": "cinema"}
+      ]
+    }
+  }
+]
