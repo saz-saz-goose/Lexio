@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lexio â€” Apprends l'anglais</title>
+    <title>Lexio — Apprends l'anglais</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -36,11 +36,11 @@
     <header class="app-header">
         <div class="logo-area">
             <button class="back-home-btn hidden" id="header-home-btn" onclick="goToHome()">
-                â† Accueil
+                ← Accueil
             </button>
             <div class="logo" id="header-logo">Lexio</div>
         </div>
-        <div class="progress-bar-wrap" id="header-progress-wrap" style="display:none; flex: 1; margin: 0 15px;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progression de la leÃ§on">
+        <div class="progress-bar-wrap" id="header-progress-wrap" style="display:none; flex: 1; margin: 0 15px;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progression de la leçon">
             <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
         </div>
         <div class="lives-container" id="lives-container" style="display:none;"></div>
@@ -51,9 +51,9 @@
     </header>
 
     <main id="main-content">
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    <!-- ══════════════════════════════════════════
      SCREEN: LOADING SCREEN
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-loading">
         <div class="card" style="text-align: center; padding: 40px 20px;">
             <div class="logo" style="font-size: 2.5rem; margin-bottom: 20px;">Lexio</div>
@@ -62,9 +62,9 @@
         </div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    <!-- ══════════════════════════════════════════
      SCREEN: ERROR SCREEN (CORS / HTTP)
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-error">
         <div class="card" style="border-color: var(--wrong); background: var(--card); padding: 32px 24px;">
             <div class="phase-tag" style="background: var(--wrong-bg); color: var(--wrong); margin-bottom: 20px;">Erreur
@@ -72,11 +72,11 @@
                 chargement</div>
             <div class="word-display"
                 style="font-size: 2rem; color: var(--wrong); margin-bottom: 12px; font-family: 'Playfair Display', serif;">
-                Impossible de charger les donnÃ©es</div>
+                Impossible de charger les données</div>
             <p class="section-sub" style="text-align: left; margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6;">
-                Pour des raisons de sÃ©curitÃ©, les navigateurs bloquent la lecture de fichiers externes (politique CORS)
+                Pour des raisons de sécurité, les navigateurs bloquent la lecture de fichiers externes (politique CORS)
                 lorsque
-                l'application est ouverte directement comme un fichier local (adresse commenÃ§ant par
+                l'application est ouverte directement comme un fichier local (adresse commençant par
                 <code>file://</code>).
             </p>
             <div class="divider" style="margin-bottom: 16px;"></div>
@@ -86,26 +86,26 @@
             <ul class="instructions-list">
                 <li><strong>Avec VS Code :</strong> Ouvrez le dossier du projet dans VS Code, installez l'extension
                     <strong>Live
-                        Server</strong>, puis cliquez sur <strong>Go Live</strong> en bas Ã  droite.</li>
+                        Server</strong>, puis cliquez sur <strong>Go Live</strong> en bas à droite.</li>
                 <li><strong>Avec Python :</strong> Ouvrez votre console dans ce dossier et tapez
                     <code>python -m http.server</code>. Ouvrez ensuite <code>http://localhost:8000</code> dans votre
                     navigateur.
                 </li>
                 <li><strong>Consultez le fichier :</strong> <code>GUIDE-SERVEUR-LOCAL.md</code> dans le dossier du
                     projet pour
-                    plus de dÃ©tails.</li>
+                    plus de détails.</li>
             </ul>
-            <button class="btn-primary" onclick="handleRetry()">RÃ©essayer</button>
+            <button class="btn-primary" onclick="handleRetry()">Réessayer</button>
         </div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    <!-- ══════════════════════════════════════════
      SCREEN: AUTH & PROFILE
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-signup">
         <div class="card">
             <div class="logo" style="text-align: center; font-size: 2rem; margin-bottom: 24px;">Lexio</div>
-            <h2 class="section-title">CrÃ©er un compte</h2>
+            <h2 class="section-title">Créer un compte</h2>
             <div class="section-sub" style="margin-bottom: 24px;">Inscris-toi pour sauvegarder ta progression</div>
 
 
@@ -166,19 +166,19 @@
                     <div class="form-error" id="err-signup-avatar" aria-live="polite" style="text-align: center;"></div>
                 </div>
 
-                <button type="submit" class="btn-primary" id="btn-signup-submit" style="margin-top: 16px;">CrÃ©er mon
+                <button type="submit" class="btn-primary" id="btn-signup-submit" style="margin-top: 16px;">Créer mon
                     compte</button>
                 <div class="form-error" id="err-signup-general" style="text-align: center; margin-top: 12px;"
                     aria-live="polite"></div>
             </form>
 
             <div style="text-align: center; margin-top: 24px;">
-                <span style="font-size: 0.85rem; color: var(--ink-light);">DÃ©jÃ  un compte ?</span>
+                <span style="font-size: 0.85rem; color: var(--ink-light);">Déjà un compte ?</span>
                 <button class="auth-link" onclick="showScreen('screen-login')">Se connecter</button>
             </div>
             <div style="text-align: center; margin-top: 12px;">
                 <button class="auth-link" style="font-size: 0.75rem; color: var(--ink-light);"
-                    onclick="showScreen('screen-privacy')">Politique de confidentialitÃ©</button>
+                    onclick="showScreen('screen-privacy')">Politique de confidentialité</button>
             </div>
         </div>
     </div>
@@ -209,7 +209,7 @@
 
                 <div style="text-align: right; margin-bottom: 16px;">
                     <button type="button" class="auth-link" onclick="showScreen('screen-forgot-password')">Mot de passe
-                        oubliÃ© ?</button>
+                        oublié ?</button>
                 </div>
 
                 <button type="submit" class="btn-primary" id="btn-login-submit">Se connecter</button>
@@ -231,7 +231,7 @@
 
     <div class="screen" id="screen-oauth-setup">
         <div class="card">
-            <h2 class="section-title">DerniÃ¨re Ã©tape</h2>
+            <h2 class="section-title">Dernière étape</h2>
             <div class="section-sub" style="margin-bottom: 24px;">Choisis ton profil pour terminer l'inscription.</div>
             <form id="form-oauth-setup" onsubmit="handleOAuthSetup(event)">
                 <div class="form-group">
@@ -261,11 +261,11 @@
     <div class="screen" id="screen-verify-email">
         <div class="card" style="text-align: center;">
             <div class="complete-icon" style="margin-bottom: 16px;"><svg width="48" height="48" style="color:var(--accent)"><use href="#icon-mail"/></svg></div>
-            <h2 class="section-title">VÃ©rifie tes emails</h2>
+            <h2 class="section-title">Vérifie tes emails</h2>
             <div class="section-sub" id="verify-email-msg" style="margin-top: 12px; margin-bottom: 24px;">
-                Nous t'avons envoyÃ© un lien de confirmation. Clique dessus pour activer ton compte.
+                Nous t'avons envoyé un lien de confirmation. Clique dessus pour activer ton compte.
             </div>
-            <button class="btn-primary" onclick="showScreen('screen-login')">Retour Ã  la connexion</button>
+            <button class="btn-primary" onclick="showScreen('screen-login')">Retour à la connexion</button>
         </div>
     </div>
 
@@ -274,22 +274,22 @@
             <div class="complete-icon" style="margin-bottom: 16px;"><svg width="48" height="48" style="color:var(--wrong)"><use href="#icon-warning"/></svg></div>
             <h2 class="section-title">Lien invalide</h2>
             <div class="section-sub" style="margin-top: 12px; margin-bottom: 24px;">
-                Ce lien de confirmation est expirÃ© ou invalide.
+                Ce lien de confirmation est expiré ou invalide.
             </div>
             <button class="btn-primary" id="btn-resend-link" onclick="resendVerificationEmail()">Renvoyer l'email de
                 confirmation</button>
             <div class="section-sub" id="msg-resend-success"
                 style="margin-top: 12px; color: var(--correct); display: none;"></div>
-            <button class="auth-link" style="margin-top: 16px;" onclick="showScreen('screen-login')">Retour Ã  la
+            <button class="auth-link" style="margin-top: 16px;" onclick="showScreen('screen-login')">Retour à la
                 connexion</button>
         </div>
     </div>
 
     <div class="screen" id="screen-forgot-password">
         <div class="card">
-            <h2 class="section-title">Mot de passe oubliÃ©</h2>
+            <h2 class="section-title">Mot de passe oublié</h2>
             <div class="section-sub" style="margin-bottom: 24px;">Saisis ton email pour recevoir un lien de
-                rÃ©initialisation.</div>
+                réinitialisation.</div>
             <form id="form-forgot-password" onsubmit="handleForgotPassword(event)">
                 <div class="form-group">
                     <label class="form-label" for="forgot-email">Email</label>
@@ -301,7 +301,7 @@
                 <div class="form-error" id="err-forgot-general" style="text-align: center; margin-top: 12px;"></div>
             </form>
             <div style="text-align: center; margin-top: 24px;">
-                <button class="auth-link" onclick="showScreen('screen-login')">Retour Ã  la connexion</button>
+                <button class="auth-link" onclick="showScreen('screen-login')">Retour à la connexion</button>
             </div>
         </div>
     </div>
@@ -331,7 +331,7 @@
                     </div>
                     <div class="form-error" id="err-reset-confirm-password" aria-live="polite"></div>
                 </div>
-                <button type="submit" class="btn-primary" id="btn-reset-submit">Mettre Ã  jour le mot de passe</button>
+                <button type="submit" class="btn-primary" id="btn-reset-submit">Mettre à jour le mot de passe</button>
                 <div class="section-sub" id="msg-reset-success"
                     style="margin-top: 12px; color: var(--correct); display: none;"></div>
                 <div class="form-error" id="err-reset-general" style="text-align: center; margin-top: 12px;"></div>
@@ -342,7 +342,7 @@
     <!-- Profile & Settings Screens -->
     <div class="screen" id="screen-profile-own">
         <div class="card" style="padding: 24px;">
-            <button class="back-home-btn" onclick="showScreen('screen-home')" style="margin-bottom: 16px;">â†
+            <button class="back-home-btn" onclick="showScreen('screen-home')" style="margin-bottom: 16px;">←
                 Retour</button>
             <div class="profile-stats-card" id="profile-own-header">
                 <!-- Rendered by JS -->
@@ -352,8 +352,8 @@
                     onclick="showScreen('screen-profile-edit')">Modifier le profil</button>
                 <button class="btn-primary"
                     style="padding: 10px; width: auto; font-size: 0.9rem; background: var(--ink-light); margin-left: 8px;"
-                    onclick="showScreen('screen-account-settings')">ParamÃ¨tres</button>
-                <button class="auth-link" style="margin-left: 12px;" onclick="handleSignOut()">Se dÃ©connecter</button>
+                    onclick="showScreen('screen-account-settings')">Paramètres</button>
+                <button class="auth-link" style="margin-left: 12px;" onclick="handleSignOut()">Se déconnecter</button>
             </div>
             <div class="section-sub" style="margin-top: 24px; font-weight: 600; text-align: left; color: var(--ink);">Ma
                 progression</div>
@@ -367,7 +367,7 @@
 
     <div class="screen" id="screen-profile-view">
         <div class="card" style="padding: 24px;">
-            <button class="back-home-btn" onclick="showScreen('screen-home')" style="margin-bottom: 16px;">â†
+            <button class="back-home-btn" onclick="showScreen('screen-home')" style="margin-bottom: 16px;">←
                 Retour</button>
             <div id="profile-view-content">
                 <!-- Rendered by JS -->
@@ -378,7 +378,7 @@
     <div class="screen" id="screen-profile-edit">
         <div class="card">
             <button class="back-home-btn" onclick="checkUnsavedChangesAndGoBack('screen-profile-own')"
-                style="margin-bottom: 16px;">â† Retour</button>
+                style="margin-bottom: 16px;">← Retour</button>
             <h2 class="section-title">Modifier le profil</h2>
             <form id="form-profile-edit" onsubmit="handleProfileEdit(event)" style="margin-top: 24px;">
                 <div class="form-group">
@@ -413,7 +413,7 @@
                 </div>
                 <button type="submit" class="btn-primary" id="btn-edit-submit">Sauvegarder</button>
                 <div class="section-sub" id="msg-edit-success"
-                    style="margin-top: 12px; color: var(--correct); display: none;">Ton profil a Ã©tÃ© mis Ã  jour.</div>
+                    style="margin-top: 12px; color: var(--correct); display: none;">Ton profil a été mis à jour.</div>
                 <div class="form-error" id="err-edit-general" style="text-align: center; margin-top: 12px;"></div>
             </form>
         </div>
@@ -421,18 +421,18 @@
 
     <div class="screen" id="screen-account-settings">
         <div class="card">
-            <button class="back-home-btn" onclick="showScreen('screen-profile-own')" style="margin-bottom: 16px;">â†
+            <button class="back-home-btn" onclick="showScreen('screen-profile-own')" style="margin-bottom: 16px;">←
                 Retour</button>
-            <h2 class="section-title">ParamÃ¨tres du compte</h2>
+            <h2 class="section-title">Paramètres du compte</h2>
             <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 16px;">
                 <div class="card" style="padding: 16px; box-shadow: none; border-color: var(--border);">
                     <div class="section-sub"
                         style="font-weight: 600; color: var(--ink); text-align: left; margin-bottom: 8px;">Exporter mes
-                        donnÃ©es</div>
-                    <div style="font-size: 0.85rem; color: var(--ink-light); margin-bottom: 12px;">TÃ©lÃ©charge une copie
-                        de tes donnÃ©es personnelles (RGPD).</div>
+                        données</div>
+                    <div style="font-size: 0.85rem; color: var(--ink-light); margin-bottom: 12px;">Télécharge une copie
+                        de tes données personnelles (RGPD).</div>
                     <button class="btn-primary" id="btn-export-data" style="padding: 10px; font-size: 0.9rem;"
-                        onclick="handleDataExport()">TÃ©lÃ©charger mes donnÃ©es</button>
+                        onclick="handleDataExport()">Télécharger mes données</button>
                     <div id="export-msg" style="font-size: 0.8rem; margin-top: 8px;"></div>
                 </div>
 
@@ -441,7 +441,7 @@
                         style="font-weight: 600; color: var(--wrong); text-align: left; margin-bottom: 8px;">Supprimer
                         le compte</div>
                     <div style="font-size: 0.85rem; color: var(--ink-light); margin-bottom: 12px;">Cette action est
-                        dÃ©finitive et entraÃ®nera la perte de toute ta progression.</div>
+                        définitive et entraînera la perte de toute ta progression.</div>
                     <button class="btn-primary" style="padding: 10px; font-size: 0.9rem; background: var(--wrong);"
                         onclick="openDeleteModal()">Supprimer mon compte</button>
                 </div>
@@ -455,10 +455,10 @@
         <div class="card" style="max-width: 400px; margin: 20px;">
             <h2 class="section-title" style="color: var(--wrong);">Supprimer le compte</h2>
             <p style="font-size: 0.9rem; color: var(--ink); margin: 16px 0; line-height: 1.5;">
-                Es-tu sÃ»r(e) de vouloir supprimer ton compte ? Cette action est irrÃ©versible. Ta progression sera
+                Es-tu sûr(e) de vouloir supprimer ton compte ? Cette action est irréversible. Ta progression sera
                 perdue.
                 <br><br>Pour confirmer, tape le mot <strong>DELETE</strong> ci-dessous.
-                <br><small style="color:var(--ink-light);">(Le mot Â« DELETE Â» est en anglais pour Ã©viter toute confusion avec le franÃ§ais Â« supprimer Â».)</small>
+                <br><small style="color:var(--ink-light);">(Le mot « DELETE » est en anglais pour éviter toute confusion avec le français « supprimer ».)</small>
             </p>
             <input type="text" class="form-input" id="delete-confirm-input" placeholder="DELETE"
                 style="text-align: center; margin-bottom: 16px;">
@@ -472,33 +472,33 @@
 
     <div class="screen" id="screen-privacy">
         <div class="card" style="padding: 24px; max-height: 80vh; overflow-y: auto;">
-            <button class="back-home-btn" onclick="showScreen(previousScreen || 'screen-signup')" style="margin-bottom: 16px;">â†
+            <button class="back-home-btn" onclick="showScreen(previousScreen || 'screen-signup')" style="margin-bottom: 16px;">←
                 Retour</button>
-            <h2 class="section-title">Politique de confidentialitÃ©</h2>
-            <div class="section-sub" style="margin-bottom: 24px;">DerniÃ¨re mise Ã  jour : 20 Mai 2026</div>
+            <h2 class="section-title">Politique de confidentialité</h2>
+            <div class="section-sub" style="margin-bottom: 24px;">Dernière mise à jour : 20 Mai 2026</div>
 
             <div style="font-size: 0.9rem; color: var(--ink); line-height: 1.6; text-align: left;">
                 <strong>1. Qui sommes-nous ?</strong><br>
                 Lexio, une application d'apprentissage de l'anglais. Contact : contact@lexio.app (France).<br><br>
 
-                <strong>2. DonnÃ©es collectÃ©es</strong><br>
-                DonnÃ©es de compte (email, pseudo, avatar), donnÃ©es d'utilisation (progression, sessions, streak) et
-                donnÃ©es techniques (adresse IP via Supabase). Si vous utilisez Google/GitHub, nous recevons vos
+                <strong>2. Données collectées</strong><br>
+                Données de compte (email, pseudo, avatar), données d'utilisation (progression, sessions, streak) et
+                données techniques (adresse IP via Supabase). Si vous utilisez Google/GitHub, nous recevons vos
                 informations publiques.<br><br>
 
                 <strong>3. Pourquoi les collectons-nous ?</strong><br>
-                Pour la crÃ©ation de compte, le suivi de progression (intÃ©rÃªt lÃ©gitime/contrat) et l'affichage des
+                Pour la création de compte, le suivi de progression (intérêt légitime/contrat) et l'affichage des
                 classements.<br><br>
 
-                <strong>4. DurÃ©e de conservation</strong><br>
-                DonnÃ©es conservÃ©es tant que le compte est actif. En cas de suppression, les donnÃ©es sont effacÃ©es dans
+                <strong>4. Durée de conservation</strong><br>
+                Données conservées tant que le compte est actif. En cas de suppression, les données sont effacées dans
                 les 30 jours.<br><br>
 
-                <strong>5. Partage des donnÃ©es</strong><br>
-                HÃ©bergÃ©es chez Supabase (sous-traitant). Aucune donnÃ©e n'est vendue Ã  des tiers.<br><br>
+                <strong>5. Partage des données</strong><br>
+                Hébergées chez Supabase (sous-traitant). Aucune donnée n'est vendue à des tiers.<br><br>
 
                 <strong>6. Vos droits (RGPD)</strong><br>
-                AccÃ¨s, rectification, suppression, portabilitÃ©. Exercez ces droits via les paramÃ¨tres de votre
+                Accès, rectification, suppression, portabilité. Exercez ces droits via les paramètres de votre
                 compte.<br><br>
 
                 <strong>7. Cookies</strong><br>
@@ -506,7 +506,7 @@
                 connexion.<br><br>
 
                 <strong>8. Enfants</strong><br>
-                Application utilisable par les enfants. Nous ne collectons pas sciemment de donnÃ©es d'enfants de moins
+                Application utilisable par les enfants. Nous ne collectons pas sciemment de données d'enfants de moins
                 de 13 ans sans consentement parental.<br><br>
 
                 Pour toute question : contact@lexio.app
@@ -514,9 +514,9 @@
         </div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    <!-- ══════════════════════════════════════════
      SCREEN: HOME SCREEN (Course Dashboard)
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-home">
         <div class="home-hero">
             <h1 class="home-title">Lexio</h1>
@@ -535,7 +535,7 @@
         <div id="home-category-view" style="width: 100%; display: none; flex-direction: column; gap: 16px;">
             <button class="back-home-btn" onclick="backToModeSelect()"
                 style="align-self: flex-start; margin-bottom: 8px;">
-                â† Retour aux options
+                ← Retour aux options
             </button>
             <div id="home-categories-container" style="width: 100%;">
                 <!-- Dynamically populated course cards -->
@@ -544,11 +544,11 @@
     </div>
 
     <div id="home-footer" style="width:100%; max-width:640px; text-align:center; padding: 20px 0 8px; margin-top: 32px; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--ink-light); display: none;">
-        <a href="/privacy.html" style="color: var(--ink-light); text-decoration: none; margin: 0 10px;">Politique de confidentialitÃ©</a>
-        Â·
+        <a href="/privacy.html" style="color: var(--ink-light); text-decoration: none; margin: 0 10px;">Politique de confidentialité</a>
+        ·
         <a href="/terms.html" style="color: var(--ink-light); text-decoration: none; margin: 0 10px;">Conditions d'utilisation</a>
     </div>
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-word-preview">
         <div class="card" style="padding: 24px; width: 100%;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
@@ -581,13 +581,13 @@
             </table>
         </div>
 
-        <button class="btn-primary" id="preview-start-btn" onclick="startCourseFromPreview()">Commencer l'apprentissage â†’</button>
-        <button class="btn-primary" onclick="showScreen('screen-home')" style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent);">â† Retour</button>
+        <button class="btn-primary" id="preview-start-btn" onclick="startCourseFromPreview()">Commencer l'apprentissage →</button>
+        <button class="btn-primary" onclick="showScreen('screen-home')" style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent);">← Retour</button>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     SCREEN: FIRST ENCOUNTER â€” word intro
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- ══════════════════════════════════════════
+     SCREEN: FIRST ENCOUNTER — word intro
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-encounter">
         <div class="card">
             <div class="word-display" id="enc-word"></div>
@@ -595,23 +595,23 @@
             <div style="display: flex; gap: 10px; width: 100%; margin-bottom: 8px;">
                 <button class="audio-btn" id="enc-audio-btn" onclick="playAudio(false)"
                     style="flex: 1; justify-content: center;">
-                    ðŸ”Š <span>Listen</span>
+                    🔊 <span>Listen</span>
                 </button>
                 <button class="audio-btn" id="enc-slow-audio-btn" onclick="playAudio(true)"
                     style="flex: 1; justify-content: center; background: #FFF; border: 1.5px solid var(--border); color: var(--ink-light);">
-                    ðŸŒ <span>Slow version</span>
+                    🐌 <span>Slow version</span>
                 </button>
             </div>
         </div>
 
 
 
-        <button class="btn-primary" id="enc-next-btn" onclick="encounterNext()">Continuer â†’</button>
+        <button class="btn-primary" id="enc-next-btn" onclick="encounterNext()">Continuer →</button>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     SCREEN: EX1 â€” MCQ (FR word â†’ EN options)
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- ══════════════════════════════════════════
+     SCREEN: EX1 — MCQ (FR word → EN options)
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex1" lang="en">
         <div class="question-prompt">
             <div class="q-word" id="ex1-word"></div>
@@ -622,33 +622,33 @@
 
         <div class="feedback-banner" id="ex1-feedback"></div>
 
-        <button class="btn-primary hidden" id="ex1-next-btn" onclick="ex1Next()">Continuer â†’</button>
+        <button class="btn-primary hidden" id="ex1-next-btn" onclick="ex1Next()">Continuer →</button>
         <div class="word-counter" id="ex1-counter"></div>
     </div>
 
-    <!-- EX1 RETEST (native â†’ TL) -->
+    <!-- EX1 RETEST (native → TL) -->
     <div class="screen" id="screen-ex1-retest" lang="en">
         <div class="card">
-            <h2 class="section-title mt-4">RÃ©vision des mots manquÃ©s</h2>
+            <h2 class="section-title mt-4">Révision des mots manqués</h2>
             <div class="section-sub mt-8">Cette fois, vous voyez le mot en anglais et choisissez la bonne traduction
-                franÃ§aise.</div>
+                française.</div>
         </div>
 
         <div class="question-prompt">
-            <div class="q-label">Traduisez en franÃ§ais</div>
+            <div class="q-label">Traduisez en français</div>
             <div class="q-word" id="ex1rt-word"></div>
         </div>
 
         <div class="options-grid" id="ex1rt-options"></div>
         <div class="feedback-banner" id="ex1rt-feedback"></div>
-        <button class="btn-primary hidden" id="ex1rt-next-btn" onclick="ex1RetestNext()">Continuer â†’</button>
+        <button class="btn-primary hidden" id="ex1rt-next-btn" onclick="ex1RetestNext()">Continuer →</button>
         <div class="word-counter" id="ex1rt-counter"></div>
     </div>
 
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    <!-- ══════════════════════════════════════════
      SCREEN: TRANSITION
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-transition">
         <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
             <svg class="transition-icon" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"
@@ -664,9 +664,9 @@
         </div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    <!-- ══════════════════════════════════════════
      SCREEN: EX2 INTRO
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex2-intro">
         <div class="card" style="text-align:center;">
             <h2 class="section-title mt-4">Tap the Translation</h2>
@@ -679,9 +679,9 @@
         </div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    <!-- ══════════════════════════════════════════
      SCREEN: EX2 GAME
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex2-game">
         <div class="question-prompt">
             <div class="game-timer" id="ex2-game-timer">15s</div>
@@ -693,17 +693,17 @@
 
         <div class="word-counter" id="ex2-game-counter" style="margin-top:16px;"></div>
     </div>	
-	<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
- 	SCREEN: EX2 MATCH â€” Matching table
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+	<!-- ══════════════════════════════════════════
+ 	SCREEN: EX2 MATCH — Matching table
+	══════════════════════════════════════════ -->
 	<div class="screen" id="screen-match">
     <div class="question-prompt">
 
-        <div class="q-sub" style="margin-top:8px;">Associez chaque mot Ã  sa traduction</div>
+        <div class="q-sub" style="margin-top:8px;">Associez chaque mot à sa traduction</div>
     </div>
     <div class="match-table-wrap">
         <table class="match-table">
-            <thead><tr><th>English</th><th>FranÃ§ais</th></tr></thead>
+            <thead><tr><th>English</th><th>Français</th></tr></thead>
             <tbody id="match-tbody"></tbody>
         </table>
     </div>
@@ -711,24 +711,24 @@
     <div class="word-counter" id="match-counter"></div>
 	</div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     SCREEN: EX4 INTRO â€” Whack-a-Mole
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- ══════════════════════════════════════════
+     SCREEN: EX4 INTRO — Whack-a-Mole
+    ══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex4-intro">
         <div class="card" style="text-align:center;">
-            <h2 class="section-title mt-4">ðŸ”¨ Whack-a-Mole !</h2>
+            <h2 class="section-title mt-4">🔨 Whack-a-Mole !</h2>
             <div class="section-sub mt-8">
-                Un mot en franÃ§ais apparaÃ®t en haut. Des moles surgissent des trous avec des traductions anglaises â€” tapez la <strong>bonne</strong> avant qu'elle redisparaisse !<br><br>
-                Attention aux faux mots qui essaient de vous piÃ©ger. Vous avez <strong>5 secondes</strong> par mot.
+                Un mot en français apparaît en haut. Des moles surgissent des trous avec des traductions anglaises — tapez la <strong>bonne</strong> avant qu'elle redisparaisse !<br><br>
+                Attention aux faux mots qui essaient de vous piéger. Vous avez <strong>5 secondes</strong> par mot.
             </div>
             <div class="divider" style="margin: 20px 0;"></div>
             <button class="btn-primary" onclick="startEx4Game()">C'est parti !</button>
         </div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     SCREEN: EX4 GAME â€” Whack-a-Mole
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- ══════════════════════════════════════════
+     SCREEN: EX4 GAME — Whack-a-Mole
+    ══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex4">
         <div style="width:100%; text-align:center;">
             <div class="mole-prompt-label">Tapez le bon mot en anglais !</div>
@@ -736,7 +736,7 @@
         </div>
 
         <div style="width:100%; display:flex; justify-content:space-between; align-items:center; padding:0 2px;">
-            <div class="game-timer" id="ex4-timer" style="margin-bottom:0;">â€”</div>
+            <div class="game-timer" id="ex4-timer" style="margin-bottom:0;">—</div>
             <div class="word-counter" id="ex4-counter"></div>
         </div>
 
@@ -749,9 +749,9 @@
         <div class="feedback-banner" id="ex4-feedback"></div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     SCREEN: EX3 â€” Partial word typing
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- ══════════════════════════════════════════
+     SCREEN: EX3 — Partial word typing
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex3" lang="en">
         <div class="question-prompt">
             <div class="q-word" id="ex3-french"></div>
@@ -759,26 +759,26 @@
         </div>
 
         <div class="card" style="text-align:center;">
-            <div class="section-sub" style="margin-bottom:12px;">Lettres en dÃ©sordre :</div>
+            <div class="section-sub" style="margin-bottom:12px;">Lettres en désordre :</div>
             <div class="partial-word-display" id="ex3-partial"></div>
         </div>
 
         <input class="type-input" id="ex3-input" type="text" placeholder="Tapez le mot anglais..." autocomplete="off"
             autocorrect="off" spellcheck="false" />
-        <button class="btn-primary" onclick="ex3Check()">VÃ©rifier</button>
+        <button class="btn-primary" onclick="ex3Check()">Vérifier</button>
 
         <div class="feedback-banner" id="ex3-feedback"></div>
-        <button class="btn-primary hidden" id="ex3-next-btn" onclick="ex3Next()">Continuer â†’</button>
+        <button class="btn-primary hidden" id="ex3-next-btn" onclick="ex3Next()">Continuer →</button>
         <div class="word-counter" id="ex3-counter"></div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    <!-- ══════════════════════════════════════════
      SCREEN: EX3 RETEST
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-ex3-retest" lang="en">
         <div class="card">
-            <h2 class="section-title mt-4">RÃ©vision des mots manquÃ©s (Ex3)</h2>
-            <div class="section-sub mt-8">MÃ©morisez le mot puis tapez-le de mÃ©moire !</div>
+            <h2 class="section-title mt-4">Révision des mots manqués (Ex3)</h2>
+            <div class="section-sub mt-8">Mémorisez le mot puis tapez-le de mémoire !</div>
         </div>
 
         <div class="question-prompt">
@@ -790,32 +790,32 @@
         <input class="type-input hidden" id="ex3rt-input" type="text" placeholder="Tapez le mot anglais..."
             autocomplete="off" autocorrect="off" spellcheck="false" />
 
-        <button class="btn-primary" id="ex3rt-memorized-btn" onclick="ex3RetestMemorized()">J'ai mÃ©morisÃ©</button>
-        <button class="btn-primary hidden" id="ex3rt-verify-btn" onclick="ex3RetestCheck()">VÃ©rifier</button>
+        <button class="btn-primary" id="ex3rt-memorized-btn" onclick="ex3RetestMemorized()">J'ai mémorisé</button>
+        <button class="btn-primary hidden" id="ex3rt-verify-btn" onclick="ex3RetestCheck()">Vérifier</button>
 
         <div class="feedback-banner" id="ex3rt-feedback"></div>
-        <button class="btn-primary hidden" id="ex3rt-next-btn" onclick="ex3RetestNext()">Continuer â†’</button>
+        <button class="btn-primary hidden" id="ex3rt-next-btn" onclick="ex3RetestNext()">Continuer →</button>
         <div class="word-counter" id="ex3rt-counter"></div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    <!-- ══════════════════════════════════════════
      SCREEN: SESSION COMPLETE
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-complete">
         <div class="complete-icon"><svg width="48" height="48" style="color:var(--accent)"><use href="#icon-celebrate"/></svg></div>
-        <div class="complete-title" id="complete-title">Session terminÃ©e !</div>
+        <div class="complete-title" id="complete-title">Session terminée !</div>
 
         <div class="card" style="margin-top:10px; margin-bottom:10px; width:100%; text-align:center; padding:20px;">
             <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-                <span style="color:var(--ink-light)">Temps passÃ© :</span>
+                <span style="color:var(--ink-light)">Temps passé :</span>
                 <strong id="stat-time">0m 0s</strong>
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-                <span style="color:var(--ink-light)">Mots rencontrÃ©s :</span>
+                <span style="color:var(--ink-light)">Mots rencontrés :</span>
                 <strong id="stat-words">0</strong>
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-                <span style="color:var(--ink-light)">Score gagnÃ© :</span>
+                <span style="color:var(--ink-light)">Score gagné :</span>
                 <strong id="stat-score" style="color:var(--accent);">0 pts</strong>
             </div>
 
@@ -826,7 +826,7 @@
 
             <div class="divider" style="margin: 16px 0;"></div>
             <div style="text-align:left;">
-                <span style="color:var(--ink-light); font-size:0.9rem;">Mots Ã  rÃ©viser en prioritÃ© :</span>
+                <span style="color:var(--ink-light); font-size:0.9rem;">Mots à réviser en priorité :</span>
                 <ul id="stat-revise-list"
                     style="margin-top:8px; padding-left:20px; font-weight:500; color:var(--wrong);">
                 </ul>
@@ -835,39 +835,39 @@
 
         <div id="complete-buttons" style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
             <button class="btn-primary" id="btn-next-group" onclick="nextGroup()" style="display: none;">Groupe suivant
-                â†’</button>
+                →</button>
             <button class="btn-primary" onclick="restartApp()"
                 style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent);">Recommencer ce
                 groupe</button>
             <button class="btn-primary" onclick="goToHome()"
-                style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent);">Retour Ã 
+                style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent);">Retour à
                 l'accueil</button>
         </div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    <!-- ══════════════════════════════════════════
      SCREEN: GAME OVER
-	â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+	══════════════════════════════════════════ -->
     <div class="screen" id="screen-game-over">
-        <div class="complete-icon">ðŸ’”</div>
+        <div class="complete-icon">💔</div>
         <div class="complete-title">Try Again!</div>
-        <div class="complete-sub">Vous avez fait 4 erreurs. Ne vous dÃ©couragez pas, la pratique fait la perfection !
+        <div class="complete-sub">Vous avez fait 4 erreurs. Ne vous découragez pas, la pratique fait la perfection !
         </div>
         <div class="divider" style="margin: 24px 0;"></div>
         <button class="btn-primary" onclick="restartApp()">Recommencer ce groupe</button>
         <button class="btn-primary" onclick="goToHome()"
-            style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent); margin-top:8px;">Retour Ã 
+            style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent); margin-top:8px;">Retour à
             l'accueil</button>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    <!-- ══════════════════════════════════════════
      SCREEN: REVISE
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    ══════════════════════════════════════════ -->
     <div class="screen" id="screen-revise">
         <div style="width:100%; display:flex; align-items:center; gap:12px; margin-bottom:4px;">
-            <button class="back-home-btn" onclick="goToHome()">â† Retour</button>
+            <button class="back-home-btn" onclick="goToHome()">← Retour</button>
             <div style="flex:1;">
-                <h2 class="section-title" style="margin:0; font-size:1.2rem;">ðŸ” RÃ©viser</h2>
+                <h2 class="section-title" style="margin:0; font-size:1.2rem;">🔁 Réviser</h2>
             </div>
             <button onclick="toggleReviseViewAll()" id="revise-view-toggle"
                 style="font-size:0.78rem; background:none; border:1px solid var(--border);
@@ -876,7 +876,7 @@
             </button>
         </div>
         <div class="section-sub" style="margin-bottom:8px;">
-            SÃ©lectionnez les mots que vous souhaitez rÃ©viser.
+            Sélectionnez les mots que vous souhaitez réviser.
         </div>
 
         <div id="revise-content" style="width:100%; display:flex; flex-direction:column; gap:12px;">
@@ -884,18 +884,18 @@
         </div>
 
         <div class="revise-footer">
-            <div class="revise-count-label" id="revise-selected-count">0 mot sÃ©lectionnÃ©</div>
-            <div class="revise-cooldown-note">Les mots rÃ©ussis seront retirÃ©s de la rÃ©vision jusqu'au lendemain.</div>
+            <div class="revise-count-label" id="revise-selected-count">0 mot sélectionné</div>
+            <div class="revise-cooldown-note">Les mots réussis seront retirés de la révision jusqu'au lendemain.</div>
             <button class="btn-primary" id="revise-start-btn" onclick="startRevisionSession()" disabled
                 style="opacity:0.4; margin-top:4px;">
-                RÃ©viser les mots sÃ©lectionnÃ©s â†’
+                Réviser les mots sélectionnés →
             </button>
         </div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     SCREEN: TEST OUT â€” typing test
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- ══════════════════════════════════════════
+     SCREEN: TEST OUT — typing test
+    ══════════════════════════════════════════ -->
     <div class="screen" id="screen-test-out">
         <div class="card" style="text-align: center; padding: 20px 28px 16px;">
             <div class="phase-tag">Test de niveau</div>
@@ -914,69 +914,69 @@
 
         <div id="test-out-hint" style="font-size: 0.85rem; color: var(--accent); font-weight: 500; text-align: center; margin-top: -8px;"></div>
 
-        <button class="btn-primary" onclick="testOutCheck()">VÃ©rifier</button>
+        <button class="btn-primary" onclick="testOutCheck()">Vérifier</button>
 
         <div class="feedback-banner" id="test-out-feedback"></div>
-        <button class="btn-primary hidden" id="test-out-next-btn" onclick="testOutNext()">Continuer â†’</button>
+        <button class="btn-primary hidden" id="test-out-next-btn" onclick="testOutNext()">Continuer →</button>
 
         <div class="word-counter" id="test-out-counter"></div>
 
         <button class="btn-primary" onclick="saveAndExitTestOut()"
             style="background:#FFF; border: 1.5px solid var(--border); color: var(--ink-light); margin-top: 8px;">
-            ðŸ’¾ Sauvegarder et quitter
+            💾 Sauvegarder et quitter
         </button>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    <!-- ══════════════════════════════════════════
      SCREEN: TEST OUT RESULTS
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    ══════════════════════════════════════════ -->
     <div class="screen" id="screen-test-out-results">
-        <div class="complete-icon">ðŸ“Š</div>
-        <div class="complete-title">RÃ©sultats du test</div>
+        <div class="complete-icon">📊</div>
+        <div class="complete-title">Résultats du test</div>
         <div class="section-sub" id="test-out-results-sub" style="text-align: center; margin-top: 4px; line-height: 1.6;"></div>
 
         <div class="test-out-results-bar">
             <div class="test-out-stat">
                 <div class="test-out-stat-num" id="test-out-known-count" style="color: var(--correct);">0</div>
-                <div class="test-out-stat-label">Mots connus âœ“</div>
+                <div class="test-out-stat-label">Mots connus ✓</div>
             </div>
             <div class="test-out-stat" style="border-left: 1px solid var(--border); padding-left: 24px;">
                 <div class="test-out-stat-num" id="test-out-unknown-count" style="color: var(--wrong);">0</div>
-                <div class="test-out-stat-label">Ã€ apprendre</div>
+                <div class="test-out-stat-label">À apprendre</div>
             </div>
         </div>
 
         <!-- Words to learn, with French + remove button -->
         <div id="test-out-words-to-learn" style="width: 100%; display: none;">
             <div style="font-size: 0.78rem; color: var(--ink-light); margin-bottom: 8px; text-align: center;">
-                Cliquez sur âœ• pour retirer un mot de votre liste d'apprentissage.
+                Cliquez sur ✕ pour retirer un mot de votre liste d'apprentissage.
             </div>
             <div class="word-preview-grid" id="test-out-word-grid" style="max-height: 280px; overflow-y: auto;"></div>
         </div>
 
         <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
             <button class="btn-primary" id="test-out-start-filtered-btn" onclick="startCourseFromTestOut()">
-                Ã‰tudier les mots Ã  apprendre â†’
+                Étudier les mots à apprendre →
             </button>
             <button class="btn-primary" onclick="goToHome()"
                 style="background:#FFF; border: 1.5px solid var(--border); color: var(--accent);">
-                Retour Ã  l'accueil
+                Retour à l'accueil
             </button>
         </div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     SCREEN: VERB PRACTICE â€” Level Select
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- ══════════════════════════════════════════
+     SCREEN: VERB PRACTICE — Level Select
+    ══════════════════════════════════════════ -->
     <div class="screen" id="screen-verb-home" lang="en">
         <div style="width:100%; display:flex; align-items:center; gap:12px; margin-bottom:4px;">
-            <button class="back-home-btn" onclick="goToHome()">â† Accueil</button>
+            <button class="back-home-btn" onclick="goToHome()">← Accueil</button>
         </div>
         <div class="home-hero" style="text-align:left; margin-bottom:0;">
             <h2 class="home-title" style="font-size:1.7rem;">Verb Practice</h2>
             <div class="home-subtitle">Choose your level, then pick a practice type.</div>
             <div style="font-size:0.75rem; color:var(--ink-light); margin-top:6px; padding:6px 10px; background:var(--accent-light); border-radius:6px;">
-                ðŸ‡¬ðŸ‡§ Les exercices de cette section sont en anglais â€” l'interface reste en franÃ§ais.
+                🇬🇧 Les exercices de cette section sont en anglais — l'interface reste en français.
             </div>
         </div>
         <!-- Level selector -->
@@ -994,28 +994,28 @@
         <div id="verb-mode-select" style="width:100%; display:none; flex-direction:column; gap:14px; margin-top:8px;">
             <div class="category-title" id="verb-mode-title">Choose Practice Type</div>
             <div class="verb-practice-mode-card" onclick="openVerbConjugation()">
-                <div class="verb-practice-mode-icon">ðŸ”¤</div>
+                <div class="verb-practice-mode-icon">🔤</div>
                 <div class="mode-info">
                     <div class="mode-title">Conjugation Practice</div>
-                    <div class="mode-desc" style="font-size:0.85rem;">Practice verb conjugations by tense â€” separate drills for regular &amp; irregular verbs, modelled on Conjuguemos.</div>
+                    <div class="mode-desc" style="font-size:0.85rem;">Practice verb conjugations by tense — separate drills for regular &amp; irregular verbs, modelled on Conjuguemos.</div>
                 </div>
             </div>
             <div class="verb-practice-mode-card" onclick="openTenseChoice()">
-                <div class="verb-practice-mode-icon">ðŸ§©</div>
+                <div class="verb-practice-mode-icon">🧩</div>
                 <div class="mode-info">
                     <div class="mode-title">Tense Choice</div>
-                    <div class="mode-desc" style="font-size:0.85rem;">Read a sentence and type the correct conjugated form in the blank â€” tests tense recognition in context.</div>
+                    <div class="mode-desc" style="font-size:0.85rem;">Read a sentence and type the correct conjugated form in the blank — tests tense recognition in context.</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     SCREEN: VERB PRACTICE â€” Conjugation (Tense/Type Select)
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- ══════════════════════════════════════════
+     SCREEN: VERB PRACTICE — Conjugation (Tense/Type Select)
+    ══════════════════════════════════════════ -->
     <div class="screen" id="screen-verb-conj-select" lang="en">
         <div style="width:100%; display:flex; align-items:center; gap:12px; margin-bottom:8px;">
-            <button class="back-home-btn" onclick="showScreen('screen-verb-home')">â† Back</button>
+            <button class="back-home-btn" onclick="showScreen('screen-verb-home')">← Back</button>
             <span id="verb-conj-level-tag" class="level-badge level-a1" style="font-size:0.75rem; padding:3px 10px;"></span>
         </div>
         <div class="home-hero" style="text-align:left; margin-bottom:4px;">
@@ -1033,10 +1033,10 @@
         <div style="width:100%;">
             <div class="category-title" style="margin-bottom:8px;">Form</div>
             <div class="verb-type-toggle" style="flex-wrap:wrap; gap:8px;" role="group" aria-label="Conjugation form">
-                <button class="verb-type-btn active" id="vform-affirmative" onclick="setVerbForm('affirmative')" aria-pressed="true" style="flex:1; min-width:120px;">âœ“ Affirmative</button>
-                <button class="verb-type-btn" id="vform-negative" onclick="setVerbForm('negative')" aria-pressed="false" style="flex:1; min-width:120px;">âœ— Negative</button>
+                <button class="verb-type-btn active" id="vform-affirmative" onclick="setVerbForm('affirmative')" aria-pressed="true" style="flex:1; min-width:120px;">✓ Affirmative</button>
+                <button class="verb-type-btn" id="vform-negative" onclick="setVerbForm('negative')" aria-pressed="false" style="flex:1; min-width:120px;">✗ Negative</button>
                 <button class="verb-type-btn" id="vform-interrogative" onclick="setVerbForm('interrogative')" aria-pressed="false" style="flex:1; min-width:120px;">? Interrogative</button>
-                <button class="verb-type-btn" id="vform-mixed" onclick="setVerbForm('mixed')" aria-pressed="false" style="flex:1; min-width:120px;">â‡„ Mixed</button>
+                <button class="verb-type-btn" id="vform-mixed" onclick="setVerbForm('mixed')" aria-pressed="false" style="flex:1; min-width:120px;">⇄ Mixed</button>
             </div>
         </div>
         <!-- Duration picker -->
@@ -1047,7 +1047,7 @@
                 <button class="verb-type-btn" id="vdur-2"  onclick="setDuration(2)"  aria-pressed="false" style="flex:1; min-width:60px;">2 min</button>
                 <button class="verb-type-btn active" id="vdur-5"  onclick="setDuration(5)"  aria-pressed="true" style="flex:1; min-width:60px;">5 min</button>
                 <button class="verb-type-btn" id="vdur-10" onclick="setDuration(10)" aria-pressed="false" style="flex:1; min-width:60px;">10 min</button>
-                <button class="verb-type-btn" id="vdur-0"  onclick="setDuration(0)"  aria-pressed="false" style="flex:1; min-width:60px;">âˆž Free</button>
+                <button class="verb-type-btn" id="vdur-0"  onclick="setDuration(0)"  aria-pressed="false" style="flex:1; min-width:60px;">∞ Free</button>
             </div>
         </div>
         <!-- Tense grid -->
@@ -1059,12 +1059,12 @@
         </div>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     SCREEN: VERB PRACTICE â€” Active Conjugation Drill
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- ══════════════════════════════════════════
+     SCREEN: VERB PRACTICE — Active Conjugation Drill
+    ══════════════════════════════════════════ -->
     <div class="screen" id="screen-verb-drill" lang="en">
         <div style="width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
-            <button class="back-home-btn" onclick="endDrillEarly()">â† Back</button>
+            <button class="back-home-btn" onclick="endDrillEarly()">← Back</button>
             <div style="display:flex; align-items:center; gap:10px;">
                 <div id="drill-timer" role="timer" aria-live="off" aria-label="Temps restant" style="display:none; font-family:'Inter',sans-serif; font-size:0.9rem; font-weight:600; color:var(--accent); background:var(--accent-light); padding:4px 12px; border-radius:20px; min-width:54px; text-align:center;"></div>
                 <span class="verb-score-badge" id="drill-score-badge" role="status" aria-live="polite">0 / 0</span>
@@ -1090,7 +1090,7 @@
                 <div style="flex:1;">
                     <input class="conj-input" type="text" id="drill-single-input"
                         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                        placeholder="conjugated formâ€¦"
+                        placeholder="conjugated form…"
                         aria-label="Type the conjugated form"
                         style="width:100%; font-size:1.1rem; padding:8px 0; border-width:2px;"
                         onkeydown="if(event.key==='Enter') checkSingleConjugation()">
@@ -1100,18 +1100,18 @@
         </div>
         <div class="feedback-banner" id="drill-feedback"></div>
         <div style="width:100%; display:flex; gap:10px;">
-            <button class="btn-primary" id="drill-check-btn" onclick="checkSingleConjugation()" style="flex:2;">Check âœ“</button>
-            <button class="btn-primary" id="drill-skip-btn" onclick="skipSinglePronoun()" style="flex:1; background:#FFF; border:1.5px solid var(--border); color:var(--ink-light);">Skip â†’</button>
+            <button class="btn-primary" id="drill-check-btn" onclick="checkSingleConjugation()" style="flex:2;">Check ✓</button>
+            <button class="btn-primary" id="drill-skip-btn" onclick="skipSinglePronoun()" style="flex:1; background:#FFF; border:1.5px solid var(--border); color:var(--ink-light);">Skip →</button>
         </div>
-        <button class="btn-primary hidden" id="drill-next-btn" onclick="advanceDrill()">Next â†’</button>
+        <button class="btn-primary hidden" id="drill-next-btn" onclick="advanceDrill()">Next →</button>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     SCREEN: VERB PRACTICE â€” Tense Choice
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- ══════════════════════════════════════════
+     SCREEN: VERB PRACTICE — Tense Choice
+    ══════════════════════════════════════════ -->
     <div class="screen" id="screen-tense-choice" lang="en">
         <div style="width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
-            <button class="back-home-btn" onclick="showScreen('screen-verb-home')">â† Back</button>
+            <button class="back-home-btn" onclick="showScreen('screen-verb-home')">← Back</button>
             <span class="verb-score-badge" id="tc-score-badge" role="status" aria-live="polite">0 / 0</span>
         </div>
         <div class="tense-sentence-card">
@@ -1124,14 +1124,14 @@
             <!-- 4 buttons injected by JS -->
         </div>
         <div class="feedback-banner" id="tc-feedback"></div>
-        <button class="btn-primary hidden" id="tc-next-btn" onclick="nextTenseChoice()">Next â†’</button>
+        <button class="btn-primary hidden" id="tc-next-btn" onclick="nextTenseChoice()">Next →</button>
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     SCREEN: VERB PRACTICE â€” Results
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- ══════════════════════════════════════════
+     SCREEN: VERB PRACTICE — Results
+    ══════════════════════════════════════════ -->
     <div class="screen" id="screen-verb-results" lang="en">
-        <div class="complete-icon" id="verb-results-icon">ðŸŽ‰</div>
+        <div class="complete-icon" id="verb-results-icon">🎉</div>
         <div class="complete-title" id="verb-results-title">Session Complete!</div>
         <div class="section-sub" id="verb-results-sub" style="text-align:center; margin-top:4px; line-height:1.6;"></div>
         <div class="verb-score-summary">
@@ -1148,20 +1148,20 @@
                 <div class="verb-score-label">Score</div>
             </div>
         </div>
-        <div id="vr-time-row" style="display:none; font-size:0.82rem; color:var(--ink-light); text-align:center; margin-top:-8px;">â± <span id="vr-time-label"></span></div>
+        <div id="vr-time-row" style="display:none; font-size:0.82rem; color:var(--ink-light); text-align:center; margin-top:-8px;">⏱ <span id="vr-time-label"></span></div>
         <div style="width:100%; display:flex; flex-direction:column; gap:10px; margin-top:8px;">
-            <button class="btn-primary" id="vr-retry-btn" onclick="retryVerbSession()">Practice Again â†’</button>
-            <button class="btn-primary" onclick="goToHome()" style="background:#FFF; border:1.5px solid var(--border); color:var(--accent);">â† Accueil</button>
+            <button class="btn-primary" id="vr-retry-btn" onclick="retryVerbSession()">Practice Again →</button>
+            <button class="btn-primary" onclick="goToHome()" style="background:#FFF; border:1.5px solid var(--border); color:var(--accent);">← Accueil</button>
         </div>
     </div>
 
-
-    <!--  ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+﻿
+    <!-- ══════════════════════════════════════════
      SCREEN: READING MENU
-     ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? -->
+     ══════════════════════════════════════════ -->
     <div class="screen" id="screen-reading-menu">
         <div style="width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
-            <button class="back-home-btn" onclick="goToHome()">? Accueil</button>
+            <button class="back-home-btn" onclick="goToHome()">  Accueil</button>
         </div>
         <div class="home-hero" style="text-align:left; margin-bottom:0;">
             <h2 class="home-title" style="font-size:1.7rem;">Reading Practice</h2>
@@ -1172,12 +1172,12 @@
         </div>
     </div>
 
-    <!--  ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+    <!-- ══════════════════════════════════════════
      SCREEN: READING VIEW
-     ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? -->
+     ══════════════════════════════════════════ -->
     <div class="screen" id="screen-reading-view" lang="en">
         <div style="width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
-            <button class="back-home-btn" onclick="showScreen('screen-reading-menu')">? Menu</button>
+            <button class="back-home-btn" onclick="showScreen('screen-reading-menu')">  Menu</button>
             <span class="verb-score-badge" id="reading-score-badge" role="status" aria-live="polite">0 pts</span>
         </div>
         
@@ -1217,15 +1217,15 @@
             </div>
 
             <div class="feedback-banner" id="reading-feedback" style="margin-top:16px;"></div>
-            <button class="btn-primary hidden" id="reading-next-btn" onclick="nextReadingExercise()" style="margin-top:12px;">Next '</button>
+            <button class="btn-primary hidden" id="reading-next-btn" onclick="nextReadingExercise()" style="margin-top:12px;">Next  </button>
         </div>
 
-        <button class="btn-primary" id="reading-start-btn" onclick="startReadingExercises()" style="margin-top:auto;">Start Exercises '</button>
+        <button class="btn-primary" id="reading-start-btn" onclick="startReadingExercises()" style="margin-top:auto;">Start Exercises  </button>
     </div>
 
-    <!--  ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+    <!-- ══════════════════════════════════════════
      SCREEN: READING RESULTS
-     ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? -->
+     ══════════════════════════════════════════ -->
     <div class="screen" id="screen-reading-results">
         <div class="complete-icon"></div>
         <div class="complete-title">Reading Complete!</div>
@@ -1245,6 +1245,7 @@
         <button class="btn-primary mt-8" onclick="showScreen('screen-reading-menu')">Choose Another Text</button>
         <button class="btn-secondary mt-4" style="width:100%;" onclick="goToHome()">Accueil</button>
     </div>
+
 </main>
 
     <script src="js/verb-data.js" defer></script>
@@ -1252,4 +1253,3 @@
     <script src="js/app.js" defer></script>
 </body>
 </html>
-
