@@ -1,8 +1,8 @@
-﻿        // --- Screen history tracking ---
+        // --- Screen history tracking ---
         var previousScreen = 'screen-signup';
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // SUPABASE INIT & AUTH LOGIC
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         const SUPABASE_URL = 'https://abouaxqxnsmigvicpxoo.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFib3VheHF4bnNtaWd2aWNweG9vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyNzA1ODksImV4cCI6MjA5NDg0NjU4OX0.oP2f_IyKkM-cBmMhVrKU7fmgsnuggGBnAargfi6si4I';
         let sbClient;
@@ -132,9 +132,9 @@
             return `<svg width="24" height="24" style="color:var(--accent)"><use href="#avatar-${id}"/></svg>`;
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // AUTHENTICATION FUNCTIONS
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         async function handleSignup(e) {
             e.preventDefault();
             if (isAuthOnCooldown('signup', 3)) { showToast('Merci de patienter quelques secondes.', 'info'); return; }
@@ -155,7 +155,7 @@
                 // Check username
                 const { data: existingUser } = await sbClient.from('profiles').select('id').eq('username', username).single();
                 if (existingUser) {
-                    document.getElementById('err-signup-username').textContent = "Ce nom d'utilisateur est dÃ©jÃ  pris.";
+                    document.getElementById('err-signup-username').textContent = "Ce nom d'utilisateur est déjà pris.";
                     return;
                 }
 
@@ -223,7 +223,7 @@
             }
             const { error } = await sbClient.auth.resend({ type: 'signup', email });
             if (!error) {
-                showToast("Email de confirmation renvoyÃ© !", "success");
+                showToast("Email de confirmation renvoyé !", "success");
             } else {
                 showToast("Erreur: " + error.message, "error");
             }
@@ -238,7 +238,7 @@
             try {
                 const { error } = await sbClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '#type=recovery' });
                 if (!error) {
-                    document.getElementById('msg-forgot-success').textContent = "Lien envoyÃ© ! VÃ©rifiez vos emails.";
+                    document.getElementById('msg-forgot-success').textContent = "Lien envoyé ! Vérifiez vos emails.";
                     document.getElementById('msg-forgot-success').style.display = 'block';
                 } else {
                     document.getElementById('err-forgot-general').textContent = error.message;
@@ -262,7 +262,7 @@
             try {
                 const { error } = await sbClient.auth.updateUser({ password: pwd });
                 if (!error) {
-                    document.getElementById('msg-reset-success').textContent = "Mot de passe mis Ã  jour !";
+                    document.getElementById('msg-reset-success').textContent = "Mot de passe mis à jour !";
                     document.getElementById('msg-reset-success').style.display = 'block';
                     setTimeout(() => showScreen('screen-login'), 2000);
                 } else {
@@ -278,7 +278,7 @@
             const username = document.getElementById('oauth-username').value;
             const { data: existingUser } = await sbClient.from('profiles').select('id').eq('username', username).single();
             if (existingUser) {
-                document.getElementById('err-oauth-username').textContent = "Ce nom d'utilisateur est dÃ©jÃ  pris.";
+                document.getElementById('err-oauth-username').textContent = "Ce nom d'utilisateur est déjà pris.";
                 return;
             }
 
@@ -301,9 +301,9 @@
             }
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // PROFILE & SETTINGS FUNCTIONS
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
 
 
         function renderProfileOwn() {
@@ -314,8 +314,8 @@
         <div class="profile-avatar-large">${getAvatarEmoji(currentProfile.avatar_id)}</div>
         <h2 class="section-title" style="margin: 0;">${currentProfile.username || 'Utilisateur'}</h2>
         <div style="font-size: 0.85rem; color: var(--ink-light);">
-          Score: <strong style="color: var(--accent);">${currentProfile.total_score || 0}</strong> â€¢ 
-          Streak: <strong style="color: var(--accent);">${currentProfile.streak_days || 0}ðŸ”¥</strong>
+          Score: <strong style="color: var(--accent);">${currentProfile.total_score || 0}</strong> • 
+          Streak: <strong style="color: var(--accent);">${currentProfile.streak_days || 0}🔥</strong>
         </div>
       `;
 
@@ -337,7 +337,7 @@
                 }
                 coursesDiv.innerHTML = html;
             } else {
-                coursesDiv.innerHTML = `<div style="font-size: 0.85rem; color: var(--ink-light); margin-top: 8px;">Aucun cours commencÃ©.</div>`;
+                coursesDiv.innerHTML = `<div style="font-size: 0.85rem; color: var(--ink-light); margin-top: 8px;">Aucun cours commencé.</div>`;
             }
         }
 
@@ -357,7 +357,7 @@
 
         function checkUnsavedChangesAndGoBack(targetScreen) {
             if (hasUnsavedChanges) {
-                if (confirm("Tu as des modifications non sauvegardÃ©es. Es-tu sÃ»r de vouloir quitter ?")) {
+                if (confirm("Tu as des modifications non sauvegardées. Es-tu sûr de vouloir quitter ?")) {
                     showScreen(targetScreen);
                 }
             } else {
@@ -375,7 +375,7 @@
             if (username !== currentProfile.username) {
                 const { data: existing } = await sbClient.from('profiles').select('id').eq('username', username).single();
                 if (existing && existing.id !== currentProfile.id) {
-                    document.getElementById('err-edit-username').textContent = "Ce nom d'utilisateur est dÃ©jÃ  pris.";
+                    document.getElementById('err-edit-username').textContent = "Ce nom d'utilisateur est déjà pris.";
                     return;
                 }
             }
@@ -409,7 +409,7 @@
             a.download = `lexio_data_${currentProfile.username}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            document.getElementById('export-msg').textContent = "DonnÃ©es exportÃ©es avec succÃ¨s.";
+            document.getElementById('export-msg').textContent = "Données exportées avec succès.";
             document.getElementById('export-msg').style.color = "var(--correct)";
         }
 
@@ -445,13 +445,13 @@
             // Actually, Supabase has auth.admin.deleteUser but we can't use it here. 
             // We will just sign out after wiping the profile.
             closeDeleteModal();
-            showToast("Ton profil a Ã©tÃ© supprimÃ©. Ton compte sera dÃ©finitivement effacÃ© par l'administrateur.", "success");
+            showToast("Ton profil a été supprimé. Ton compte sera définitivement effacé par l'administrateur.", "success");
             await handleSignOut();
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // WORD DATA & ARCHITECTURE
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         const INDEX_FILE = 'word-lists/INDEX.json';
         let WORD_LIST_FILE = '';
 	let currentCourseName = '';
@@ -463,9 +463,9 @@
         let fullWordList = [];
         let currentChunkIndex = 0;
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // STATE
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         let encounterIndex = 0;
         let encounterSentenceIndex = 0;
 
@@ -502,7 +502,7 @@
         let totalSteps = 0;
         let stepsCompleted = 0;
 
-        // â”€â”€ TEST OUT STATE â”€â”€
+        // ── TEST OUT STATE ──
         let testOutQueue = [];
         let testOutIndex = 0;
         let testOutKnown = [];
@@ -511,20 +511,20 @@
         let testOutCourseName = '';
         let testOutAllWords = [];
 
-        // â”€â”€ PREVIEW EXCLUSIONS â”€â”€
+        // ── PREVIEW EXCLUSIONS ──
         let previewExcludedWords = new Set(); // english words excluded by user on preview screen
 
-        // â”€â”€ LEARNT WORD TRACKING â”€â”€
+        // ── LEARNT WORD TRACKING ──
         let sessionLearntWords = new Set(); // words correctly answered first-try this session
 
-        // â”€â”€ REVISION STATE â”€â”€
+        // ── REVISION STATE ──
         let isRevisionSession = false;
         let revisionSelectedWords = [];
         let revisionCorrectThisSession = new Set(); // english words correct in this revision
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // UTILS
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         function showScreen(id) {
             log('showScreen called with id:', id);
             // Track previous screen for smart back-navigation
@@ -551,22 +551,22 @@
 
                 // Update document.title for screen reader announcement
                 const screenTitles = {
-                    'screen-home': 'Lexio â€” Accueil',
-                    'screen-login': 'Lexio â€” Connexion',
-                    'screen-signup': 'Lexio â€” Inscription',
-                    'screen-privacy': 'Lexio â€” Politique de confidentialitÃ©',
-                    'screen-profile-own': 'Lexio â€” Mon profil',
-                    'screen-profile-edit': 'Lexio â€” Modifier le profil',
-                    'screen-account-settings': 'Lexio â€” ParamÃ¨tres',
-                    'screen-verb-home': 'Lexio â€” Verb Practice',
-                    'screen-verb-conj-select': 'Lexio â€” Conjugation Practice',
-                    'screen-verb-drill': 'Lexio â€” Conjugation Drill',
-                    'screen-tense-choice': 'Lexio â€” Tense Choice',
-                    'screen-verb-results': 'Lexio â€” Results',
-                    'screen-forgot-password': 'Lexio â€” Mot de passe oubliÃ©',
-                    'screen-reset-password': 'Lexio â€” Nouveau mot de passe',
+                    'screen-home': 'Lexio — Accueil',
+                    'screen-login': 'Lexio — Connexion',
+                    'screen-signup': 'Lexio — Inscription',
+                    'screen-privacy': 'Lexio — Politique de confidentialité',
+                    'screen-profile-own': 'Lexio — Mon profil',
+                    'screen-profile-edit': 'Lexio — Modifier le profil',
+                    'screen-account-settings': 'Lexio — Paramètres',
+                    'screen-verb-home': 'Lexio — Verb Practice',
+                    'screen-verb-conj-select': 'Lexio — Conjugation Practice',
+                    'screen-verb-drill': 'Lexio — Conjugation Drill',
+                    'screen-tense-choice': 'Lexio — Tense Choice',
+                    'screen-verb-results': 'Lexio — Results',
+                    'screen-forgot-password': 'Lexio — Mot de passe oublié',
+                    'screen-reset-password': 'Lexio — Nouveau mot de passe',
                 };
-                document.title = screenTitles[id] || 'Lexio â€” Apprends l\'anglais';
+                document.title = screenTitles[id] || 'Lexio — Apprends l\'anglais';
             }
         }
 
@@ -583,7 +583,7 @@
             for (let i = 0; i < MAX_LIVES; i++) {
                 const heart = document.createElement('div');
                 heart.className = 'heart';
-                heart.textContent = 'â¤ï¸';
+                heart.textContent = '❤️';
                 container.appendChild(heart);
             }
             container.style.display = 'flex';
@@ -654,9 +654,9 @@
             }
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // GOOGLE TRANSLATE API DYNAMIC FETCH
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         async function translateText(text, sl = 'en', tl = 'fr') {
             const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`;
             const response = await fetch(url);
@@ -695,23 +695,23 @@
             return Promise.all(promises);
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // HOME DASHBOARD & NAVIGATION
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         const homeCategoriesData = [
             {
                 id: "curriculum",
                 type: "themed",
                 title: "Learn by curriculum",
                 icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2C3E6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
-                description: "Listes de vocabulaire alignÃ©es sur les examens de Cambridge et le programme national.",
+                description: "Listes de vocabulaire alignées sur les examens de Cambridge et le programme national.",
                 files: [
                     { filename: "CAMBRIDGE STARTERS ANIMALS.json", title: "Les Animaux (Starters)", level: "A1", approximate_word_count: 30 },
                     { filename: "CAMBRIDGE STARTERS.json", title: "Cambridge YLE Starters", level: "Pre-A1", approximate_word_count: 200 },
                     { filename: "CAMBRIDGE MOVERS.json", title: "Cambridge YLE Movers", level: "A1", approximate_word_count: 220 },
                     { filename: "CAMBRIDGE FLYERS.json", title: "Cambridge YLE Flyers", level: "A2", approximate_word_count: 200 },
                     { filename: "BREVET.json", title: "Brevet - Vocabulaire", level: "B1", approximate_word_count: 160 },
-                    { filename: "BAC - axes thematiques.json", title: "Bac - Axes ThÃ©matiques", level: "B2", approximate_word_count: 125 }
+                    { filename: "BAC - axes thematiques.json", title: "Bac - Axes Thématiques", level: "B2", approximate_word_count: 125 }
                 ]
             },
             {
@@ -719,11 +719,11 @@
                 type: "themed",
                 title: "Learn by theme",
                 icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2C3E6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
-                description: "Listes thÃ©matiques couvrant la vie quotidienne et les sujets d'intÃ©rÃªt.",
+                description: "Listes thématiques couvrant la vie quotidienne et les sujets d'intérêt.",
                 files: [
-                    { filename: "THEMES A1-A2.json", title: "ThÃ¨mes A1-A2", level: "A1-A2", approximate_word_count: 200 },
-                    { filename: "THEMES B1-B2.json", title: "ThÃ¨mes B1-B2", level: "B1-B2", approximate_word_count: 210 },
-                    { filename: "THEMES C1-C2.json", title: "ThÃ¨mes C1-C2", level: "C1-C2", approximate_word_count: 210 },
+                    { filename: "THEMES A1-A2.json", title: "Thèmes A1-A2", level: "A1-A2", approximate_word_count: 200 },
+                    { filename: "THEMES B1-B2.json", title: "Thèmes B1-B2", level: "B1-B2", approximate_word_count: 210 },
+                    { filename: "THEMES C1-C2.json", title: "Thèmes C1-C2", level: "C1-C2", approximate_word_count: 210 },
                     { filename: "BUSINESS AND FINANCE.json", title: "Business and Finance", level: "C1-C2", approximate_word_count: 140 },
                     { filename: "MEDICAL AND PSYCHOLOGICAL.json", title: "Medical and Psychological", level: "C1-C2", approximate_word_count: 165 },
                     { filename: "PRACTICAL ENGLISH.json", title: "Practical English", level: "B1-B2", approximate_word_count: 140 }
@@ -734,7 +734,7 @@
                 type: "themed",
                 title: "Learn by level",
                 icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2C3E6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
-                description: "Vocabulaire classÃ© par nature grammaticale et par niveau CEFR.",
+                description: "Vocabulaire classé par nature grammaticale et par niveau CEFR.",
                 files: [
                     { filename: "WORD GROUPS A1-A2.json", title: "Groupes de Mots A1-A2", level: "A1-A2", approximate_word_count: 230 },
                     { filename: "WORD GROUPS B1-B2.json", title: "Groupes de Mots B1-B2", level: "B1-B2", approximate_word_count: 330 },
@@ -788,7 +788,7 @@
             `;
             modeContainer.appendChild(readingCard);
 
-            // Verb Practice card â€” always visible
+            // Verb Practice card — always visible
             const verbCard = document.createElement('div');
             verbCard.className = 'mode-card';
             verbCard.onclick = () => openVerbPractice();
@@ -803,7 +803,7 @@
             `;
             modeContainer.appendChild(verbCard);
 
-            // Revise card â€” only show if logged in and has learnt words
+            // Revise card — only show if logged in and has learnt words
             if (currentProfile) {
                 const allLearnt = _getAllLearntWords();
                 const totalLearnt = Object.values(allLearnt).reduce((n, arr) => n + arr.length, 0);
@@ -814,8 +814,8 @@
                     revCard.innerHTML = `
                         <div class="mode-icon" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;background:var(--accent-light);border-radius:12px;flex-shrink:0;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2C3E6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg></div>
                         <div class="mode-info">
-                            <div class="mode-title">RÃ©viser</div>
-                            <div class="mode-desc">${totalLearnt} mot${totalLearnt > 1 ? 's' : ''} acquis disponibles Ã  rÃ©viser.</div>
+                            <div class="mode-title">Réviser</div>
+                            <div class="mode-desc">${totalLearnt} mot${totalLearnt > 1 ? 's' : ''} acquis disponibles à réviser.</div>
                         </div>
                     `;
                     modeContainer.appendChild(revCard);
@@ -823,27 +823,27 @@
             }
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // THEME NAVIGATION (level â†’ topics â†’ session)
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
+        // THEME NAVIGATION (level → topics → session)
+        // ══════════════════════════════════════════
 
         // emoji map for known theme keys
         const THEME_ICONS = {
-            everyday_objects: 'ðŸŽ’', the_house_and_local_area: 'ðŸ ',
-            family_and_relationships: 'ðŸ‘¨â€ðŸ‘©â€ðŸ‘§', travel_and_holidays: 'âœˆï¸',
-            environment_and_world: 'ðŸŒ', food_and_lifestyle: 'ðŸŽ',
-            hobbies_and_interests: 'ðŸŽ¸', work_and_jobs: 'ðŸ’¼',
-            health_and_body: 'ðŸ¥', education: 'ðŸ“š', technology: 'ðŸ’»',
-            society_and_politics: 'ðŸ›ï¸', arts_and_culture: 'ðŸŽ­',
-            science_and_nature: 'ðŸ”¬', sport: 'âš½', money_and_shopping: 'ðŸ›ï¸',
-            emotions_and_personality: 'ðŸ˜Š', clothes_and_appearance: 'ðŸ‘—',
-            default: 'ðŸ“–'
+            everyday_objects: '🎒', the_house_and_local_area: '🏠',
+            family_and_relationships: '👨‍👩‍👧', travel_and_holidays: '✈️',
+            environment_and_world: '🌍', food_and_lifestyle: '🍎',
+            hobbies_and_interests: '🎸', work_and_jobs: '💼',
+            health_and_body: '🏥', education: '📚', technology: '💻',
+            society_and_politics: '🏛️', arts_and_culture: '🎭',
+            science_and_nature: '🔬', sport: '⚽', money_and_shopping: '🛍️',
+            emotions_and_personality: '😊', clothes_and_appearance: '👗',
+            default: '📖'
         };
 
         let _themeNavStack = []; // for back navigation: [{label, fn}]
 
         function showThemeLevels(cat) {
-            _themeNavStack = [{ label: 'â† Retour aux options', fn: backToModeSelect }];
+            _themeNavStack = [{ label: '← Retour aux options', fn: backToModeSelect }];
             _renderThemeBackBtn();
             const container = document.getElementById('home-categories-container');
             container.innerHTML = '';
@@ -856,9 +856,9 @@
                 card.innerHTML = `
                     <div class="theme-topic-info">
                         <div class="theme-topic-title">${file.title}</div>
-                        <div class="theme-topic-meta">Niveau ${file.level} Â· ~${file.approximate_word_count || '?'} mots</div>
+                        <div class="theme-topic-meta">Niveau ${file.level} · ~${file.approximate_word_count || '?'} mots</div>
                     </div>
-                    <div class="theme-topic-arrow">â€º</div>
+                    <div class="theme-topic-arrow">›</div>
                 `;
                 card.onclick = () => showThemeTopics(file, cat);
                 grid.appendChild(card);
@@ -867,14 +867,14 @@
         }
 
         async function showThemeTopics(file, cat) {
-            _themeNavStack.push({ label: `â† ${file.title}`, fn: () => {
+            _themeNavStack.push({ label: `← ${file.title}`, fn: () => {
                 _themeNavStack.pop();
                 showThemeLevels(cat);
             }});
             _renderThemeBackBtn();
 
             const container = document.getElementById('home-categories-container');
-            container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--ink-light);">Chargement des thÃ¨mes...</div>`;
+            container.innerHTML = `<div style="text-align:center; padding:24px; color:var(--ink-light);">Chargement des thèmes...</div>`;
 
             let data;
             try {
@@ -891,7 +891,7 @@
             container.innerHTML = '';
 
             if (!topicContainer) {
-                // Flat file â€” no sub-topics, just start the course directly
+                // Flat file — no sub-topics, just start the course directly
                 selectCourse(file.filename, file.title);
                 return;
             }
@@ -907,12 +907,12 @@
             allCard.className = 'theme-topic-card';
             allCard.style.borderColor = 'var(--accent)';
             allCard.innerHTML = `
-                <div class="theme-topic-icon">ðŸ“š</div>
+                <div class="theme-topic-icon">📚</div>
                 <div class="theme-topic-info">
-                    <div class="theme-topic-title" style="color:var(--accent);">Tout Ã©tudier</div>
-                    <div class="theme-topic-meta">${totalWords} mots Â· tous les thÃ¨mes</div>
+                    <div class="theme-topic-title" style="color:var(--accent);">Tout étudier</div>
+                    <div class="theme-topic-meta">${totalWords} mots · tous les thèmes</div>
                 </div>
-                <div class="theme-topic-arrow">â€º</div>
+                <div class="theme-topic-arrow">›</div>
             `;
             allCard.onclick = () => selectCourse(file.filename, file.title);
             grid.appendChild(allCard);
@@ -931,7 +931,7 @@
                         <div class="theme-topic-title">${label}</div>
                         <div class="theme-topic-meta">${wordCount} mot${wordCount !== 1 ? 's' : ''}</div>
                     </div>
-                    <div class="theme-topic-arrow">â€º</div>
+                    <div class="theme-topic-arrow">›</div>
                 `;
                 card.onclick = () => selectThemeTopic(file.filename, file.title, key, label, topic.words || []);
                 grid.appendChild(card);
@@ -942,7 +942,7 @@
 
         function selectThemeTopic(filename, fileTitle, topicKey, topicLabel, rawWords) {
             WORD_LIST_FILE = 'word-lists/' + filename;
-            currentCourseName = `${fileTitle} â€” ${topicLabel}`;
+            currentCourseName = `${fileTitle} — ${topicLabel}`;
             // Stash the pre-filtered words so showCoursePreview uses them
             window._themeTopicWords = rawWords.map(w => ({
                 english: w.word || w.english || '',
@@ -951,7 +951,7 @@
                 sentences: w.sentences || [],
                 type: w.type || ''
             })).filter(w => w.english);
-            showCoursePreview(filename, `${fileTitle} â€” ${topicLabel}`);
+            showCoursePreview(filename, `${fileTitle} — ${topicLabel}`);
         }
 
         function _renderThemeBackBtn() {
@@ -1021,7 +1021,7 @@
 
                 const desc = document.createElement('div');
                 desc.className = 'course-desc';
-                desc.textContent = file.notes || file.description || 'Vocabulaire thÃ©matique pour l\'apprentissage.';
+                desc.textContent = file.notes || file.description || 'Vocabulaire thématique pour l\'apprentissage.';
                 top.appendChild(desc);
 
                 card.appendChild(top);
@@ -1035,13 +1035,13 @@
                 footer.appendChild(count);
 
                 const act = document.createElement('span');
-                act.textContent = 'Ã‰tudier â†’';
+                act.textContent = 'Étudier →';
                 footer.appendChild(act);
 
                 if (currentProfile) {
                     const testBtn = document.createElement('button');
                     testBtn.className = 'test-out-btn';
-                    testBtn.textContent = 'ðŸŽ¯ Tester';
+                    testBtn.textContent = '🎯 Tester';
                     testBtn.title = 'Tester vos connaissances sur ce cours';
                     testBtn.onclick = (e) => initiateTestOut(file.filename, file.title, e);
                     footer.appendChild(testBtn);
@@ -1088,7 +1088,7 @@
     }
     if (levelText) document.getElementById('preview-level-badge').textContent = `Niveau ${levelText}`;
 
-    // Load word list â€” use pre-filtered topic words if coming from a theme topic
+    // Load word list — use pre-filtered topic words if coming from a theme topic
     const courseKey = 'word-lists/' + filename;
 
     let rawParsed;
@@ -1129,7 +1129,7 @@
         document.getElementById('preview-word-count').textContent = `${parsed.length} mots`;
         const grid = document.getElementById('preview-word-grid');
         if (parsed.length === 0) {
-            grid.innerHTML = `<div style="grid-column: span 2; text-align: center; color: var(--ink-light);">Aucun mot trouvÃ©.</div>`;
+            grid.innerHTML = `<div style="grid-column: span 2; text-align: center; color: var(--ink-light);">Aucun mot trouvé.</div>`;
             return;
         }
         grid.innerHTML = '';
@@ -1143,8 +1143,8 @@
                 previewExcludedWords.add(w.english);
                 chip.innerHTML = `
                     <span class="word-chip-en">${w.english}</span>
-                    <span class="word-chip-fr">${w.french || 'â€”'}</span>
-                    <button class="word-chip-learnt-badge" title="DÃ©jÃ  acquis â€” cliquer pour rÃ©Ã©tudier">âœ“</button>
+                    <span class="word-chip-fr">${w.french || '—'}</span>
+                    <button class="word-chip-learnt-badge" title="Déjà acquis — cliquer pour réétudier">✓</button>
                 `;
                 chip.querySelector('.word-chip-learnt-badge').addEventListener('click', () => {
                     if (previewExcludedWords.has(w.english)) {
@@ -1152,13 +1152,13 @@
                         chip.classList.remove('word-chip-learnt');
                         chip.style.opacity = '1';
                         const btn = chip.querySelector('.word-chip-learnt-badge');
-                        btn.textContent = 'âœ•';
+                        btn.textContent = '✕';
                         btn.className = 'word-chip-remove-btn';
                     } else {
                         previewExcludedWords.add(w.english);
                         chip.classList.add('word-chip-learnt');
                         const btn = chip.querySelector('.word-chip-remove-btn');
-                        btn.textContent = 'âœ“';
+                        btn.textContent = '✓';
                         btn.className = 'word-chip-learnt-badge';
                     }
                     _updatePreviewWordCount(parsed.length);
@@ -1166,8 +1166,8 @@
             } else {
                 chip.innerHTML = `
                     <span class="word-chip-en">${w.english}</span>
-                    <span class="word-chip-fr">${w.french || 'â€”'}</span>
-                    <button class="word-chip-remove-btn" title="Je ne veux pas apprendre ce mot">âœ•</button>
+                    <span class="word-chip-fr">${w.french || '—'}</span>
+                    <button class="word-chip-remove-btn" title="Je ne veux pas apprendre ce mot">✕</button>
                 `;
                 chip.querySelector('.word-chip-remove-btn').addEventListener('click', () => {
                     if (previewExcludedWords.has(w.english)) {
@@ -1194,7 +1194,7 @@
     async function fetchCourseLeaderboard(courseKey, courseName) {
     const leaderboardDiv = document.getElementById('preview-leaderboard');
     const tbody = document.getElementById('preview-leaderboard-body');
-    document.getElementById('preview-leaderboard-title').textContent = `Classement â€” ${courseName}`;
+    document.getElementById('preview-leaderboard-title').textContent = `Classement — ${courseName}`;
     leaderboardDiv.style.display = 'block';
     tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Chargement...</td></tr>';
 
@@ -1215,7 +1215,7 @@
         .slice(0, 10);
 
     if (ranked.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--ink-light);">Personne n\'a encore Ã©tudiÃ© ce cours. Sois le premier !</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--ink-light);">Personne n\'a encore étudié ce cours. Sois le premier !</td></tr>';
         return;
     }
 
@@ -1224,9 +1224,9 @@
         const isMe = p.id === currentUser?.id;
         const rank = index + 1;
         let rankDisplay = rank;
-        if (rank === 1) rankDisplay = 'ðŸ¥‡ 1';
-        if (rank === 2) rankDisplay = 'ðŸ¥ˆ 2';
-        if (rank === 3) rankDisplay = 'ðŸ¥‰ 3';
+        if (rank === 1) rankDisplay = '🥇 1';
+        if (rank === 2) rankDisplay = '🥈 2';
+        if (rank === 3) rankDisplay = '🥉 3';
         html += `
             <tr class="${isMe ? 'highlight' : ''}">
                 <td>${rankDisplay}</td>
@@ -1260,9 +1260,9 @@
         }).length;
         const manuallyExcluded = previewExcludedWords.size - learntCount;
         let label = `${remaining} / ${total} mots`;
-        if (learntCount > 0) label += ` Â· ${learntCount} acquis âœ“`;
-        if (manuallyExcluded > 0) label += ` Â· ${manuallyExcluded} ignorÃ©${manuallyExcluded > 1 ? 's' : ''}`;
-        if (remaining < 4) label += ` Â· minimum 4 requis`;
+        if (learntCount > 0) label += ` · ${learntCount} acquis ✓`;
+        if (manuallyExcluded > 0) label += ` · ${manuallyExcluded} ignoré${manuallyExcluded > 1 ? 's' : ''}`;
+        if (remaining < 4) label += ` · minimum 4 requis`;
         document.getElementById('preview-word-count').textContent = label;
 
         const startBtn = document.getElementById('preview-start-btn');
@@ -1271,14 +1271,14 @@
             startBtn.style.opacity = remaining < 4 ? '0.4' : '1';
             startBtn.style.cursor = remaining < 4 ? 'not-allowed' : 'pointer';
             startBtn.textContent = remaining < 4
-                ? `SÃ©lectionne au moins 4 mots pour commencer`
-                : `Commencer l'apprentissage â†’`;
+                ? `Sélectionne au moins 4 mots pour commencer`
+                : `Commencer l'apprentissage →`;
         }
     }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // SCHEMA PARSER
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         function parseWordList(data) {
             let parsedWords = [];
 
@@ -1346,9 +1346,9 @@
             });
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // FIRST ENCOUNTER
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         function startEncounter() {
             encounterIndex = 0;
             encounterSentenceIndex = 0;
@@ -1376,9 +1376,9 @@
             loadEncounterWord();
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // EX 1 â€” MCQ French word â†’ choose English
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
+        // EX 1 — MCQ French word → choose English
+        // ══════════════════════════════════════════
         function startEx1() {
             ex1Queue = [...words];
             ex1Index = 0;
@@ -1422,7 +1422,7 @@
             if (chosen === correct) {
                 btn.classList.add('correct');
                 triggerGlow('correct');
-                showFeedback('ex1-feedback', 'correct', 'âœ“ Correct !');
+                showFeedback('ex1-feedback', 'correct', '✓ Correct !');
                 playAudio(false, correct);
                 stepsCompleted++;
                 updateProgress();
@@ -1431,7 +1431,7 @@
                     sessionLearntWords.add(wordObj.english);
                     if (isRevisionSession) revisionCorrectThisSession.add(wordObj.english);
                 } else {
-                    // Word was wrong before â€” this is a second-attempt correct
+                    // Word was wrong before — this is a second-attempt correct
                     secondTryCorrect++;
                 }
                 document.getElementById('ex1-next-btn').classList.remove('hidden');
@@ -1439,7 +1439,7 @@
                 btn.classList.add('wrong');
                 allBtns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
                 triggerGlow('wrong');
-                showFeedback('ex1-feedback', 'wrong', `âœ— La bonne rÃ©ponse est : "${correct}"`);
+                showFeedback('ex1-feedback', 'wrong', `✗ La bonne réponse est : "${correct}"`);
                 if (!ex1Incorrect.find(w => w.english === wordObj.english)) ex1Incorrect.push(wordObj);
 
                 // Track errors
@@ -1496,13 +1496,13 @@
             if (chosen === correct) {
                 btn.classList.add('correct');
                 triggerGlow('correct');
-                showFeedback('ex1rt-feedback', 'correct', 'âœ“ Correct !');
+                showFeedback('ex1rt-feedback', 'correct', '✓ Correct !');
                 playAudio(false, ex1RetestQueue[ex1RetestIndex].english);
             } else {
                 btn.classList.add('wrong');
                 allBtns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
                 triggerGlow('wrong');
-                showFeedback('ex1rt-feedback', 'wrong', `âœ— La bonne rÃ©ponse est : "${correct}"`);
+                showFeedback('ex1rt-feedback', 'wrong', `✗ La bonne réponse est : "${correct}"`);
                 loseLife();
                 retestAllCorrect = false;
             }
@@ -1517,9 +1517,9 @@
             loadEx1Retest();
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // EX 2 â€” GAME (TAP THE TRANSLATION)
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
+        // EX 2 — GAME (TAP THE TRANSLATION)
+        // ══════════════════════════════════════════
         let ex2FullQueue = [];
 
         function startEx2Part1() {
@@ -1696,14 +1696,14 @@
                 }
             }, 4000);
         }
-	// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-	// EX2 MATCH â€” Matching Table
-	// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+	// ══════════════════════════════════════════
+	// EX2 MATCH — Matching Table
+	// ══════════════════════════════════════════
         let matchPairs = [];
         let matchSelected = null;
 
         function startMatch() {
-            log('ðŸŽ¯ startMatch called, words:', words.length);
+            log('🎯 startMatch called, words:', words.length);
             matchPairs = words.map(w => ({ english: w.english, french: w.french }));
             matchSelected = null;
             buildMatchTable();
@@ -1760,7 +1760,7 @@
         return;
     }
 
-    // Two different languages selected â€” check pair
+    // Two different languages selected — check pair
     const enWord = matchSelected.lang === 'en' ? matchSelected.word : cell.dataset.word;
     const frWord = matchSelected.lang === 'fr' ? matchSelected.word : cell.dataset.word;
     const isCorrect = words.some(w => w.english === enWord && w.french === frWord);
@@ -1794,11 +1794,11 @@
 
 	function updateMatchCounter() {
     const matched = words.length - matchPairs.length;
-    document.getElementById('match-counter').textContent = `${matched} / ${words.length} paires trouvÃ©es`;
+    document.getElementById('match-counter').textContent = `${matched} / ${words.length} paires trouvées`;
 	}
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // EX 4 â€” WHACK-A-MOLE
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
+        // EX 4 — WHACK-A-MOLE
+        // ══════════════════════════════════════════
         let ex4Queue        = [];
         let ex4Index        = 0;
         let ex4TimeLeft     = 0;
@@ -1876,9 +1876,9 @@
                 if (ex4TimeLeft <= 0) {
                     clearInterval(ex4TimerInterval);
                     if (!ex4Active) return;
-                    // Time's up â€” no life lost, just show answer and advance
+                    // Time's up — no life lost, just show answer and advance
                     ex4Active = false;
-                    showFeedback('ex4-feedback', 'wrong', `â± Temps Ã©coulÃ© â€” c'Ã©tait : "${w.english}"`);
+                    showFeedback('ex4-feedback', 'wrong', `⏱ Temps écoulé — c'était : "${w.english}"`);
                     triggerGlow('wrong');
                     const t = setTimeout(() => {
                         ex4Active = true;
@@ -1905,7 +1905,7 @@
             const t1 = setTimeout(() => mole.classList.add('up'), 20);
             ex4MoleTimers.push(t1);
 
-            // Auto-hide after dwell time (same for target and distractors â€” no visual hint)
+            // Auto-hide after dwell time (same for target and distractors — no visual hint)
             const dwell = 1500 + Math.random() * 1000;
             const t2 = setTimeout(() => {
                 if (!mole.parentNode) return;
@@ -1931,7 +1931,7 @@
             mole.addEventListener('click', () => {
                 if (!ex4Active) return;
                 if (isTarget) {
-                    // âœ… Correct
+                    // ✅ Correct
                     ex4Active = false;
                     clearInterval(ex4TimerInterval);
                     ex4MoleTimers.forEach(t => clearTimeout(t));
@@ -1949,7 +1949,7 @@
                     hole.appendChild(fly);
                     setTimeout(() => fly.remove(), 900);
 
-                    showFeedback('ex4-feedback', 'correct', 'âœ“ Correct !');
+                    showFeedback('ex4-feedback', 'correct', '✓ Correct !');
                     const t = setTimeout(() => {
                         ex4Active = true;
                         ex4Index++;
@@ -1957,10 +1957,10 @@
                     }, 900);
                     ex4MoleTimers.push(t);
                 } else {
-                    // âœ— Wrong â€” flash red, no life lost, keep going
+                    // ✗ Wrong — flash red, no life lost, keep going
                     mole.classList.add('hit-wrong');
                     triggerGlow('wrong');
-                    showFeedback('ex4-feedback', 'wrong', `âœ— Non ! Cherche "${wordObj.english}"`);
+                    showFeedback('ex4-feedback', 'wrong', `✗ Non ! Cherche "${wordObj.english}"`);
                     setTimeout(() => {
                         if (mole.parentNode) {
                             mole.classList.remove('hit-wrong');
@@ -1994,9 +1994,9 @@
             return pool.slice(0, count);
         }
 
-    	// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // EX 3 â€” Partial word typing
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    	// ══════════════════════════════════════════
+        // EX 3 — Partial word typing
+        // ══════════════════════════════════════════
         function startEx3() {
             ex3Queue = shuffle([...words]);
             ex3Index = 0;
@@ -2058,7 +2058,7 @@
             if (val === answer) {
                 input.classList.add('correct');
                 triggerGlow('correct');
-                showFeedback('ex3-feedback', 'correct', 'âœ“ Correct !');
+                showFeedback('ex3-feedback', 'correct', '✓ Correct !');
                 playAudio(false, answer);
                 if (!tried) {
                     firstTryCorrect++;
@@ -2069,7 +2069,7 @@
             } else {
                 input.classList.add('wrong');
                 triggerGlow('wrong');
-                showFeedback('ex3-feedback', 'wrong', `âœ— La bonne rÃ©ponse Ã©tait : "${input.dataset.answer}"`);
+                showFeedback('ex3-feedback', 'wrong', `✗ La bonne réponse était : "${input.dataset.answer}"`);
 
                 if (!wordErrors[answer]) wordErrors[answer] = 0;
                 wordErrors[answer]++;
@@ -2145,7 +2145,7 @@
             if (val === answer) {
                 input.classList.add('correct');
                 triggerGlow('correct');
-                showFeedback('ex3rt-feedback', 'correct', 'âœ“ Correct !');
+                showFeedback('ex3rt-feedback', 'correct', '✓ Correct !');
                 playAudio(false, answer);
                 input.disabled = true;
                 verifyBtn.classList.add('hidden');
@@ -2157,12 +2157,12 @@
                 retestAllCorrect = false;
 
                 if (ex3RetestAttempts >= 2) {
-                    showFeedback('ex3rt-feedback', 'wrong', `âœ— La bonne rÃ©ponse Ã©tait : "${input.dataset.answer}"`);
+                    showFeedback('ex3rt-feedback', 'wrong', `✗ La bonne réponse était : "${input.dataset.answer}"`);
                     input.disabled = true;
                     verifyBtn.classList.add('hidden');
                     document.getElementById('ex3rt-next-btn').classList.remove('hidden');
                 } else {
-                    showFeedback('ex3rt-feedback', 'wrong', 'âœ— Presque... (1 tentative restante)');
+                    showFeedback('ex3rt-feedback', 'wrong', '✗ Presque... (1 tentative restante)');
                 }
             }
         }
@@ -2173,20 +2173,20 @@
             loadEx3Retest();
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // SHARED HELPERS
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         function showFeedback(id, type, msg) {
             const el = document.getElementById(id);
             el.className = `feedback-banner show ${type}`;
-            el.innerHTML = (type === 'correct' ? 'âœ“ ' : 'âœ— ') + msg.replace(/^[âœ“âœ—] /, '');
+            el.innerHTML = (type === 'correct' ? '✓ ' : '✗ ') + msg.replace(/^[✓✗] /, '');
         }
 
         function showSessionComplete() {
             document.getElementById('progressBar').style.width = '100%';
 
             const totalChunks = Math.ceil(fullWordList.length / 10);
-            document.getElementById('complete-title').textContent = `Session terminÃ©e ! (${currentChunkIndex + 1}/${totalChunks})`;
+            document.getElementById('complete-title').textContent = `Session terminée ! (${currentChunkIndex + 1}/${totalChunks})`;
 
             const now = Date.now();
             const diffSecs = Math.floor((now - sessionStartTime) / 1000);
@@ -2203,7 +2203,7 @@
             const topErrors = sortedErrors.slice(0, 3);
 
             if (topErrors.length === 0) {
-                reviseList.innerHTML = '<li style="color:var(--correct); list-style:none;">Aucun, parfait ! ðŸŽ‰</li>';
+                reviseList.innerHTML = '<li style="color:var(--correct); list-style:none;">Aucun, parfait ! 🎉</li>';
             } else {
                 topErrors.forEach(w => {
                     const li = document.createElement('li');
@@ -2231,10 +2231,10 @@
 
             // Show bonus breakdown if any bonuses earned
             const bonuses = [];
-            if (firstTryCorrect > 0) bonuses.push({ label: `${firstTryCorrect} Ã— premier essai correct`, pts: firstTryCorrect * 10 });
-            if (secondTryCorrect > 0) bonuses.push({ label: `${secondTryCorrect} Ã— deuxiÃ¨me essai correct`, pts: secondTryCorrect * 5 });
-            if (perfectLivesBonus) bonuses.push({ label: 'ðŸ›¡ï¸ Toutes vies conservÃ©es', pts: 10 });
-            if (perfectRetestBonus) bonuses.push({ label: 'â­ RÃ©vision parfaite', pts: 10 });
+            if (firstTryCorrect > 0) bonuses.push({ label: `${firstTryCorrect} × premier essai correct`, pts: firstTryCorrect * 10 });
+            if (secondTryCorrect > 0) bonuses.push({ label: `${secondTryCorrect} × deuxième essai correct`, pts: secondTryCorrect * 5 });
+            if (perfectLivesBonus) bonuses.push({ label: '🛡️ Toutes vies conservées', pts: 10 });
+            if (perfectRetestBonus) bonuses.push({ label: '⭐ Révision parfaite', pts: 10 });
 
             const bonusDiv = document.getElementById('stat-bonuses');
             const bonusList = document.getElementById('stat-bonus-list');
@@ -2275,9 +2275,9 @@
             startCurrentChunk();
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // INIT & FETCH
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         async function initializeDashboard() {
             if (currentProfile) {
                 document.getElementById('header-profile-btn-container').style.display = 'block';
@@ -2359,7 +2359,7 @@
 
         async function startCurrentChunk() {
             showScreen('screen-loading');
-            document.getElementById('loading-status').textContent = 'Traduction et gÃ©nÃ©ration des phrases...';
+            document.getElementById('loading-status').textContent = 'Traduction et génération des phrases...';
 
             const startIndex = currentChunkIndex * 10;
             const chunk = fullWordList.slice(startIndex, startIndex + 10);
@@ -2394,13 +2394,13 @@
             }
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // TEST OUT
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         async function initiateTestOut(filename, title, e) {
             if (e) e.stopPropagation();
             if (!currentProfile) {
-                showToast("Vous devez Ãªtre connectÃ© pour utiliser le test de niveau.", "error");
+                showToast("Vous devez être connecté pour utiliser le test de niveau.", "error");
                 return;
             }
             testOutCourseKey = 'word-lists/' + filename;
@@ -2477,7 +2477,7 @@
             input.disabled = false;
             input.placeholder = `${firstLetter}...`;
             // Show first-letter hint below the input
-            document.getElementById('test-out-hint').textContent = `Indice : commence par Â« ${firstLetter} Â»`;
+            document.getElementById('test-out-hint').textContent = `Indice : commence par « ${firstLetter} »`;
             setTimeout(() => input.focus(), 100);
         }
 
@@ -2495,12 +2495,12 @@
             if (isCorrect) {
                 input.classList.add('correct');
                 triggerGlow('correct');
-                showFeedback('test-out-feedback', 'correct', 'âœ“ Correct â€” mot connu !');
+                showFeedback('test-out-feedback', 'correct', '✓ Correct — mot connu !');
                 testOutKnown.push(answer);
             } else {
                 input.classList.add('wrong');
                 triggerGlow('wrong');
-                showFeedback('test-out-feedback', 'wrong', `âœ— La bonne rÃ©ponse Ã©tait : "${answer}"`);
+                showFeedback('test-out-feedback', 'wrong', `✗ La bonne réponse était : "${answer}"`);
                 testOutUnknown.push(testOutQueue[testOutIndex]);
             }
 
@@ -2553,7 +2553,7 @@
 
             if (unknownCount === 0) {
                 document.getElementById('test-out-results-sub').textContent =
-                    `Impressionnant ! Vous connaissez dÃ©jÃ  tous les mots de ce cours.`;
+                    `Impressionnant ! Vous connaissez déjà tous les mots de ce cours.`;
                 document.getElementById('test-out-start-filtered-btn').style.display = 'none';
             } else {
                 const pct = total > 0 ? Math.round((knownCount / total) * 100) : 0;
@@ -2576,11 +2576,11 @@
             loadWordList();
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
         // REVISION
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
 
-        // Returns { courseKey: [{english, french}, ...] } â€” filters out cooldown words
+        // Returns { courseKey: [{english, french}, ...] } — filters out cooldown words
         function _getAllLearntWords() {
             if (!currentProfile?.courses_progress) return {};
             const todayStr = new Date().toISOString().slice(0, 10);
@@ -2622,7 +2622,7 @@
             container.innerHTML = '';
 
             if (reviseViewAll) {
-                // Flat list â€” one block with all words
+                // Flat list — one block with all words
                 const allWords = [];
                 for (const [ck, words] of Object.entries(reviseWordData)) {
                     words.forEach(w => allWords.push({ ...w, sourceKey: ck }));
@@ -2687,7 +2687,7 @@
                 chip.innerHTML = `
                     <input type="checkbox" id="revise-word-checkbox" ${sel ? 'checked' : ''}>
                     <span class="revise-word-en">${w.english}</span>
-                    <span class="revise-word-fr">${w.french || 'â€”'}</span>
+                    <span class="revise-word-fr">${w.french || '—'}</span>
                 `;
                 chip.addEventListener('click', () => {
                     if (_isRevisionSelected(w.english)) {
@@ -2725,14 +2725,14 @@
 
         function _updateReviseFooter() {
             const n = revisionSelectedWords.length;
-            const label = n === 0 ? '0 mot sÃ©lectionnÃ©'
-                : n < 5 ? `${n} mot${n > 1 ? 's' : ''} sÃ©lectionnÃ©${n > 1 ? 's' : ''} â€” minimum 5 requis`
-                : `${n} mot${n > 1 ? 's' : ''} sÃ©lectionnÃ©${n > 1 ? 's' : ''}`;
+            const label = n === 0 ? '0 mot sélectionné'
+                : n < 5 ? `${n} mot${n > 1 ? 's' : ''} sélectionné${n > 1 ? 's' : ''} — minimum 5 requis`
+                : `${n} mot${n > 1 ? 's' : ''} sélectionné${n > 1 ? 's' : ''}`;
             document.getElementById('revise-selected-count').textContent = label;
             const btn = document.getElementById('revise-start-btn');
             btn.disabled = n < 5;
             btn.style.opacity = n >= 5 ? '1' : '0.4';
-            btn.textContent = n >= 5 ? `RÃ©viser ${n} mot${n > 1 ? 's' : ''} â†’` : 'RÃ©viser les mots sÃ©lectionnÃ©s â†’';
+            btn.textContent = n >= 5 ? `Réviser ${n} mot${n > 1 ? 's' : ''} →` : 'Réviser les mots sélectionnés →';
         }
 
         async function openReviseScreen() {
@@ -2770,14 +2770,14 @@
             isRevisionSession = true;
             revisionCorrectThisSession = new Set();
 
-            // Set up the word list directly â€” no loadWordList needed
+            // Set up the word list directly — no loadWordList needed
             words = revisionSelectedWords.map(w => ({ english: w.english, french: w.french, sourceKey: w.sourceKey }));
             allEnglish = words.map(w => w.english);
             allFrench = words.map(w => w.french);
             fullWordList = [...words];
             currentChunkIndex = 0;
             WORD_LIST_FILE = 'revision_session';
-            currentCourseName = 'RÃ©vision';
+            currentCourseName = 'Révision';
 
             totalSteps = words.length * 2; // ex1 + ex3 only
             stepsCompleted = 0;
@@ -2794,7 +2794,7 @@
             document.getElementById('header-logo').style.display = 'none';
             document.getElementById('header-progress-wrap').style.display = 'block';
 
-            // Skip encounter screen â€” go straight to Ex1
+            // Skip encounter screen — go straight to Ex1
             showScreen('screen-ex1');
             startEx1();
         }
@@ -2849,9 +2849,9 @@
         courses_progress: currentProfile.courses_progress
     }).eq('id', currentUser.id);
 	}
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // VERB PRACTICE â€” DATA
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
+        // VERB PRACTICE — DATA
+        // ══════════════════════════════════════════
 
         // Verb database: tenses available per level
         const VERB_TENSES_BY_LEVEL = {
@@ -2884,7 +2884,7 @@
         function conjugateVerb(infinitive, tense, isIrregular) {
             const v = infinitive.toLowerCase().trim();
 
-            // â”€â”€ Special case: TO BE â”€â”€
+            // ── Special case: TO BE ──
             if (v === 'be') {
                 const beConj = {
                     present_simple:             ['am', 'are', 'is', 'are', 'are', 'are'],
@@ -2903,7 +2903,7 @@
                 return beConj[tense] || beConj.present_simple;
             }
 
-            // â”€â”€ Special case: TO HAVE (present simple) â”€â”€
+            // ── Special case: TO HAVE (present simple) ──
             if (v === 'have' && tense === 'present_simple') {
                 return ['have', 'have', 'has', 'have', 'have', 'have'];
             }
@@ -3011,7 +3011,7 @@
 
         const SUBJ_KEY_TO_IDX = { 'I': 0, 'you': 1, 'he': 2, 'we': 3, 'they': 5 };
 
-        // All irregular verbs across all levels â€” lazy-loaded with verb data
+        // All irregular verbs across all levels — lazy-loaded with verb data
         var _allIrregularVerbs = null;
         function getAllIrregularVerbs() {
             if (!_allIrregularVerbs) _allIrregularVerbs = new Set([...Object.values(getVerbLists().irregular).flat()]);
@@ -3075,16 +3075,16 @@
                     tenseKey,
                     answer,
                     options: shuffle([answer, ...distractors.slice(0, 3)]),
-                    hint: `Verb: "${verb}" â€” context clue: ${template.clue}`,
-                    explanation: `${tenseName} â€” ${template.clue}.`
+                    hint: `Verb: "${verb}" — context clue: ${template.clue}`,
+                    explanation: `${tenseName} — ${template.clue}.`
                 });
             }
             return shuffle(questions);
         }
 
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        // VERB PRACTICE â€” STATE & NAVIGATION
-        // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        // ══════════════════════════════════════════
+        // VERB PRACTICE — STATE & NAVIGATION
+        // ══════════════════════════════════════════
         let verbState = {
             level: 'A1',
             verbType: 'regular',
@@ -3124,21 +3124,21 @@
             'past_simple',
             'present_perfect',
             'past_perfect',
-            'past_perfect_continuous'  // uses past participle: "had been running" â€” pp identical, but included for consistency
+            'past_perfect_continuous'  // uses past participle: "had been running" — pp identical, but included for consistency
         ]);
 
-        // â”€â”€ NEGATIVE CONJUGATION â”€â”€
+        // ── NEGATIVE CONJUGATION ──
         function conjugateNegative(infinitive, tense, isIrregular) {
             const v = infinitive.toLowerCase().trim();
             const pos = conjugateVerb(v, tense, isIrregular);
 
             function negateForm(form, pi) {
-                // Special case: "be" in present simple â€” negate the be-form itself (am/is/are)
+                // Special case: "be" in present simple — negate the be-form itself (am/is/are)
                 if (v === 'be' && tense === 'present_simple') {
                     const negMap = { 'am': "am not", 'is': "isn't", 'are': "aren't" };
                     return negMap[form] || ('not ' + form);
                 }
-                // Special case: "be" in past simple â€” negate was/were directly
+                // Special case: "be" in past simple — negate was/were directly
                 if (v === 'be' && tense === 'past_simple') {
                     return form === 'was' ? "wasn't" : "weren't";
                 }
@@ -3166,7 +3166,7 @@
             return pos.map((f, i) => negateForm(f, i));
         }
 
-        // â”€â”€ INTERROGATIVE CONJUGATION â”€â”€
+        // ── INTERROGATIVE CONJUGATION ──
         function conjugateInterrogative(infinitive, tense, isIrregular) {
             const v = infinitive.toLowerCase().trim();
             const pos = conjugateVerb(v, tense, isIrregular);
@@ -3177,13 +3177,13 @@
                 const subj = subjs[pi];
                 const sl = subj.toLowerCase();
 
-                // Special case: "be" in present simple â€” invert am/is/are + subject
+                // Special case: "be" in present simple — invert am/is/are + subject
                 if (v === 'be' && tense === 'present_simple') {
                     const auxMap2 = { 'am': 'Am', 'is': 'Is', 'are': 'Are' };
                     const aux2 = auxMap2[form] || 'Is';
                     return `${aux2} ${sl}?`;
                 }
-                // Special case: "be" in past simple â€” invert was/were + subject
+                // Special case: "be" in past simple — invert was/were + subject
                 if (v === 'be' && tense === 'past_simple') {
                     const aux2 = form === 'was' ? 'Was' : 'Were';
                     return `${aux2} ${sl}?`;
@@ -3222,7 +3222,7 @@
             return conjugateVerb(verb, tense, isIrr); // affirmative
         }
 
-        // â”€â”€ DRILL TIMER â”€â”€
+        // ── DRILL TIMER ──
         let drillTimerInterval = null;
         let drillTimerSecondsLeft = 0;
         let drillTimerSecondsElapsed = 0;
@@ -3242,7 +3242,7 @@
             const timerEl = document.getElementById('drill-timer');
 
             if (drillDurationMinutes === 0) {
-                // Unlimited â€” hide timer
+                // Unlimited — hide timer
                 timerEl.style.display = 'none';
                 return;
             }
@@ -3364,7 +3364,7 @@
             const reg = getVerbLists().regular[level] || getVerbLists().regular.A1;
             const irr = getVerbLists().irregular[level] || getVerbLists().irregular.A1;
             if (!IRREGULAR_SENSITIVE_TENSES.has(tenseKey)) {
-                // Distinction doesn't apply â€” always use both lists combined
+                // Distinction doesn't apply — always use both lists combined
                 return [...reg, ...irr];
             }
             return verbState.verbType === 'irregular' ? irr : reg;
@@ -3379,7 +3379,7 @@
             const forms = ['affirmative', 'negative', 'interrogative'];
             const selectedForm = verbState.verbForm || 'affirmative';
 
-            // For timed sessions, generate a very large shuffled queue (10Ã— verb pool Ã— 6 pronouns)
+            // For timed sessions, generate a very large shuffled queue (10× verb pool × 6 pronouns)
             // so it never runs out before the timer ends. For unlimited, use one full pass.
             const repeats = drillDurationMinutes > 0 ? Math.max(10, Math.ceil((drillDurationMinutes * 60) / (verbPool.length * 6 * 8))) : 1;
             const pairs = [];
@@ -3415,7 +3415,7 @@
 
             const tenseName = TENSE_META[verbState.tense]?.name || verbState.tense;
             const isSensitive = IRREGULAR_SENSITIVE_TENSES.has(verbState.tense);
-            const typeLabel = isSensitive ? (isIrr ? ' Â· Irregular' : ' Â· Regular') : '';
+            const typeLabel = isSensitive ? (isIrr ? ' · Irregular' : ' · Regular') : '';
             document.getElementById('drill-tense-label').textContent = tenseName + typeLabel;
             document.getElementById('drill-verb-infinitive').textContent = 'to ' + verb;
             document.getElementById('drill-verb-number').textContent =
@@ -3424,16 +3424,16 @@
                 `${verbState.correct} / ${verbState.total}`;
 
             // Form label
-            const formLabels = { affirmative: 'âœ“ Affirmative', negative: 'âœ— Negative', interrogative: '? Interrogative' };
+            const formLabels = { affirmative: '✓ Affirmative', negative: '✗ Negative', interrogative: '? Interrogative' };
             document.getElementById('drill-form-label').textContent = formLabels[form] || '';
 
             // Update input placeholder based on form
             const placeholders = {
-                affirmative: 'e.g. walked / has goneâ€¦',
-                negative: "e.g. didn't walk / hasn't goneâ€¦",
+                affirmative: 'e.g. walked / has gone…',
+                negative: "e.g. didn't walk / hasn't gone…",
                 interrogative: 'e.g. Did she walk? / Has he gone?'
             };
-            document.getElementById('drill-single-input').placeholder = placeholders[form] || 'conjugated formâ€¦';
+            document.getElementById('drill-single-input').placeholder = placeholders[form] || 'conjugated form…';
 
             // Progress bar
             const container = document.getElementById('drill-pronoun-dots');
@@ -3464,7 +3464,7 @@
             input.value = '';
             input.disabled = false;
             input.className = 'conj-input';
-            input.placeholder = 'conjugated formâ€¦';
+            input.placeholder = 'conjugated form…';
 
             document.getElementById('drill-pronoun-display').textContent = pron;
             document.getElementById('drill-single-answer').style.display = 'none';
@@ -3495,15 +3495,15 @@
             if (ok) {
                 verbState.correct++;
                 document.getElementById('drill-feedback').className = 'feedback-banner correct show';
-                document.getElementById('drill-feedback').textContent = 'âœ“ Correct!';
+                document.getElementById('drill-feedback').textContent = '✓ Correct!';
                 document.body.classList.add('glow-correct');
                 setTimeout(() => document.body.classList.remove('glow-correct'), 800);
             } else {
                 const answerDiv = document.getElementById('drill-single-answer');
-                answerDiv.textContent = `âœ“ Correct form: ${verbState.currentForms[realIdx]}`;
+                answerDiv.textContent = `✓ Correct form: ${verbState.currentForms[realIdx]}`;
                 answerDiv.style.display = 'block';
                 document.getElementById('drill-feedback').className = 'feedback-banner wrong show';
-                document.getElementById('drill-feedback').textContent = 'âœ— Not quite â€” see the correct form above.';
+                document.getElementById('drill-feedback').textContent = '✗ Not quite — see the correct form above.';
                 document.body.classList.add('glow-wrong');
                 setTimeout(() => document.body.classList.remove('glow-wrong'), 800);
             }
@@ -3514,7 +3514,7 @@
             document.getElementById('drill-next-btn').classList.remove('hidden');
 
             const isLast = (verbState.drillPos === verbState.drillQueue.length - 1);
-            document.getElementById('drill-next-btn').textContent = isLast ? 'See Results â†’' : 'Next â†’';
+            document.getElementById('drill-next-btn').textContent = isLast ? 'See Results →' : 'Next →';
         }
 
         function skipSinglePronoun() {
@@ -3584,13 +3584,13 @@
                 tcCorrect++;
                 btn.classList.add('correct');
                 document.getElementById('tc-feedback').className = 'feedback-banner correct show';
-                document.getElementById('tc-feedback').textContent = 'âœ“ Correct!';
+                document.getElementById('tc-feedback').textContent = '✓ Correct!';
                 document.body.classList.add('glow-correct');
                 setTimeout(() => document.body.classList.remove('glow-correct'), 800);
             } else {
                 btn.classList.add('wrong');
                 document.getElementById('tc-feedback').className = 'feedback-banner wrong show';
-                document.getElementById('tc-feedback').innerHTML = `âœ— The correct answer is <strong>${q.answer}</strong> â€” ${q.explanation}`;
+                document.getElementById('tc-feedback').innerHTML = `✗ The correct answer is <strong>${q.answer}</strong> — ${q.explanation}`;
                 document.body.classList.add('glow-wrong');
                 setTimeout(() => document.body.classList.remove('glow-wrong'), 800);
                 // Fill blank with correct answer
@@ -3623,7 +3623,7 @@
             document.getElementById('vr-correct').textContent = correct;
             document.getElementById('vr-wrong').textContent = wrong;
             document.getElementById('vr-pct').textContent = pct + '%';
-            document.getElementById('verb-results-icon').textContent = pct >= 80 ? 'ðŸŽ‰' : pct >= 50 ? 'ðŸ’ª' : 'ðŸ“š';
+            document.getElementById('verb-results-icon').textContent = pct >= 80 ? '🎉' : pct >= 50 ? '💪' : '📚';
             document.getElementById('verb-results-title').textContent = pct >= 80 ? 'Excellent work!' : pct >= 50 ? 'Good effort!' : 'Keep practising!';
             document.getElementById('verb-results-sub').textContent = mode === 'conjugation'
                 ? `You conjugated verbs correctly ${correct} out of ${total} times in the ${TENSE_META[verbState.tense]?.name} tense.`
