@@ -3660,6 +3660,37 @@
         });
 
 // ==========================================
+// READING MODULE — SOUND HELPER
+// ==========================================
+
+function playSound(type) {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        if (type === 'correct' || type === 'lesson_complete') {
+            osc.frequency.setValueAtTime(523.25, ctx.currentTime);       // C5
+            osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
+            gain.gain.setValueAtTime(0.18, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.4);
+        } else {
+            osc.frequency.setValueAtTime(300, ctx.currentTime);
+            osc.frequency.setValueAtTime(220, ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.15, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.3);
+        }
+    } catch (e) {
+        // Audio not supported — silently skip
+    }
+}
+
+// ==========================================
 // READING MODULE
 // ==========================================
 
@@ -3809,7 +3840,7 @@ function checkReadingTF(userChoice) {
         feedback.textContent = "Correct! Well done.";
         playSound('correct');
     } else {
-        feedback.className = 'feedback-banner show incorrect';
+        feedback.className = 'feedback-banner show wrong';
         feedback.textContent = `Incorrect. The answer is ${q.answer ? 'True' : 'False'}.`;
         playSound('incorrect');
     }
@@ -3858,7 +3889,7 @@ function checkReadingFind() {
         feedback.textContent = "Spot on!";
         playSound('correct');
     } else {
-        feedback.className = 'feedback-banner show incorrect';
+        feedback.className = 'feedback-banner show wrong';
         feedback.textContent = `The correct phrase is: "${q.english}"`;
         playSound('incorrect');
     }
@@ -3913,7 +3944,7 @@ function checkReadingComp(userChoice, btnElement) {
         btns.forEach(b => {
             if (b.textContent === q.answer) b.classList.add('correct');
         });
-        feedback.className = 'feedback-banner show incorrect';
+        feedback.className = 'feedback-banner show wrong';
         feedback.textContent = "Oops, wrong word!";
         playSound('incorrect');
     }
