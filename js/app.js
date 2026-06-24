@@ -3522,7 +3522,7 @@
             tcSentences = generateTenseChoiceSentences(verbState.level);
             tcIndex = 0;
             tcCorrect = 0;
-            showScreen('screen-verb-tc');
+            showScreen('screen-tense-choice');
             loadTenseChoiceQuestion();
         }
 
